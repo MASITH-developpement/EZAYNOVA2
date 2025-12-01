@@ -1,0 +1,59 @@
+# Odoo
+*.pyc
+*.pyo
+__pycache__/
+*.log
+*.pot
+*.swp
+*~
+.DS_Store
+
+# Odoo filestore
+filestore/
+sessions/
+
+# Odoo data
+/var/lib/odoo/
+
+# Database
+*.db
+*.sqlite
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Python
+venv/
+env/
+ENV/
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Railway
+.railway/

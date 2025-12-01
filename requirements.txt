@@ -1,0 +1,6 @@
+# Dépendances Python supplémentaires pour Odoo 19 CE
+# L'image officielle Odoo contient déjà la plupart des dépendances
+
+# Modules supplémentaires optionnels
+psycopg2-binary>=2.9.0
+python-dotenv>=0.19.0
