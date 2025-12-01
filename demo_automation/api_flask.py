@@ -71,6 +71,23 @@ def register_demo(db_name, user_email, user_name, user_phone, created_at, expire
     conn.close()
 
 
+@app.route('/', methods=['GET'])
+def index():
+    """Page d'accueil de l'API avec documentation"""
+    return jsonify({
+        'service': 'Odoo Demo API',
+        'version': '1.0.0',
+        'status': 'running',
+        'endpoints': {
+            'GET /health': 'Health check (no auth required)',
+            'POST /api/demo/create': 'Create a new Odoo demo (requires API key)',
+            'GET /api/demo/stats': 'Get demo statistics (requires API key)',
+            'GET /api/demo/list': 'List all demos (requires API key)'
+        },
+        'documentation': 'https://github.com/MASITH-developpement/EZAYNOVA2'
+    }), 200
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Endpoint de santé pour vérifier que l'API fonctionne"""
