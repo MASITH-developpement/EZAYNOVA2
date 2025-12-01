@@ -7,7 +7,23 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}=== Démarrage de l'entrypoint Odoo 19 CE ===${NC}"
+# Forcer l'affichage immédiat (unbuffered)
+export PYTHONUNBUFFERED=1
+
+echo "========================================"
+echo "=== DEMARRAGE ENTRYPOINT ODOO 19 CE ==="
+echo "========================================"
+echo ""
+
+# Afficher les variables d'environnement pour le debug
+echo "Variables d'environnement disponibles:"
+echo "  DB_HOST: ${DB_HOST:-NON DEFINI}"
+echo "  DB_PORT: ${DB_PORT:-NON DEFINI}"
+echo "  DB_USER: ${DB_USER:-NON DEFINI}"
+echo "  DB_PASSWORD: ${DB_PASSWORD:+***DEFINI***}"
+echo "  DB_NAME: ${DB_NAME:-NON DEFINI (utilisera 'postgres')}"
+echo "  ADMIN_PASSWORD: ${ADMIN_PASSWORD:+***DEFINI***}"
+echo ""
 
 # Vérifier les variables d'environnement obligatoires
 REQUIRED_VARS=("DB_HOST" "DB_PORT" "DB_USER" "DB_PASSWORD" "ADMIN_PASSWORD")
@@ -20,12 +36,22 @@ for VAR in "${REQUIRED_VARS[@]}"; do
 done
 
 if [ ${#MISSING_VARS[@]} -ne 0 ]; then
-    echo -e "${RED}Erreur: Variables d'environnement manquantes:${NC}"
-    printf '%s\n' "${MISSING_VARS[@]}"
+    echo "ERREUR: Variables d'environnement manquantes:"
+    printf '  - %s\n' "${MISSING_VARS[@]}"
+    echo ""
+    echo "Veuillez configurer ces variables dans Railway:"
+    echo "  DB_HOST=\${{Postgres.PGHOST}}"
+    echo "  DB_PORT=\${{Postgres.PGPORT}}"
+    echo "  DB_USER=\${{Postgres.PGUSER}}"
+    echo "  DB_PASSWORD=\${{Postgres.PGPASSWORD}}"
+    echo "  DB_NAME=\${{Postgres.PGDATABASE}}"
+    echo "  ADMIN_PASSWORD=votre_mot_de_passe_securise"
+    echo ""
     exit 1
 fi
 
-echo -e "${YELLOW}Configuration des variables d'environnement...${NC}"
+echo "Configuration des variables d'environnement... OK"
+echo ""
 
 # Variables par défaut
 DB_NAME="${DB_NAME:-postgres}"

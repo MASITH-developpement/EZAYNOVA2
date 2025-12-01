@@ -17,43 +17,83 @@ Ce projet configure et déploie Odoo 19 Community Edition en français sur Railw
 1. Compte Railway (https://railway.app)
 2. Ce dépôt GitHub (EZAYNOVA2)
 
-### Étapes de déploiement
+### Étapes de déploiement (IMPORTANT)
 
-#### 1. Créer un nouveau projet sur Railway
+#### Étape 1 : Créer le projet sur Railway
 
-1. Connectez-vous à Railway
-2. Cliquez sur "New Project"
-3. Sélectionnez "Deploy from GitHub repo"
-4. Choisissez le dépôt `EZAYNOVA2`
+1. Connectez-vous à [Railway](https://railway.app)
+2. Cliquez sur **"New Project"**
+3. Sélectionnez **"Deploy from GitHub repo"**
+4. Choisissez le dépôt **`MASITH-developpement/EZAYNOVA2`**
+5. Railway commencera à construire le projet (il échouera sans PostgreSQL - c'est normal !)
 
-#### 2. Ajouter une base de données PostgreSQL
+#### Étape 2 : Ajouter PostgreSQL (CRITIQUE)
 
-1. Dans votre projet Railway, cliquez sur "New"
-2. Sélectionnez "Database" → "Add PostgreSQL"
-3. Railway créera automatiquement une base de données PostgreSQL
+⚠️ **Sans PostgreSQL, Odoo ne fonctionnera pas !**
 
-#### 3. Configurer les variables d'environnement
+1. Dans votre projet Railway, cliquez sur **"+ New"**
+2. Sélectionnez **"Database"**
+3. Choisissez **"Add PostgreSQL"**
+4. Attendez que PostgreSQL soit provisionné (≈ 30 secondes)
+5. Railway créera automatiquement les variables `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`
 
-Dans les paramètres de votre service Odoo, ajoutez les variables suivantes :
+#### Étape 3 : Configurer les variables d'environnement (CRITIQUE)
+
+⚠️ **Cette étape est OBLIGATOIRE pour que l'application fonctionne !**
+
+1. Cliquez sur votre service **Odoo** (pas PostgreSQL)
+2. Allez dans l'onglet **"Variables"**
+3. Cliquez sur **"+ New Variable"** et ajoutez **CHAQUE** variable ci-dessous :
 
 ```bash
-# Base de données (référencez votre service PostgreSQL)
+# === CONFIGURATION BASE DE DONNÉES ===
+# IMPORTANT: Utilisez exactement ces références Railway
 DB_HOST=${{Postgres.PGHOST}}
 DB_PORT=${{Postgres.PGPORT}}
 DB_USER=${{Postgres.PGUSER}}
 DB_PASSWORD=${{Postgres.PGPASSWORD}}
 DB_NAME=${{Postgres.PGDATABASE}}
 
-# Mot de passe administrateur Odoo
-ADMIN_PASSWORD=votre_mot_de_passe_admin_securise
+# === CONFIGURATION ODOO ===
+# IMPORTANT: Remplacez par un mot de passe fort et sécurisé
+ADMIN_PASSWORD=VotreMotDePasseSecurise123!
 
-# Port (Railway l'assigne automatiquement)
-PORT=8069
+# === OPTIONNEL ===
+WORKERS=2
 ```
 
-#### 4. Déployer
+**Comment ajouter les variables :**
+- Pour chaque ligne ci-dessus, créez une nouvelle variable
+- **Nom** : La partie avant le `=` (exemple: `DB_HOST`)
+- **Valeur** : La partie après le `=` (exemple: `${{Postgres.PGHOST}}`)
+- Railway remplacera automatiquement `${{Postgres.PGHOST}}` par la vraie valeur
 
-Railway détectera automatiquement le `Dockerfile` et commencera le déploiement.
+#### Étape 4 : Vérifier et redéployer
+
+1. Après avoir ajouté toutes les variables, retournez à l'onglet **"Deployments"**
+2. Cliquez sur **"Redeploy"** ou attendez le déploiement automatique
+3. Surveillez les logs - vous devriez voir :
+   ```
+   ========================================
+   === DEMARRAGE ENTRYPOINT ODOO 19 CE ===
+   ========================================
+
+   Variables d'environnement disponibles:
+     DB_HOST: [votre-host]
+     DB_PORT: 5432
+     DB_USER: postgres
+     ...
+   ```
+
+4. Si vous voyez `NON DEFINI`, retournez à l'étape 3 !
+
+#### Étape 5 : Accéder à Odoo
+
+1. Une fois le déploiement réussi, cliquez sur le service Odoo
+2. Allez dans l'onglet **"Settings"**
+3. Sous **"Networking"**, cliquez sur **"Generate Domain"** si ce n'est pas déjà fait
+4. Cliquez sur l'URL générée (exemple: `https://votre-app.up.railway.app`)
+5. Vous devriez voir la page de création de base de données Odoo
 
 ## 🔧 Configuration
 
@@ -145,12 +185,14 @@ COPY ./addons /mnt/extra-addons
 ```
 EZAYNOVA2/
 ├── Dockerfile          # Image Docker Odoo 19
-├── entrypoint.sh      # Script de démarrage avec substitution des variables
+├── entrypoint.sh      # Script de démarrage intelligent avec validation
 ├── odoo.conf          # Configuration Odoo (template)
-├── railway.json       # Configuration Railway
-├── requirements.txt   # Dépendances Python
+├── railway.toml       # Configuration Railway avec variables
+├── railway.json       # Configuration Railway (backup)
+├── .env.example       # Exemple de variables d'environnement
+├── requirements.txt   # Dépendances Python supplémentaires
 ├── .gitignore        # Fichiers à ignorer
-└── README.md         # Ce fichier
+└── README.md         # Documentation complète
 ```
 
 ## 🔧 Architecture et fonctionnement
@@ -172,23 +214,72 @@ Ce système permet de :
 
 ## 🐛 Dépannage
 
-### L'application ne démarre pas
+### ❌ Erreur : "Variables d'environnement manquantes"
 
-1. Vérifiez les logs dans Railway
-2. Assurez-vous que toutes les variables d'environnement sont définies
-3. Vérifiez que la base de données PostgreSQL est bien connectée
+**Symptôme** : Dans les logs, vous voyez :
+```
+ERREUR: Variables d'environnement manquantes:
+  - DB_HOST
+  - DB_PORT
+  - DB_USER
+  ...
+```
 
-### Erreur de connexion à la base de données
+**Solution** :
+1. Vérifiez que PostgreSQL est ajouté au projet
+2. Allez dans le service Odoo → Onglet **"Variables"**
+3. Ajoutez TOUTES les variables listées à l'Étape 3 ci-dessus
+4. Assurez-vous d'utiliser la syntaxe exacte : `${{Postgres.PGHOST}}` (pas de guillemets)
+5. Redéployez l'application
 
-1. Vérifiez que le service PostgreSQL est actif
-2. Vérifiez les variables d'environnement `DB_*`
-3. Assurez-vous que les références `${{Postgres.*}}` sont correctes
+### ❌ Erreur : "database: default@default:default"
 
-### Performance lente
+**Symptôme** : Dans les logs, vous voyez :
+```
+odoo: database: default@default:default
+psycopg2.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed
+```
 
-1. Augmentez les ressources Railway si nécessaire
-2. Modifiez les paramètres `workers` dans `odoo.conf`
-3. Optimisez la mémoire avec `limit_memory_*`
+**Cause** : Les variables d'environnement ne sont pas définies ou incorrectes.
+
+**Solution** :
+1. Vérifiez que vous avez bien ajouté les variables `DB_HOST`, `DB_PORT`, etc.
+2. Vérifiez la syntaxe : `DB_HOST=${{Postgres.PGHOST}}` (avec les accolades et sans espaces)
+3. Redéployez après avoir corrigé
+
+### ❌ Erreur : "Running as user 'root' is a security risk"
+
+**Symptôme** : Warning dans les logs
+
+**Impact** : Aucun - c'est juste un avertissement. L'application fonctionne.
+
+**Solution (optionnelle)** : Pour l'ignorer, c'est normal pour les conteneurs Docker.
+
+### ❌ PostgreSQL n'est pas prêt
+
+**Symptôme** : Dans les logs, vous voyez :
+```
+Tentative 1/30 - PostgreSQL n'est pas encore prêt...
+```
+
+**Solution** :
+- C'est normal ! Le script attend que PostgreSQL soit prêt
+- Cela devrait se résoudre en quelques secondes
+- Si cela dépasse 30 tentatives, vérifiez que PostgreSQL est bien déployé
+
+### ⚠️ L'application ne démarre pas
+
+1. **Vérifiez les logs** dans Railway (onglet "Deployments" → cliquez sur le déploiement)
+2. **Cherchez les messages d'erreur** du script entrypoint
+3. **Vérifiez PostgreSQL** : Le service doit être actif (pas de croix rouge)
+4. **Vérifiez les variables** : Toutes les variables requises doivent être définies
+5. **Redéployez** : Parfois un simple redéploiement résout le problème
+
+### 🐌 Performance lente
+
+1. Augmentez les ressources dans Railway (Plan supérieur)
+2. Modifiez la variable `WORKERS` (essayez 4 ou 6)
+3. Vérifiez que votre base de données PostgreSQL a assez de ressources
 
 ## 📚 Ressources
 
