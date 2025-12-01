@@ -1,5 +1,6 @@
 FROM odoo:19.0
 
+# Version: Fix postgres user security issue
 # Définir l'utilisateur root pour l'installation
 USER root
 
