@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_chantier_user,eazynova.chantier.user,model_eazynova_chantier,group_chantier_user,1,1,1,0
-access_chantier_manager,eazynova.chantier.manager,model_eazynova_chantier,group_chantier_manager,1,1,1,1

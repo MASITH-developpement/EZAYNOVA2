@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates>
-    <!-- Le widget hérite de DateTimeField, pas besoin de template spécifique -->
-</templates>
