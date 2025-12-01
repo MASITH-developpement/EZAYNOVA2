@@ -16,6 +16,14 @@ RUN mkdir -p /mnt/extra-addons \
     && mkdir -p /var/lib/odoo \
     && mkdir -p /etc/odoo
 
+# Installer les dépendances Python requises par les modules eazynova
+RUN pip3 install --no-cache-dir \
+    numpy \
+    pandas \
+    xlrd \
+    openpyxl \
+    python-dateutil
+
 # Copier les modules personnalisés (eazynova*)
 COPY ./addons /mnt/extra-addons
 
