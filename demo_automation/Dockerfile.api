@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Installer les dépendances système
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copier les fichiers de l'application
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY api_flask.py .
+COPY create_demo.py .
+COPY cleanup_expired.py .
+
+# Créer le dossier pour la base de données SQLite
+RUN mkdir -p /app/data
+
+# Exposer le port
+EXPOSE 8080
+
+# Variable d'environnement pour le port
+ENV PORT=8080
+
+# Lancer l'application avec gunicorn
+CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 api_flask:app

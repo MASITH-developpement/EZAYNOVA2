@@ -1,0 +1,31 @@
+# Configuration Railway pour l'API de démos Odoo
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.api"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Variables d'environnement requises
+# Ces variables doivent être configurées dans l'interface Railway
+[deploy.env]
+# URL de l'instance Odoo principale
+ODOO_URL = "https://ezaynova2-production.up.railway.app"
+
+# Master password de l'instance Odoo (ADMIN_PASSWORD)
+# IMPORTANT: À configurer dans Railway avec la vraie valeur
+MASTER_PASSWORD = "${{ODOO_MASTER_PASSWORD}}"
+
+# Clé API pour sécuriser l'accès à l'API
+# Générer une clé aléatoire forte
+API_KEY = "${{DEMO_API_KEY}}"
+
+# Chemin pour la base de données SQLite
+DB_PATH = "/app/data/demos.db"
+
+# Port de l'application
+PORT = "8080"
