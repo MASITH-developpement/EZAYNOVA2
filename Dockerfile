@@ -17,7 +17,8 @@ RUN mkdir -p /mnt/extra-addons \
     && mkdir -p /etc/odoo
 
 # Installer les dépendances Python requises par les modules eazynova
-RUN pip3 install --no-cache-dir \
+# --break-system-packages est nécessaire pour Python 3.12+ dans Docker
+RUN pip3 install --no-cache-dir --break-system-packages \
     numpy \
     pandas \
     xlrd \
