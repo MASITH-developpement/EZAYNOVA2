@@ -16,12 +16,11 @@ RUN mkdir -p /mnt/extra-addons \
     && mkdir -p /var/lib/odoo \
     && mkdir -p /etc/odoo
 
-# Copier le script d'entrée et le fichier de configuration template
-COPY ./entrypoint.sh /entrypoint.sh
-COPY ./odoo.conf /etc/odoo/odoo.conf.template
+# Copier le nouveau script de démarrage
+COPY ./start-odoo.sh /start-odoo.sh
 
-# Rendre le script exécutable et donner les permissions appropriées
-RUN chmod +x /entrypoint.sh \
+# Rendre le script exécutable et donner les permissions
+RUN chmod +x /start-odoo.sh \
     && chown -R odoo:odoo /mnt/extra-addons \
     && chown -R odoo:odoo /var/lib/odoo \
     && chown -R odoo:odoo /etc/odoo
@@ -29,11 +28,5 @@ RUN chmod +x /entrypoint.sh \
 # Exposer le port Odoo
 EXPOSE 8069
 
-# Définir les variables d'environnement par défaut
-ENV ODOO_RC=/etc/odoo/odoo.conf
-
-# Utiliser le script d'entrée
-ENTRYPOINT ["/entrypoint.sh"]
-
-# Arguments par défaut (peuvent être overridés)
-CMD []
+# Lancer le script
+CMD ["/start-odoo.sh"]
