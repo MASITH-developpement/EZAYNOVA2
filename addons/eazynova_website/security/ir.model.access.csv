@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saas_plan_public,saas.plan.public,model_saas_plan,base.group_public,1,0,0,0
+access_saas_plan_user,saas.plan.user,model_saas_plan,group_saas_user,1,0,0,0
+access_saas_plan_manager,saas.plan.manager,model_saas_plan,group_saas_manager,1,1,1,1
+access_saas_plan_feature_public,saas.plan.feature.public,model_saas_plan_feature,base.group_public,1,0,0,0
+access_saas_plan_feature_user,saas.plan.feature.user,model_saas_plan_feature,group_saas_user,1,0,0,0
+access_saas_plan_feature_manager,saas.plan.feature.manager,model_saas_plan_feature,group_saas_manager,1,1,1,1
+access_saas_subscription_portal,saas.subscription.portal,model_saas_subscription,base.group_portal,1,0,0,0
+access_saas_subscription_user,saas.subscription.user,model_saas_subscription,group_saas_user,1,1,1,0
+access_saas_subscription_manager,saas.subscription.manager,model_saas_subscription,group_saas_manager,1,1,1,1
+access_saas_instance_portal,saas.instance.portal,model_saas_instance,base.group_portal,1,0,0,0
+access_saas_instance_user,saas.instance.user,model_saas_instance,group_saas_user,1,0,0,0
+access_saas_instance_manager,saas.instance.manager,model_saas_instance,group_saas_manager,1,1,1,1

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Menu principal du site web -->
+        <record id="menu_saas_home" model="website.menu">
+            <field name="name">Accueil</field>
+            <field name="url">/</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="menu_saas_features" model="website.menu">
+            <field name="name">Fonctionnalités</field>
+            <field name="url">/saas/features</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="menu_saas_pricing" model="website.menu">
+            <field name="name">Tarifs</field>
+            <field name="url">/saas/pricing</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="menu_saas_signup" model="website.menu">
+            <field name="name">Essai gratuit</field>
+            <field name="url">/saas/signup</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">40</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Formulaire d'inscription -->
+    <template id="signup" name="EAZYNOVA Signup Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+
+                <!-- Header -->
+                <section class="pt96 pb48 bg-primary text-white">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-4 mb-3">Commencer votre essai gratuit</h1>
+                                <p class="lead">
+                                    30 jours d'essai · Sans carte bancaire · Sans engagement
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Formulaire -->
+                <section class="pt48 pb96">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <div class="card shadow-lg border-0">
+                                    <div class="card-body p-5">
+                                        <form action="/saas/signup/submit" method="post" class="needs-validation" novalidate="true">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                            <!-- Informations entreprise -->
+                                            <h4 class="mb-4"><i class="fa fa-building me-2"/>Informations de l'entreprise</h4>
+
+                                            <div class="mb-3">
+                                                <label for="company_name" class="form-label">Nom de l'entreprise *</label>
+                                                <input type="text" class="form-control" id="company_name" name="company_name" required="required"/>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="contact_name" class="form-label">Nom du contact *</label>
+                                                    <input type="text" class="form-control" id="contact_name" name="contact_name" required="required"/>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="email" class="form-label">Email *</label>
+                                                    <input type="email" class="form-control" id="email" name="email" required="required"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Téléphone *</label>
+                                                    <input type="tel" class="form-control" id="phone" name="phone" required="required"/>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="country_id" class="form-label">Pays</label>
+                                                    <select class="form-select" id="country_id" name="country_id">
+                                                        <option value="">-- Sélectionner --</option>
+                                                        <t t-foreach="countries" t-as="country">
+                                                            <option t-att-value="country.id" t-att-selected="'selected' if country.code == 'FR' else None">
+                                                                <t t-esc="country.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="street" class="form-label">Adresse</label>
+                                                <input type="text" class="form-control" id="street" name="street"/>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="zip" class="form-label">Code postal</label>
+                                                    <input type="text" class="form-control" id="zip" name="zip"/>
+                                                </div>
+                                                <div class="col-md-8 mb-3">
+                                                    <label for="city" class="form-label">Ville</label>
+                                                    <input type="text" class="form-control" id="city" name="city"/>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-4"/>
+
+                                            <!-- Choix du plan -->
+                                            <h4 class="mb-4"><i class="fa fa-tag me-2"/>Votre abonnement</h4>
+
+                                            <div class="mb-3">
+                                                <label for="plan_id" class="form-label">Plan *</label>
+                                                <select class="form-select" id="plan_id" name="plan_id" required="required">
+                                                    <t t-foreach="plans" t-as="plan">
+                                                        <option t-att-value="plan.id" t-att-data-monthly-price="plan.monthly_price"
+                                                                t-att-data-included-users="plan.included_users"
+                                                                t-att-data-extra-user-price="plan.extra_user_price"
+                                                                t-att-data-setup-fee="plan.setup_fee">
+                                                            <t t-esc="plan.name"/> - <t t-esc="'%.0f' % plan.monthly_price"/> €/mois
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="nb_users" class="form-label">
+                                                    Nombre d'utilisateurs *
+                                                    <small class="text-muted">(5 inclus, +20 €/utilisateur supplémentaire)</small>
+                                                </label>
+                                                <input type="number" class="form-control" id="nb_users" name="nb_users" value="5" min="1" max="100" required="required"/>
+                                            </div>
+
+                                            <!-- Récapitulatif des prix -->
+                                            <div class="alert alert-info">
+                                                <h5 class="alert-heading"><i class="fa fa-calculator me-2"/>Récapitulatif</h5>
+                                                <div id="price_summary">
+                                                    <p class="mb-1">Prix de base : <strong id="base_price">250 €</strong>/mois HT</p>
+                                                    <p class="mb-1" id="extra_users_line" style="display: none;">
+                                                        <span id="extra_users_count">0</span> utilisateur(s) supplémentaire(s) :
+                                                        <strong id="extra_price">0 €</strong>/mois HT
+                                                    </p>
+                                                    <hr/>
+                                                    <p class="mb-1 fs-5"><strong>Total mensuel : <span id="total_monthly">250 €</span> HT</strong></p>
+                                                    <p class="mb-0 text-warning">
+                                                        <i class="fa fa-plus me-1"/>Configuration complète : <strong id="setup_fee">1 800 €</strong> HT (une fois)
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="alert alert-success">
+                                                <i class="fa fa-gift me-2"/><strong>Période d'essai gratuite de 30 jours</strong><br/>
+                                                <small>Aucun paiement ne vous sera demandé pendant la période d'essai.
+                                                Vous pourrez activer votre abonnement à tout moment.</small>
+                                            </div>
+
+                                            <hr class="my-4"/>
+
+                                            <!-- Conditions -->
+                                            <div class="mb-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required="required"/>
+                                                    <label class="form-check-label" for="terms">
+                                                        J'accepte les <a href="/page/terms" target="_blank">conditions générales d'utilisation</a> et
+                                                        la <a href="/page/privacy" target="_blank">politique de confidentialité</a> *
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bouton de soumission -->
+                                            <div class="d-grid gap-2">
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                    <i class="fa fa-rocket me-2"/>Démarrer mon essai gratuit
+                                                </button>
+                                            </div>
+
+                                            <p class="text-center text-muted mt-3 small">
+                                                <i class="fa fa-lock me-1"/>Vos données sont sécurisées et ne seront jamais partagées
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Avantages -->
+                                <div class="row mt-5">
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fa fa-3x fa-check-circle text-success mb-3"/>
+                                        <h5>Sans engagement</h5>
+                                        <p class="text-muted">Aucune carte bancaire requise</p>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fa fa-3x fa-clock text-primary mb-3"/>
+                                        <h5>Prêt en 5 minutes</h5>
+                                        <p class="text-muted">Votre instance provisionnée automatiquement</p>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fa fa-3x fa-headset text-info mb-3"/>
+                                        <h5>Support inclus</h5>
+                                        <p class="text-muted">Assistance technique par email</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- Page de succès -->
+    <template id="signup_success" name="EAZYNOVA Signup Success">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="pt96 pb96">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-check-circle text-success" style="font-size: 80px;"/>
+                                </div>
+                                <h1 class="display-4 mb-4">Bienvenue sur EAZYNOVA !</h1>
+                                <p class="lead text-muted mb-5">
+                                    Votre période d'essai gratuite de 30 jours a commencé.<br/>
+                                    Nous sommes en train de provisionner votre instance personnelle.
+                                </p>
+
+                                <div class="card shadow-sm mb-5">
+                                    <div class="card-body p-4">
+                                        <h4 class="mb-3">Prochaines étapes</h4>
+                                        <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                                                <i class="fa fa-envelope text-primary me-2"/>
+                                                <strong>Vérifiez votre email</strong> - Nous vous avons envoyé un email de confirmation
+                                            </div>
+                                            <div class="list-group-item">
+                                                <i class="fa fa-clock text-info me-2"/>
+                                                <strong>Provisioning en cours</strong> - Votre instance sera prête dans 2-3 minutes
+                                            </div>
+                                            <div class="list-group-item">
+                                                <i class="fa fa-key text-success me-2"/>
+                                                <strong>Recevez vos identifiants</strong> - Vous recevrez vos accès par email
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <strong><i class="fa fa-info-circle me-2"/>Votre abonnement</strong><br/>
+                                    Référence : <t t-esc="subscription.name"/><br/>
+                                    Plan : <t t-esc="subscription.plan_id.name"/><br/>
+                                    Utilisateurs : <t t-esc="subscription.nb_users"/><br/>
+                                    Fin de la période d'essai : <t t-esc="subscription.trial_end_date.strftime('%d/%m/%Y')"/>
+                                </div>
+
+                                <a href="/" class="btn btn-primary btn-lg mt-3">
+                                    <i class="fa fa-home me-2"/>Retour à l'accueil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- Page d'erreur -->
+    <template id="signup_error" name="EAZYNOVA Signup Error">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="pt96 pb96">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-times-circle text-danger" style="font-size: 80px;"/>
+                                </div>
+                                <h1 class="display-4 mb-4">Oups ! Une erreur est survenue</h1>
+                                <div class="alert alert-danger">
+                                    <t t-esc="error"/>
+                                </div>
+                                <p class="lead text-muted mb-5">
+                                    Nous sommes désolés, mais nous n'avons pas pu créer votre compte.
+                                </p>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <a href="/saas/signup" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-arrow-left me-2"/>Réessayer
+                                    </a>
+                                    <a href="/contactus" class="btn btn-outline-primary btn-lg">
+                                        <i class="fa fa-envelope me-2"/>Nous contacter
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="pricing" name="EAZYNOVA Pricing Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+
+                <!-- Header -->
+                <section class="pt96 pb48 bg-light">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-3 mb-3">Tarifs EAZYNOVA</h1>
+                                <p class="lead text-muted">
+                                    Un tarif simple et transparent, sans mauvaise surprise
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pricing Cards -->
+                <section class="pt48 pb96">
+                    <div class="container">
+                        <t t-foreach="plans" t-as="plan">
+                            <div class="row mb-5">
+                                <div class="col-lg-8 mx-auto">
+                                    <div class="card shadow-lg border-0">
+                                        <div class="card-header bg-primary text-white text-center py-4">
+                                            <h2 class="mb-0"><t t-esc="plan.name"/></h2>
+                                        </div>
+                                        <div class="card-body p-5">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="text-center mb-4">
+                                                        <div class="display-3 text-primary mb-2">
+                                                            <t t-esc="'%.0f' % plan.monthly_price"/> €
+                                                        </div>
+                                                        <p class="text-muted">par mois HT</p>
+                                                        <p class="small">
+                                                            <strong><t t-esc="plan.included_users"/> utilisateurs inclus</strong><br/>
+                                                            + <t t-esc="'%.0f' % plan.extra_user_price"/> €/mois par utilisateur supplémentaire
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="alert alert-info text-center">
+                                                        <strong><i class="fa fa-gift me-2"/>Essai gratuit</strong><br/>
+                                                        <t t-esc="plan.trial_days"/> jours sans engagement
+                                                    </div>
+
+                                                    <div class="alert alert-warning text-center" t-if="plan.setup_fee > 0">
+                                                        <strong>Configuration complète</strong><br/>
+                                                        <t t-esc="'%.0f' % plan.setup_fee"/> € HT (frais unique)
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <h4 class="mb-3">Fonctionnalités incluses :</h4>
+                                                    <ul class="list-unstyled">
+                                                        <t t-foreach="plan.feature_ids" t-as="feature">
+                                                            <li class="mb-2">
+                                                                <i t-att-class="'fa %s text-success me-2' % (feature.icon or 'fa-check')"/>
+                                                                <strong><t t-esc="feature.name"/></strong>
+                                                                <t t-if="feature.description">
+                                                                    <br/>
+                                                                    <small class="text-muted ms-4"><t t-esc="feature.description"/></small>
+                                                                </t>
+                                                            </li>
+                                                        </t>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-4">
+                                                <div class="col-12 text-center">
+                                                    <a t-attf-href="/saas/signup?plan_id={{plan.id}}" class="btn btn-primary btn-lg">
+                                                        <i class="fa fa-rocket me-2"/>Démarrer l'essai gratuit
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Calculateur de prix -->
+                        <div class="row mt-5">
+                            <div class="col-lg-8 mx-auto">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h4 class="mb-0"><i class="fa fa-calculator me-2"/>Calculez votre prix</h4>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-8">
+                                                <label for="nb_users_calc" class="form-label">Nombre d'utilisateurs</label>
+                                                <input type="number" class="form-control form-control-lg" id="nb_users_calc" value="5" min="1" max="100"/>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div id="calculated_price" class="mt-3">
+                                                    <div class="display-4 text-primary">250 €</div>
+                                                    <p class="text-muted mb-0">par mois HT</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="price_details" class="mt-3 small text-muted">
+                                            <p class="mb-1">Prix de base (5 utilisateurs) : 250 €/mois</p>
+                                            <p class="mb-1">Utilisateurs supplémentaires : 0 × 20 € = 0 €/mois</p>
+                                            <p class="mb-1 fw-bold">Total mensuel : 250 €/mois HT</p>
+                                            <p class="mb-0 text-warning">+ Configuration : 1 800 € HT (une fois)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ -->
+                        <div class="row mt-5">
+                            <div class="col-lg-8 mx-auto">
+                                <h3 class="mb-4">Questions fréquentes</h3>
+
+                                <div class="accordion" id="pricingFAQ">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                                Que se passe-t-il après les 30 jours d'essai ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#pricingFAQ">
+                                            <div class="accordion-body">
+                                                À la fin de votre période d'essai de 30 jours, vous pouvez choisir d'activer votre abonnement payant.
+                                                Si vous ne souhaitez pas continuer, votre base de données sera supprimée automatiquement 30 jours après
+                                                la fin de l'essai.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                                Les frais de configuration sont-ils obligatoires ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                            <div class="accordion-body">
+                                                Oui, les frais de configuration de 1 800 € HT sont facturés une seule fois lors de l'activation de votre
+                                                abonnement. Ils couvrent la mise en place complète de votre instance, l'import de vos données,
+                                                la formation initiale et le support dédié.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                                Puis-je ajouter ou retirer des utilisateurs ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                            <div class="accordion-body">
+                                                Oui, vous pouvez ajuster le nombre d'utilisateurs à tout moment depuis votre tableau de bord client.
+                                                Les utilisateurs supplémentaires sont facturés au prorata du mois en cours.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                                Puis-je annuler mon abonnement ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                            <div class="accordion-body">
+                                                Oui, vous pouvez annuler votre abonnement à tout moment sans frais. Votre instance restera active
+                                                jusqu'à la fin de votre période de facturation en cours. Ensuite, vos données seront conservées
+                                                pendant 30 jours avant suppression définitive.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                                Mes données sont-elles sécurisées ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#pricingFAQ">
+                                            <div class="accordion-body">
+                                                Absolument ! Vos données sont hébergées sur des serveurs sécurisés avec chiffrement SSL,
+                                                sauvegardes quotidiennes automatiques, et conformité RGPD. Chaque client dispose de sa propre
+                                                base de données isolée.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="row mt-5">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <div class="bg-light p-5 rounded">
+                                    <h3 class="mb-3">Prêt à démarrer ?</h3>
+                                    <p class="lead text-muted mb-4">
+                                        Essayez EAZYNOVA gratuitement pendant 30 jours, sans carte bancaire
+                                    </p>
+                                    <a href="/saas/signup" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-rocket me-2"/>Commencer l'essai gratuit
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

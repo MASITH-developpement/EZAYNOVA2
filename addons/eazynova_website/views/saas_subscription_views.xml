@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste des abonnements -->
+    <record id="view_saas_subscription_tree" model="ir.ui.view">
+        <field name="name">saas.subscription.tree</field>
+        <field name="model">saas.subscription</field>
+        <field name="arch" type="xml">
+            <list string="Abonnements SaaS" default_order="create_date desc">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="nb_users"/>
+                <field name="monthly_price"/>
+                <field name="state" decoration-success="state=='active'" decoration-warning="state=='trial'" decoration-danger="state in ('expired', 'cancelled')"/>
+                <field name="date_start"/>
+                <field name="trial_end_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des abonnements -->
+    <record id="view_saas_subscription_form" model="ir.ui.view">
+        <field name="name">saas.subscription.form</field>
+        <field name="model">saas.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Abonnement SaaS">
+                <header>
+                    <button name="action_start_trial" string="Démarrer l'essai" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_activate" string="Activer" type="object" class="oe_highlight" invisible="state not in ('trial', 'suspended')"/>
+                    <button name="action_suspend" string="Suspendre" type="object" invisible="state != 'active'"/>
+                    <button name="action_cancel" string="Annuler" type="object" invisible="state in ('cancelled', 'expired')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,trial,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-file-invoice">
+                            <field name="invoice_count" widget="statinfo" string="Factures"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                            <field name="plan_id"/>
+                            <field name="nb_users"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="trial_end_date" invisible="state != 'trial'"/>
+                            <field name="next_billing_date" invisible="state != 'active'"/>
+                            <field name="date_end" invisible="state not in ('cancelled', 'expired')"/>
+                        </group>
+                    </group>
+                    <group string="Tarification">
+                        <group>
+                            <field name="monthly_price" widget="monetary"/>
+                            <field name="setup_fee" widget="monetary"/>
+                            <field name="setup_paid"/>
+                        </group>
+                        <group>
+                            <field name="total_monthly" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Instance">
+                        <field name="instance_id"/>
+                        <field name="instance_url" widget="url"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue recherche -->
+    <record id="view_saas_subscription_search" model="ir.ui.view">
+        <field name="name">saas.subscription.search</field>
+        <field name="model">saas.subscription</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher abonnements">
+                <filter string="Essai" name="trial" domain="[('state', '=', 'trial')]"/>
+                <filter string="Actif" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Expiré" name="expired" domain="[('state', '=', 'expired')]"/>
+                <!-- Group by supprimé pour compatibilité stricte Odoo 19 CE -->
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_saas_subscription" model="ir.actions.act_window">
+        <field name="name">Abonnements</field>
+        <field name="res_model">saas.subscription</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouvel abonnement SaaS
+            </p>
+            <p>
+                Gérez les abonnements de vos clients à la plateforme EAZYNOVA.
+            </p>
+        </field>
+    </record>
+
+</odoo>

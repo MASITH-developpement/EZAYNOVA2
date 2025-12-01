@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Template de base -->
+    <template id="layout" name="EAZYNOVA Website Layout" inherit_id="website.layout">
+        <xpath expr="//head/link[last()]" position="after">
+            <link rel="stylesheet" href="/eazynova_website/static/src/css/website.css"/>
+        </xpath>
+        <xpath expr="//body" position="inside">
+            <script src="/eazynova_website/static/src/js/website.js"/>
+        </xpath>
+    </template>
+
+</odoo>

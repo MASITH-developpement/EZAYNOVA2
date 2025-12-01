@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="homepage" name="EAZYNOVA Homepage">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+
+                <!-- Hero Section -->
+                <section class="s_cover parallax s_parallax_is_fixed pt96 pb96" data-vcss="001" data-snippet="s_cover" data-name="Cover">
+                    <span class="s_parallax_bg oe_img_bg o_bg_img_center" style="background-image: url('/web/image/website.s_cover_default_image'); background-position: 50% 0;"/>
+                    <div class="o_we_bg_filter bg-black-50"/>
+                    <div class="container">
+                        <div class="row s_nb_column_fixed">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-2 text-white">EAZYNOVA</h1>
+                                <h3 class="text-white-50 mb-4">La solution ERP complète pour votre entreprise de construction</h3>
+                                <p class="lead text-white mb-5">
+                                    Gérez vos chantiers, votre planning, vos achats et vos factures en toute simplicité.
+                                    Profitez d'un essai gratuit de 30 jours, sans engagement.
+                                </p>
+                                <div class="s_button_text">
+                                    <a href="/saas/signup" class="btn btn-primary btn-lg me-3">
+                                        <i class="fa fa-rocket me-2"/>Essai gratuit 30 jours
+                                    </a>
+                                    <a href="/saas/pricing" class="btn btn-outline-light btn-lg">
+                                        <i class="fa fa-tag me-2"/>Voir les tarifs
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="pt64 pb64" data-snippet="s_text_block">
+                    <div class="container">
+                        <div class="row mb-5">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h2 class="display-4 mb-3">Pourquoi choisir EAZYNOVA ?</h2>
+                                <p class="lead text-muted">
+                                    Une plateforme SaaS complète conçue spécialement pour les entreprises de construction
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-building"/>
+                                        </div>
+                                        <h4>Gestion de chantiers</h4>
+                                        <p class="text-muted">Planifiez et suivez vos chantiers en temps réel avec nos outils dédiés</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-success bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-calendar"/>
+                                        </div>
+                                        <h4>Planning interactif</h4>
+                                        <p class="text-muted">Visualisez vos projets avec un calendrier Gantt intuitif</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-info bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-face-smile"/>
+                                        </div>
+                                        <h4>Reconnaissance faciale</h4>
+                                        <p class="text-muted">Authentification biométrique sécurisée sans mot de passe</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-warning bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-file-invoice"/>
+                                        </div>
+                                        <h4>OCR de factures</h4>
+                                        <p class="text-muted">Reconnaissance automatique et extraction des données de factures</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-danger bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-chart-line"/>
+                                        </div>
+                                        <h4>Business Plan</h4>
+                                        <p class="text-muted">Tableaux de bord et prévisions financières en temps réel</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="feature-icon bg-secondary bg-gradient text-white rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px; line-height: 80px;">
+                                            <i class="fa fa-3x fa-shopping-cart"/>
+                                        </div>
+                                        <h4>Gestion des achats</h4>
+                                        <p class="text-muted">Suivez vos achats, fournisseurs et stocks facilement</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <a href="/saas/features" class="btn btn-outline-primary btn-lg">
+                                    Découvrir toutes les fonctionnalités <i class="fa fa-arrow-right ms-2"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pricing Teaser -->
+                <section class="pt64 pb64 bg-light">
+                    <div class="container">
+                        <div class="row mb-5">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h2 class="display-4 mb-3">Tarif simple et transparent</h2>
+                                <p class="lead text-muted">Pas de surprise, un prix unique tout compris</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 mx-auto">
+                                <div class="card shadow border-0">
+                                    <div class="card-body p-5 text-center">
+                                        <h3 class="mb-4">EAZYNOVA Standard</h3>
+                                        <div class="display-3 text-primary mb-2">250 €</div>
+                                        <p class="text-muted mb-4">par mois HT</p>
+                                        <ul class="list-unstyled mb-4 text-start">
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>5 utilisateurs inclus</li>
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>20 €/mois par utilisateur supplémentaire</li>
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>Tous les modules inclus</li>
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>Essai gratuit 30 jours</li>
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>Configuration complète : 1 800 € HT</li>
+                                            <li class="mb-2"><i class="fa fa-check text-success me-2"/>Support technique inclus</li>
+                                        </ul>
+                                        <a href="/saas/signup" class="btn btn-primary btn-lg w-100 mb-3">
+                                            Commencer l'essai gratuit
+                                        </a>
+                                        <a href="/saas/pricing" class="btn btn-outline-primary w-100">
+                                            En savoir plus
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="pt64 pb64">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h2 class="display-4 mb-4">Prêt à transformer votre entreprise ?</h2>
+                                <p class="lead text-muted mb-5">
+                                    Rejoignez les entreprises qui ont déjà choisi EAZYNOVA pour gérer leur activité
+                                </p>
+                                <a href="/saas/signup" class="btn btn-primary btn-lg">
+                                    <i class="fa fa-rocket me-2"/>Démarrer maintenant - Gratuit pendant 30 jours
+                                </a>
+                                <p class="text-muted mt-3 small">Sans carte bancaire · Sans engagement</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

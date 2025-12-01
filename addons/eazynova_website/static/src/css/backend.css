@@ -1,0 +1,46 @@
+/* EAZYNOVA Backend Styles */
+
+/* SaaS Dashboard */
+.o_saas_dashboard {
+    padding: 20px;
+}
+
+.o_saas_stat_card {
+    background: linear-gradient(135deg, #875A7B 0%, #6d4861 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.o_saas_stat_card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.o_saas_stat_card p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+}
+
+/* Form Views */
+.o_form_view .o_saas_state_badge {
+    font-size: 1rem;
+    padding: 0.5em 1em;
+}
+
+/* List Views */
+.o_list_view .o_data_row:hover {
+    background-color: rgba(135, 90, 123, 0.05);
+}
+
+/* Kanban Views */
+.o_kanban_view .o_saas_kanban_card {
+    border-left: 4px solid #875A7B;
+}
+
+.o_kanban_view .o_saas_kanban_card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste des instances -->
+    <record id="view_saas_instance_tree" model="ir.ui.view">
+        <field name="name">saas.instance.tree</field>
+        <field name="model">saas.instance</field>
+        <field name="arch" type="xml">
+            <list string="Instances SaaS" default_order="create_date desc">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="subscription_id"/>
+                <field name="url" widget="url"/>
+                <field name="max_users"/>
+                <field name="current_users"/>
+                <field name="state" decoration-success="state=='active'" decoration-warning="state in ('provisioning', 'suspended')" decoration-danger="state in ('error', 'deleted')"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des instances -->
+    <record id="view_saas_instance_form" model="ir.ui.view">
+        <field name="name">saas.instance.form</field>
+        <field name="model">saas.instance</field>
+        <field name="arch" type="xml">
+            <form string="Instance SaaS">
+                <header>
+                    <button name="action_provision" string="Provisionner" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_suspend" string="Suspendre" type="object" invisible="state != 'active'"/>
+                    <button name="action_resume" string="Réactiver" type="object" invisible="state != 'suspended'"/>
+                    <button name="action_delete" string="Supprimer" type="object" confirm="Êtes-vous sûr de vouloir supprimer cette instance ?" invisible="state == 'deleted'"/>
+                    <button name="action_open_instance" string="Ouvrir" type="object" icon="fa-external-link" invisible="not url or state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,provisioning,active"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subscription_id"/>
+                            <field name="partner_id"/>
+                            <field name="plan_id"/>
+                        </group>
+                        <group>
+                            <field name="url" widget="url"/>
+                            <field name="provisioned_date"/>
+                            <field name="last_accessed"/>
+                        </group>
+                    </group>
+                    <group string="Configuration technique">
+                        <group>
+                            <field name="database_name"/>
+                            <field name="railway_project_id"/>
+                            <field name="railway_service_id"/>
+                        </group>
+                        <group>
+                            <field name="admin_login"/>
+                            <field name="admin_password" password="True"/>
+                        </group>
+                    </group>
+                    <group string="Ressources">
+                        <group>
+                            <field name="max_users"/>
+                            <field name="current_users"/>
+                        </group>
+                        <group>
+                            <field name="storage_used_mb"/>
+                        </group>
+                    </group>
+                    <group string="Erreur" invisible="state != 'error'">
+                        <field name="error_message" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue recherche -->
+    <record id="view_saas_instance_search" model="ir.ui.view">
+        <field name="name">saas.instance.search</field>
+        <field name="model">saas.instance</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher instances">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="url"/>
+                <filter string="Actives" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Suspendues" name="suspended" domain="[('state', '=', 'suspended')]"/>
+                <filter string="Erreur" name="error" domain="[('state', '=', 'error')]"/>
+                <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
+                <filter string="Plan" name="group_plan" context="{'group_by': 'plan_id'}"/>
+                <filter string="Client" name="group_partner" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_saas_instance" model="ir.actions.act_window">
+        <field name="name">Instances</field>
+        <field name="res_model">saas.instance</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune instance pour le moment
+            </p>
+            <p>
+                Les instances Odoo provisionnées pour vos clients apparaîtront ici.
+            </p>
+        </field>
+    </record>
+
+</odoo>

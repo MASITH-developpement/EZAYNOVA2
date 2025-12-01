@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Email: Début de la période d'essai -->
+        <record id="email_template_trial_start" model="mail.template">
+            <field name="name">SaaS: Début de la période d'essai</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="subject">Bienvenue sur EAZYNOVA - Votre essai gratuit de 30 jours commence !</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@eazynova.fr')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #875A7B; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Bienvenue sur EAZYNOVA !</h1>
+    </div>
+
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <p>Bonjour <strong>${object.partner_id.name}</strong>,</p>
+
+        <p>Votre période d'essai gratuite de <strong>30 jours</strong> vient de commencer !</p>
+
+        <p>Votre instance EAZYNOVA est en cours de provisioning. Vous recevrez un email avec vos identifiants de connexion dans quelques minutes.</p>
+
+        <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #875A7B;">
+            <h3 style="margin-top: 0;">Votre abonnement :</h3>
+            <ul>
+                <li><strong>Plan :</strong> ${object.plan_id.name}</li>
+                <li><strong>Nombre d'utilisateurs :</strong> ${object.nb_users}</li>
+                <li><strong>Fin de la période d'essai :</strong> ${format_date(object.trial_end_date)}</li>
+            </ul>
+        </div>
+
+        <p>Pendant cette période, vous avez accès à toutes les fonctionnalités d'EAZYNOVA :</p>
+        <ul>
+            % for feature in object.plan_id.feature_ids:
+            <li>${feature.name}</li>
+            % endfor
+        </ul>
+
+        <p>À la fin de votre période d'essai, vous pourrez choisir de continuer avec un abonnement payant pour seulement <strong>${object.monthly_price} €/mois</strong>.</p>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="/my/subscriptions" style="background-color: #875A7B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Accéder à mon tableau de bord
+            </a>
+        </p>
+
+        <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+
+        <p>Cordialement,<br/>
+        L'équipe EAZYNOVA</p>
+    </div>
+
+    <div style="background-color: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+        <p style="margin: 0;">© 2024 EAZYNOVA - Tous droits réservés</p>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Email: Credentials de l'instance -->
+        <record id="email_template_instance_credentials" model="mail.template">
+            <field name="name">SaaS: Credentials de l'instance</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="subject">Votre instance EAZYNOVA est prête !</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@eazynova.fr')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #875A7B; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Votre instance est prête !</h1>
+    </div>
+
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <p>Bonjour <strong>${object.partner_id.name}</strong>,</p>
+
+        <p>Votre instance EAZYNOVA a été provisionnée avec succès !</p>
+
+        <div style="background-color: white; padding: 20px; margin: 20px 0; border: 2px solid #875A7B; border-radius: 5px;">
+            <h3 style="margin-top: 0; color: #875A7B;">Vos identifiants de connexion :</h3>
+            <p><strong>URL :</strong> <a href="${object.instance_id.url}">${object.instance_id.url}</a></p>
+            <p><strong>Login :</strong> ${object.instance_id.admin_login}</p>
+            <p><strong>Mot de passe :</strong> ${object.instance_id.admin_password}</p>
+        </div>
+
+        <p style="color: #d9534f;"><strong>⚠️ Important :</strong> Pour votre sécurité, changez votre mot de passe lors de votre première connexion.</p>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="${object.instance_id.url}" style="background-color: #875A7B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Accéder à mon instance EAZYNOVA
+            </a>
+        </p>
+
+        <p>Besoin d'aide pour démarrer ? Consultez notre <a href="/page/documentation">documentation</a> ou contactez notre support.</p>
+
+        <p>Cordialement,<br/>
+        L'équipe EAZYNOVA</p>
+    </div>
+
+    <div style="background-color: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+        <p style="margin: 0;">© 2024 EAZYNOVA - Tous droits réservés</p>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Email: Période d'essai expirée -->
+        <record id="email_template_trial_expired" model="mail.template">
+            <field name="name">SaaS: Période d'essai expirée</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="subject">Votre période d'essai EAZYNOVA est terminée</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@eazynova.fr')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #875A7B; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Votre période d'essai est terminée</h1>
+    </div>
+
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <p>Bonjour <strong>${object.partner_id.name}</strong>,</p>
+
+        <p>Votre période d'essai gratuite de 30 jours vient de se terminer.</p>
+
+        <p>Nous espérons que vous avez apprécié découvrir EAZYNOVA et toutes ses fonctionnalités !</p>
+
+        <p><strong>Pour continuer à utiliser EAZYNOVA, activez votre abonnement dès maintenant :</strong></p>
+
+        <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #875A7B;">
+            <h3 style="margin-top: 0;">Tarif :</h3>
+            <p><strong>${object.monthly_price} €/mois</strong> pour ${object.nb_users} utilisateurs</p>
+            <p>+ Frais de configuration unique : <strong>${object.setup_fee} €</strong></p>
+        </div>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="/my/subscriptions/${object.id}/activate" style="background-color: #5cb85c; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Activer mon abonnement
+            </a>
+        </p>
+
+        <p style="color: #d9534f;"><strong>⚠️ Attention :</strong> Votre instance sera supprimée dans 30 jours si vous n'activez pas votre abonnement.</p>
+
+        <p>Cordialement,<br/>
+        L'équipe EAZYNOVA</p>
+    </div>
+
+    <div style="background-color: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+        <p style="margin: 0;">© 2024 EAZYNOVA - Tous droits réservés</p>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Email: Abonnement activé -->
+        <record id="email_template_subscription_active" model="mail.template">
+            <field name="name">SaaS: Abonnement activé</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="subject">Votre abonnement EAZYNOVA est activé !</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@eazynova.fr')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #5cb85c; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Abonnement activé !</h1>
+    </div>
+
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <p>Bonjour <strong>${object.partner_id.name}</strong>,</p>
+
+        <p>Merci d'avoir choisi EAZYNOVA ! Votre abonnement a été activé avec succès.</p>
+
+        <div style="background-color: white; padding: 15px; margin: 20px 0; border-left: 4px solid #5cb85c;">
+            <h3 style="margin-top: 0;">Détails de votre abonnement :</h3>
+            <ul>
+                <li><strong>Plan :</strong> ${object.plan_id.name}</li>
+                <li><strong>Nombre d'utilisateurs :</strong> ${object.nb_users}</li>
+                <li><strong>Prix mensuel :</strong> ${object.monthly_price} €/mois</li>
+                <li><strong>Prochaine facturation :</strong> ${format_date(object.next_billing_date)}</li>
+            </ul>
+        </div>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="${object.instance_url}" style="background-color: #875A7B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Accéder à mon instance
+            </a>
+        </p>
+
+        <p>Vous pouvez gérer votre abonnement à tout moment depuis votre <a href="/my/subscriptions">tableau de bord client</a>.</p>
+
+        <p>Cordialement,<br/>
+        L'équipe EAZYNOVA</p>
+    </div>
+
+    <div style="background-color: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+        <p style="margin: 0;">© 2024 EAZYNOVA - Tous droits réservés</p>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Email: Instance supprimée -->
+        <record id="email_template_instance_deleted" model="mail.template">
+            <field name="name">SaaS: Instance supprimée</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="subject">Votre instance EAZYNOVA a été supprimée</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@eazynova.fr')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #d9534f; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Instance supprimée</h1>
+    </div>
+
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <p>Bonjour <strong>${object.partner_id.name}</strong>,</p>
+
+        <p>Votre instance EAZYNOVA a été supprimée suite à l'expiration de votre abonnement.</p>
+
+        <p>Toutes vos données ont été définitivement supprimées conformément à nos conditions générales.</p>
+
+        <p>Vous souhaitez revenir ? Créez un nouveau compte à tout moment :</p>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="/saas/signup" style="background-color: #875A7B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Créer un nouveau compte
+            </a>
+        </p>
+
+        <p>Nous espérons vous revoir bientôt !</p>
+
+        <p>Cordialement,<br/>
+        L'équipe EAZYNOVA</p>
+    </div>
+
+    <div style="background-color: #333; color: white; padding: 15px; text-align: center; font-size: 12px;">
+        <p style="margin: 0;">© 2024 EAZYNOVA - Tous droits réservés</p>
+    </div>
+</div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

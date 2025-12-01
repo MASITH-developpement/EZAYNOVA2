@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Cron: Vérifier les périodes d'essai expirées -->
+        <record id="ir_cron_check_trial_expiration" model="ir.cron">
+            <field name="name">SaaS: Vérifier les périodes d'essai expirées</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_check_trial_expiration()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cron: Générer les factures mensuelles -->
+        <record id="ir_cron_generate_invoices" model="ir.cron">
+            <field name="name">SaaS: Générer les factures mensuelles</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_generate_invoices()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cron: Supprimer les bases de données inactives -->
+        <record id="ir_cron_check_unpaid_subscriptions" model="ir.cron">
+            <field name="name">SaaS: Supprimer les bases inactives après 30 jours</field>
+            <field name="model_id" ref="model_saas_subscription"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_check_unpaid_subscriptions()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cron: Mettre à jour les statistiques d'utilisation -->
+        <record id="ir_cron_update_usage_stats" model="ir.cron">
+            <field name="name">SaaS: Mettre à jour les statistiques d'utilisation</field>
+            <field name="model_id" ref="model_saas_instance"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_usage_stats()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

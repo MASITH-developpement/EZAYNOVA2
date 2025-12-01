@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="features" name="EAZYNOVA Features Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+
+                <!-- Header -->
+                <section class="pt96 pb48 bg-light">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-3 mb-3">Fonctionnalités EAZYNOVA</h1>
+                                <p class="lead text-muted">
+                                    Tous les outils dont vous avez besoin pour gérer votre entreprise de construction
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features List -->
+                <section class="pt48 pb96">
+                    <div class="container">
+                        <t t-foreach="features" t-as="feature">
+                            <div class="row mb-5 align-items-center" t-att-class="'flex-row-reverse' if feature_index % 2 else ''">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <div t-att-class="'text-end' if feature_index % 2 else ''">
+                                        <div class="feature-icon-large d-inline-block bg-primary bg-gradient text-white rounded-circle mb-3"
+                                             style="width: 100px; height: 100px; line-height: 100px; text-align: center;">
+                                            <i t-att-class="'fa fa-3x %s' % (feature.icon or 'fa-check')"/>
+                                        </div>
+                                        <h2 class="mb-3"><t t-esc="feature.name"/></h2>
+                                        <p class="lead text-muted" t-if="feature.description">
+                                            <t t-esc="feature.description"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-body p-4">
+                                            <h5>Avantages :</h5>
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-check text-success me-2"/>Gain de temps considérable</li>
+                                                <li><i class="fa fa-check text-success me-2"/>Automatisation des tâches</li>
+                                                <li><i class="fa fa-check text-success me-2"/>Interface intuitive</li>
+                                                <li><i class="fa fa-check text-success me-2"/>Accès mobile</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr t-if="not feature_last" class="my-5"/>
+                        </t>
+
+                        <!-- CTA -->
+                        <div class="row mt-5">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <div class="bg-light p-5 rounded">
+                                    <h3 class="mb-3">Découvrez EAZYNOVA gratuitement</h3>
+                                    <p class="lead text-muted mb-4">
+                                        30 jours d'essai gratuit pour tester toutes ces fonctionnalités
+                                    </p>
+                                    <a href="/saas/signup" class="btn btn-primary btn-lg me-3">
+                                        <i class="fa fa-rocket me-2"/>Essai gratuit
+                                    </a>
+                                    <a href="/saas/pricing" class="btn btn-outline-primary btn-lg">
+                                        <i class="fa fa-tag me-2"/>Voir les tarifs
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

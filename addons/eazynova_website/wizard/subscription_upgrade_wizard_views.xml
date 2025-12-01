@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_subscription_upgrade_wizard_form" model="ir.ui.view">
+        <field name="name">subscription.upgrade.wizard.form</field>
+        <field name="model">subscription.upgrade.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Mettre à niveau l'abonnement">
+                <group>
+                    <field name="subscription_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </group>
+                <group>
+                    <group string="Abonnement actuel">
+                        <field name="current_nb_users"/>
+                        <field name="current_price"/>
+                    </group>
+                    <group string="Nouvelle configuration">
+                        <field name="new_nb_users"/>
+                        <field name="new_price"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="price_difference" widget="monetary"/>
+                </group>
+                <footer>
+                    <button string="Appliquer" name="action_upgrade" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_subscription_upgrade_wizard" model="ir.actions.act_window">
+        <field name="name">Mettre à niveau</field>
+        <field name="res_model">subscription.upgrade.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_saas_subscription"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>

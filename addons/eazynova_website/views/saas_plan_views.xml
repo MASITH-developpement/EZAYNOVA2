@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste des plans -->
+    <record id="view_saas_plan_tree" model="ir.ui.view">
+        <field name="name">saas.plan.tree</field>
+        <field name="model">saas.plan</field>
+        <field name="arch" type="xml">
+            <list string="Plans SaaS" default_order="sequence,id">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="monthly_price"/>
+                <field name="included_users"/>
+                <field name="extra_user_price"/>
+                <field name="setup_fee"/>
+                <field name="trial_days"/>
+                <field name="subscription_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des plans -->
+    <record id="view_saas_plan_form" model="ir.ui.view">
+        <field name="name">saas.plan.form</field>
+        <field name="model">saas.plan</field>
+        <field name="arch" type="xml">
+            <form string="Plan SaaS">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_subscriptions" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="subscription_count" widget="statinfo" string="Abonnements"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom du plan"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tarification">
+                            <group>
+                                <group>
+                                    <field name="monthly_price" widget="monetary"/>
+                                    <field name="included_users"/>
+                                    <field name="extra_user_price" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="setup_fee" widget="monetary"/>
+                                    <field name="trial_days"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Fonctionnalités">
+                            <field name="feature_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="icon"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Limitations">
+                            <group>
+                                <field name="max_users"/>
+                                <field name="max_storage_gb"/>
+                            </group>
+                        </page>
+                        <page string="Modules Odoo">
+                            <field name="module_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="summary"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description">
+                            <field name="description" placeholder="Description du plan (HTML)"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_saas_plan" model="ir.actions.act_window">
+        <field name="name">Plans</field>
+        <field name="res_model">saas.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouveau plan SaaS
+            </p>
+            <p>
+                Configurez vos différentes offres d'abonnement pour EAZYNOVA.
+            </p>
+        </field>
+    </record>
+
+</odoo>

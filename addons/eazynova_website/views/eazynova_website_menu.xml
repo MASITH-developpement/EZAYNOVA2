@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menu principal -->
+    <menuitem id="menu_saas_root"
+              name="SaaS EAZYNOVA"
+              sequence="100"
+              web_icon="eazynova_website,static/description/icon.png"/>
+
+    <!-- Abonnements -->
+    <menuitem id="menu_saas_subscriptions"
+              name="Abonnements"
+              parent="menu_saas_root"
+              action="action_saas_subscription"
+              sequence="10"/>
+
+    <!-- Instances -->
+    <menuitem id="menu_saas_instances"
+              name="Instances"
+              parent="menu_saas_root"
+              action="action_saas_instance"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_saas_configuration"
+              name="Configuration"
+              parent="menu_saas_root"
+              sequence="100"/>
+
+    <menuitem id="menu_saas_plans"
+              name="Plans"
+              parent="menu_saas_configuration"
+              action="action_saas_plan"
+              sequence="10"/>
+
+</odoo>

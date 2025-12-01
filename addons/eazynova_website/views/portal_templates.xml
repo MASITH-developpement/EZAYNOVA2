@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Liste des abonnements dans le portail -->
+    <template id="portal_my_subscriptions" name="My Subscriptions">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Mes abonnements</t>
+            </t>
+
+            <t t-if="not subscriptions">
+                <div class="alert alert-info" role="alert">
+                    Vous n'avez pas encore d'abonnement.
+                    <a href="/saas/signup" class="alert-link">Démarrer un essai gratuit</a>
+                </div>
+            </t>
+
+            <t t-if="subscriptions" t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <th>Référence</th>
+                        <th>Plan</th>
+                        <th>Utilisateurs</th>
+                        <th>Prix mensuel</th>
+                        <th>État</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="subscriptions" t-as="subscription">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/my/subscriptions/{{subscription.id}}">
+                                    <t t-esc="subscription.name"/>
+                                </a>
+                            </td>
+                            <td><t t-esc="subscription.plan_id.name"/></td>
+                            <td><t t-esc="subscription.nb_users"/> utilisateurs</td>
+                            <td><t t-esc="'%.2f' % subscription.monthly_price"/> €/mois</td>
+                            <td>
+                                <span t-att-class="'badge bg-%s' % ('success' if subscription.state == 'active' else 'warning' if subscription.state == 'trial' else 'danger')">
+                                    <t t-if="subscription.state == 'draft'">Brouillon</t>
+                                    <t t-elif="subscription.state == 'trial'">Essai gratuit</t>
+                                    <t t-elif="subscription.state == 'active'">Actif</t>
+                                    <t t-elif="subscription.state == 'suspended'">Suspendu</t>
+                                    <t t-elif="subscription.state == 'cancelled'">Annulé</t>
+                                    <t t-elif="subscription.state == 'expired'">Expiré</t>
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <a t-attf-href="/my/subscriptions/{{subscription.id}}" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-eye"/> Voir
+                                </a>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <!-- Détail d'un abonnement -->
+    <template id="portal_subscription_detail" name="Subscription Detail">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row g-0">
+                        <div class="col-12 col-md-6">
+                            <h5 class="mb-0">
+                                Abonnement <t t-esc="subscription.name"/>
+                                <span t-att-class="'badge bg-%s ms-2' % ('success' if subscription.state == 'active' else 'warning' if subscription.state == 'trial' else 'danger')">
+                                    <t t-if="subscription.state == 'draft'">Brouillon</t>
+                                    <t t-elif="subscription.state == 'trial'">Essai gratuit</t>
+                                    <t t-elif="subscription.state == 'active'">Actif</t>
+                                    <t t-elif="subscription.state == 'suspended'">Suspendu</t>
+                                    <t t-elif="subscription.state == 'cancelled'">Annulé</t>
+                                    <t t-elif="subscription.state == 'expired'">Expiré</t>
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="col-12 col-md-6 text-md-end">
+                            <t t-if="subscription.instance_url">
+                                <a t-att-href="subscription.instance_url" target="_blank" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-external-link-alt"/> Accéder à mon instance
+                                </a>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+
+                <t t-set="card_body">
+                    <!-- Messages -->
+                    <t t-if="request.params.get('message') == 'activated'">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fa fa-check-circle me-2"/>Votre abonnement a été activé avec succès !
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"/>
+                        </div>
+                    </t>
+                    <t t-if="request.params.get('message') == 'cancelled'">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="fa fa-exclamation-triangle me-2"/>Votre abonnement a été annulé.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"/>
+                        </div>
+                    </t>
+                    <t t-if="request.params.get('message') == 'upgraded'">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fa fa-check-circle me-2"/>Votre abonnement a été mis à jour !
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"/>
+                        </div>
+                    </t>
+
+                    <!-- Informations principales -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Informations générales</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Plan :</strong></td>
+                                    <td><t t-esc="subscription.plan_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nombre d'utilisateurs :</strong></td>
+                                    <td><t t-esc="subscription.nb_users"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date de début :</strong></td>
+                                    <td><t t-esc="subscription.date_start.strftime('%d/%m/%Y')"/></td>
+                                </tr>
+                                <t t-if="subscription.state == 'trial'">
+                                    <tr>
+                                        <td><strong>Fin de l'essai :</strong></td>
+                                        <td><t t-esc="subscription.trial_end_date.strftime('%d/%m/%Y')"/></td>
+                                    </tr>
+                                </t>
+                                <t t-if="subscription.next_billing_date">
+                                    <tr>
+                                        <td><strong>Prochaine facturation :</strong></td>
+                                        <td><t t-esc="subscription.next_billing_date.strftime('%d/%m/%Y')"/></td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Tarification</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Prix mensuel :</strong></td>
+                                    <td><t t-esc="'%.2f' % subscription.monthly_price"/> € HT</td>
+                                </tr>
+                                <t t-if="not subscription.setup_paid and subscription.setup_fee > 0">
+                                    <tr>
+                                        <td><strong>Configuration :</strong></td>
+                                        <td><t t-esc="'%.2f' % subscription.setup_fee"/> € HT (une fois)</td>
+                                    </tr>
+                                </t>
+                                <t t-if="subscription.invoice_count > 0">
+                                    <tr>
+                                        <td><strong>Factures :</strong></td>
+                                        <td>
+                                            <a href="#" class="badge bg-info"><t t-esc="subscription.invoice_count"/> facture(s)</a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Instance -->
+                    <t t-if="subscription.instance_id">
+                        <hr/>
+                        <h6>Mon instance</h6>
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>URL :</strong></p>
+                                        <p><a t-att-href="subscription.instance_url" target="_blank">
+                                            <t t-esc="subscription.instance_url"/>
+                                            <i class="fa fa-external-link-alt ms-1"/>
+                                        </a></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>État :</strong></p>
+                                        <p>
+                                            <span t-att-class="'badge bg-%s' % ('success' if subscription.instance_id.state == 'active' else 'warning')">
+                                                <t t-if="subscription.instance_id.state == 'active'">Actif</t>
+                                                <t t-elif="subscription.instance_id.state == 'suspended'">Suspendu</t>
+                                                <t t-elif="subscription.instance_id.state == 'provisioning'">Provisioning...</t>
+                                                <t t-else=""><t t-esc="subscription.instance_id.state"/></t>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Actions -->
+                    <hr/>
+                    <h6>Actions</h6>
+                    <div class="btn-group-vertical w-100 mb-3" role="group">
+                        <t t-if="subscription.state in ['trial', 'expired']">
+                            <a t-attf-href="/my/subscriptions/{{subscription.id}}/activate" class="btn btn-success">
+                                <i class="fa fa-check-circle me-2"/>Activer l'abonnement
+                            </a>
+                        </t>
+                        <t t-if="subscription.state in ['trial', 'active']">
+                            <a t-attf-href="/my/subscriptions/{{subscription.id}}/upgrade" class="btn btn-primary">
+                                <i class="fa fa-arrow-up me-2"/>Modifier le nombre d'utilisateurs
+                            </a>
+                        </t>
+                        <t t-if="subscription.state in ['trial', 'active']">
+                            <a t-attf-href="/my/subscriptions/{{subscription.id}}/cancel" class="btn btn-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir annuler cet abonnement ?');">
+                                <i class="fa fa-times-circle me-2"/>Annuler l'abonnement
+                            </a>
+                        </t>
+                    </div>
+
+                    <!-- Avertissement expiration -->
+                    <t t-if="subscription.state == 'expired'">
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-triangle me-2"/>
+                            <strong>Votre période d'essai est terminée.</strong><br/>
+                            Votre instance sera supprimée dans 30 jours si vous n'activez pas votre abonnement.
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Formulaire de mise à niveau -->
+    <template id="portal_subscription_upgrade" name="Subscription Upgrade">
+        <t t-call="portal.portal_layout">
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Modifier mon abonnement</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form t-attf-action="/my/subscriptions/{{subscription.id}}/upgrade/submit" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                    <div class="mb-4">
+                                        <h6>Abonnement actuel</h6>
+                                        <p>
+                                            Plan : <strong><t t-esc="subscription.plan_id.name"/></strong><br/>
+                                            Utilisateurs : <strong><t t-esc="subscription.nb_users"/></strong><br/>
+                                            Prix mensuel : <strong><t t-esc="'%.2f' % subscription.monthly_price"/> € HT</strong>
+                                        </p>
+                                    </div>
+
+                                    <hr/>
+
+                                    <div class="mb-3">
+                                        <label for="nb_users" class="form-label">
+                                            Nouveau nombre d'utilisateurs
+                                            <small class="text-muted">(+20 €/utilisateur supplémentaire au-delà de 5)</small>
+                                        </label>
+                                        <input type="number" class="form-control" id="nb_users" name="nb_users"
+                                               t-att-value="subscription.nb_users" min="1" max="100" required="required"/>
+                                    </div>
+
+                                    <div class="alert alert-info">
+                                        <strong><i class="fa fa-info-circle me-2"/>Information</strong><br/>
+                                        Le changement sera effectif immédiatement. La facturation sera ajustée au prorata.
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-check me-2"/>Valider la modification
+                                        </button>
+                                        <a t-attf-href="/my/subscriptions/{{subscription.id}}" class="btn btn-outline-secondary">
+                                            Annuler
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

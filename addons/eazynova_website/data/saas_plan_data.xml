@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Fonctionnalités communes -->
+        <record id="feature_gestion_chantiers" model="saas.plan.feature">
+            <field name="name">Gestion de chantiers</field>
+            <field name="description">Planification et suivi des chantiers de construction</field>
+            <field name="icon">fa-building</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="feature_planning" model="saas.plan.feature">
+            <field name="name">Planning interactif</field>
+            <field name="description">Calendrier Gantt pour la planification des tâches</field>
+            <field name="icon">fa-calendar</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="feature_reconnaissance_faciale" model="saas.plan.feature">
+            <field name="name">Reconnaissance faciale</field>
+            <field name="description">Authentification biométrique sans mot de passe</field>
+            <field name="icon">fa-face-smile</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="feature_gestion_achats" model="saas.plan.feature">
+            <field name="name">Gestion des achats</field>
+            <field name="description">Suivi des achats et fournisseurs</field>
+            <field name="icon">fa-shopping-cart</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="feature_factures_ocr" model="saas.plan.feature">
+            <field name="name">OCR de factures</field>
+            <field name="description">Reconnaissance automatique des factures</field>
+            <field name="icon">fa-file-invoice</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="feature_businessplan" model="saas.plan.feature">
+            <field name="name">Business Plan</field>
+            <field name="description">Tableaux de bord et prévisions financières</field>
+            <field name="icon">fa-chart-line</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="feature_support" model="saas.plan.feature">
+            <field name="name">Support prioritaire</field>
+            <field name="description">Assistance technique dédiée</field>
+            <field name="icon">fa-headset</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <record id="feature_sauvegarde" model="saas.plan.feature">
+            <field name="name">Sauvegardes quotidiennes</field>
+            <field name="description">Backup automatique de vos données</field>
+            <field name="icon">fa-cloud-arrow-up</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="feature_api" model="saas.plan.feature">
+            <field name="name">Accès API</field>
+            <field name="description">Intégrations avec vos outils existants</field>
+            <field name="icon">fa-code</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <!-- Séquence pour les abonnements -->
+        <record id="seq_saas_subscription" model="ir.sequence">
+            <field name="name">Abonnement SaaS</field>
+            <field name="code">saas.subscription</field>
+            <field name="prefix">SUB</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!-- Plan EAZYNOVA Standard -->
+        <record id="plan_eazynova_standard" model="saas.plan">
+            <field name="name">EAZYNOVA Standard</field>
+            <field name="sequence">10</field>
+            <field name="description"><![CDATA[
+                <h3>Plan Standard EAZYNOVA</h3>
+                <p>La solution complète pour gérer votre entreprise de construction</p>
+                <ul>
+                    <li>Tous les modules EAZYNOVA inclus</li>
+                    <li>5 utilisateurs inclus</li>
+                    <li>10 GB de stockage</li>
+                    <li>Support par email</li>
+                    <li>Mises à jour automatiques</li>
+                </ul>
+            ]]></field>
+            <field name="monthly_price">250.00</field>
+            <field name="setup_fee">1800.00</field>
+            <field name="included_users">5</field>
+            <field name="extra_user_price">20.00</field>
+            <field name="trial_days">30</field>
+            <field name="max_users">0</field>
+            <field name="max_storage_gb">10</field>
+            <field name="feature_ids" eval="[(6, 0, [
+                ref('feature_gestion_chantiers'),
+                ref('feature_planning'),
+                ref('feature_reconnaissance_faciale'),
+                ref('feature_gestion_achats'),
+                ref('feature_factures_ocr'),
+                ref('feature_businessplan'),
+                ref('feature_support'),
+                ref('feature_sauvegarde'),
+                ref('feature_api'),
+            ])]"/>
+        </record>
+
+    </data>
+</odoo>
