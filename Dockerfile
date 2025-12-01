@@ -7,6 +7,7 @@ USER root
 RUN apt-get update && apt-get install -y \
     python3-pip \
     git \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Créer les répertoires nécessaires
@@ -14,16 +15,15 @@ RUN mkdir -p /mnt/extra-addons \
     && mkdir -p /var/lib/odoo \
     && mkdir -p /etc/odoo
 
-# Copier le fichier de configuration
-COPY ./odoo.conf /etc/odoo/odoo.conf
+# Copier le script d'entrée et le fichier de configuration template
+COPY ./entrypoint.sh /entrypoint.sh
+COPY ./odoo.conf /etc/odoo/odoo.conf.template
 
-# Donner les permissions appropriées
-RUN chown -R odoo:odoo /mnt/extra-addons \
+# Rendre le script exécutable et donner les permissions appropriées
+RUN chmod +x /entrypoint.sh \
+    && chown -R odoo:odoo /mnt/extra-addons \
     && chown -R odoo:odoo /var/lib/odoo \
     && chown -R odoo:odoo /etc/odoo
-
-# Revenir à l'utilisateur odoo
-USER odoo
 
 # Exposer le port Odoo
 EXPOSE 8069
@@ -31,5 +31,8 @@ EXPOSE 8069
 # Définir les variables d'environnement par défaut
 ENV ODOO_RC=/etc/odoo/odoo.conf
 
-# Commande de démarrage
-CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
+# Utiliser le script d'entrée
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Arguments par défaut (peuvent être overridés)
+CMD []

@@ -145,12 +145,30 @@ COPY ./addons /mnt/extra-addons
 ```
 EZAYNOVA2/
 ├── Dockerfile          # Image Docker Odoo 19
-├── odoo.conf          # Configuration Odoo
+├── entrypoint.sh      # Script de démarrage avec substitution des variables
+├── odoo.conf          # Configuration Odoo (template)
 ├── railway.json       # Configuration Railway
 ├── requirements.txt   # Dépendances Python
 ├── .gitignore        # Fichiers à ignorer
 └── README.md         # Ce fichier
 ```
+
+## 🔧 Architecture et fonctionnement
+
+### Script entrypoint.sh
+
+Le projet utilise un script d'entrée personnalisé (`entrypoint.sh`) qui :
+
+1. **Valide les variables d'environnement** : Vérifie que toutes les variables requises sont définies
+2. **Génère la configuration** : Crée dynamiquement le fichier `odoo.conf` avec les valeurs des variables d'environnement
+3. **Attend PostgreSQL** : Vérifie que la base de données est prête avant de démarrer Odoo (max 30 tentatives)
+4. **Lance Odoo** : Démarre Odoo avec la configuration générée
+
+Ce système permet de :
+- Utiliser les variables d'environnement de Railway directement
+- Éviter les erreurs de configuration statique
+- Garantir que la base de données est prête avant le démarrage
+- Fournir des logs colorés et informatifs
 
 ## 🐛 Dépannage
 
