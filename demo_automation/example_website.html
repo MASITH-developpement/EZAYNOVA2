@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une Démo Odoo Gratuite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .demo-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .demo-info p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .demo-info strong {
+            color: #155724;
+        }
+
+        .demo-url {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .demo-url:hover {
+            background: #218838;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Démo Gratuite Odoo 19</h1>
+        <p class="subtitle">Testez Odoo gratuitement pendant 3 jours</p>
+
+        <form id="demoForm">
+            <div class="form-group">
+                <label for="name">Nom complet *</label>
+                <input type="text" id="name" name="name" required placeholder="Jean Dupont">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="jean.dupont@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Téléphone (optionnel)</label>
+                <input type="tel" id="phone" name="phone" placeholder="+33 6 12 34 56 78">
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                Créer ma démo gratuite
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #666;">Création de votre démo en cours...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <strong>Erreur:</strong> <span id="errorText"></span>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h3 style="margin-bottom: 10px;">✅ Votre démo est prête !</h3>
+            <div class="demo-info" id="demoInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://votre-api.railway.app';  // À remplacer par l'URL de votre API
+        const API_KEY = 'votre-cle-api-secrete';           // À remplacer par votre clé API
+
+        document.getElementById('demoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Récupérer les valeurs du formulaire
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            // Afficher le loader
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+
+            try {
+                // Appeler l'API pour créer la démo
+                const response = await fetch(`${API_URL}/api/demo/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': API_KEY
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        name: name,
+                        phone: phone,
+                        duration_hours: 72  // 3 jours
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Afficher les informations de connexion
+                    const demoInfo = data.demo;
+                    const expiresDate = new Date(demoInfo.expires_at);
+
+                    document.getElementById('demoInfo').innerHTML = `
+                        <p><strong>URL:</strong> ${demoInfo.url}</p>
+                        <p><strong>Login:</strong> ${demoInfo.login}</p>
+                        <p><strong>Mot de passe:</strong> ${demoInfo.password}</p>
+                        <p><strong>Expire le:</strong> ${expiresDate.toLocaleDateString('fr-FR')} à ${expiresDate.toLocaleTimeString('fr-FR')}</p>
+                        <a href="${demoInfo.url}" target="_blank" class="demo-url">
+                            Accéder à ma démo →
+                        </a>
+                    `;
+
+                    document.getElementById('successMessage').classList.add('show');
+                    document.getElementById('demoForm').reset();
+
+                    // Optionnel: Envoyer les infos par email (à implémenter côté serveur)
+                    console.log('Démo créée:', demoInfo);
+
+                } else {
+                    throw new Error(data.error || 'Erreur lors de la création de la démo');
+                }
+
+            } catch (error) {
+                document.getElementById('errorText').textContent = error.message;
+                document.getElementById('errorMessage').classList.add('show');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
