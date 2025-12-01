@@ -46,4 +46,3 @@ done
 # Lancer Odoo avec l'option --no-database-list pour accepter l'utilisateur postgres
 echo "Démarrage d'Odoo..."
 exec odoo -c /etc/odoo/odoo.conf --no-database-list
-EOF
