@@ -122,13 +122,9 @@ done
 echo -e "${GREEN}PostgreSQL est prêt!${NC}"
 
 # Donner les permissions appropriées
-chown odoo:odoo /etc/odoo/odoo.conf
+chown -R odoo:odoo /etc/odoo /var/lib/odoo /mnt/extra-addons 2>/dev/null || true
 
 echo -e "${GREEN}Démarrage d'Odoo 19 CE en français...${NC}"
 
-# Démarrer Odoo en tant qu'utilisateur odoo
-if [ "$(id -u)" = '0' ]; then
-    exec gosu odoo odoo -c /etc/odoo/odoo.conf "$@"
-else
-    exec odoo -c /etc/odoo/odoo.conf "$@"
-fi
+# Démarrer Odoo directement
+exec odoo -c /etc/odoo/odoo.conf "$@"
