@@ -16,6 +16,9 @@ RUN mkdir -p /mnt/extra-addons \
     && mkdir -p /var/lib/odoo \
     && mkdir -p /etc/odoo
 
+# Copier les modules personnalisés (eazynova*)
+COPY ./addons /mnt/extra-addons
+
 # Copier le nouveau script de démarrage
 COPY ./start-odoo.sh /start-odoo.sh
 
