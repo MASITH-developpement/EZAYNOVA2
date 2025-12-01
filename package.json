@@ -1,0 +1,28 @@
+{
+  "name": "odoo-railway-automation",
+  "version": "1.0.0",
+  "description": "Automatisation du déploiement d'Odoo 19 CE sur Railway pour démos gratuites",
+  "main": "deploy-automation.js",
+  "scripts": {
+    "deploy": "node deploy-automation.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "odoo",
+    "railway",
+    "automation",
+    "deployment",
+    "demo"
+  ],
+  "author": "EZAYNOVA2",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

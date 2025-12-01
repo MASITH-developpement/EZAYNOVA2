@@ -1,0 +1,45 @@
+{
+  "name": "Odoo 19 CE en Français - Demo Gratuite",
+  "description": "Odoo 19 Community Edition en français avec PostgreSQL - Déploiement automatique",
+  "services": [
+    {
+      "name": "postgres",
+      "image": "postgres:16-alpine",
+      "env": {
+        "POSTGRES_USER": "odoo",
+        "POSTGRES_PASSWORD": {
+          "generate": true
+        },
+        "POSTGRES_DB": "postgres"
+      },
+      "volumes": [
+        {
+          "mountPath": "/var/lib/postgresql/data"
+        }
+      ]
+    },
+    {
+      "name": "odoo",
+      "source": {
+        "repo": "MASITH-developpement/EZAYNOVA2",
+        "branch": "claude/setup-odoo-railway-01FfKyFWbhfsz5yffgwXx4ro"
+      },
+      "env": {
+        "DB_HOST": "${{postgres.RAILWAY_PRIVATE_DOMAIN}}",
+        "DB_PORT": "5432",
+        "DB_USER": "${{postgres.POSTGRES_USER}}",
+        "DB_PASSWORD": "${{postgres.POSTGRES_PASSWORD}}",
+        "DB_NAME": "${{postgres.POSTGRES_DB}}",
+        "ADMIN_PASSWORD": {
+          "generate": true
+        },
+        "WORKERS": "2"
+      },
+      "domains": [
+        {
+          "generate": true
+        }
+      ]
+    }
+  ]
+}

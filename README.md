@@ -9,8 +9,41 @@ Ce projet configure et déploie Odoo 19 Community Edition en français sur Railw
 - **Base de données**: PostgreSQL
 - **Déploiement**: Railway
 - **Container**: Docker
+- **🤖 Déploiement 100% automatique** pour démos gratuites
 
-## 🚀 Déploiement sur Railway
+## 🤖 Déploiement Automatique (Pour Site Web)
+
+**Vous voulez offrir des démos gratuites via votre site ?** Ce projet inclut une automatisation complète via l'API Railway !
+
+### ⚡ Déploiement en Un Clic
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/odoo-19-ce)
+
+### 🔧 Automatisation via API (Node.js / Python)
+
+Pour créer automatiquement des démos depuis votre site web :
+
+```bash
+# Node.js
+node deploy-automation.js --token YOUR_TOKEN --demo-name "Client ABC"
+
+# Python
+python deploy-automation.py --token YOUR_TOKEN --demo-name "Client ABC"
+```
+
+**Documentation complète** : Voir [AUTOMATION.md](./AUTOMATION.md)
+
+Fonctionnalités :
+- ✅ Création automatique de projet + PostgreSQL + Odoo
+- ✅ Configuration des variables d'environnement
+- ✅ Génération de mots de passe sécurisés
+- ✅ Récupération automatique de l'URL publique
+- ✅ Prêt pour intégration dans votre site web
+- ⏱️ **Temps total : 2-3 minutes par démo**
+
+---
+
+## 🚀 Déploiement Manuel sur Railway
 
 ### Prérequis
 

@@ -1,0 +1,2 @@
+# Dépendances Python pour l'automatisation du déploiement
+requests>=2.31.0
