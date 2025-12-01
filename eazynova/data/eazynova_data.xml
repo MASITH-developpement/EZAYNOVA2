@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Séquences -->
+    <record id="seq_eazynova_ai_request" model="ir.sequence">
+        <field name="name">Requête IA EAZYNOVA</field>
+        <field name="code">eazynova.ai.request</field>
+        <field name="prefix">AI/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Configuration par défaut -->
+    <record id="eazynova_default_config" model="ir.config_parameter">
+        <field name="key">eazynova.ai.provider</field>
+        <field name="value">openai</field>
+    </record>
+
+    <record id="eazynova_ai_enabled" model="ir.config_parameter">
+        <field name="key">eazynova.ai.enabled</field>
+        <field name="value">True</field>
+    </record>
+</odoo>

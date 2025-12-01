@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- action_trust_config définie dans trust_menu.xml -->
+
+    <!-- Form view -->
+    <record id="view_trust_config_form" model="ir.ui.view">
+        <field name="name">eazynova.trust.config.form</field>
+        <field name="model">eazynova.trust.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuration Avis Clients">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group string="Trustpilot">
+                        <group>
+                            <field name="trustpilot_enabled"/>
+                            <field name="trustpilot_dev_mode"/>
+                            <field name="trustpilot_api_key"/>
+                            <field name="trustpilot_business_unit_id"/>
+                            <field name="trustpilot_review_url"/>
+                        </group>
+                        <group string="Widget">
+                            <field name="trustpilot_template_id"/>
+                            <field name="trustpilot_widget_token"/>
+                            <field name="trustpilot_locale"/>
+                            <field name="trustpilot_script_url"/>
+                        </group>
+                    </group>
+                    <group string="Général">
+                        <field name="auto_send_after_invoice"/>
+                        <field name="days_after_invoice"/>
+                        <field name="auto_reminder"/>
+                        <field name="days_before_reminder"/>
+                        <field name="moderation_required"/>
+                        <field name="min_rating_publish"/>
+                        <field name="display_on_website"/>
+                        <field name="reviews_per_page"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_rexel_invoice_import" model="ir.sequence">
+        <field name="name">Import Facture Rexel</field>
+        <field name="code">eazynova.rexel.invoice.import</field>
+        <field name="prefix">RXL</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

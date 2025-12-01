@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================== TEMPLATE DE BASE AVEC FILIGRANE ==================== -->
+    <template id="eazynova_watermark_layout" inherit_id="web.external_layout">
+        <!-- Filigrane conditionnel (affiché si pas d'abonnement actif) -->
+        <xpath expr="//div[hasclass('header')]" position="after">
+            <t t-if="not o.has_active_subscription()">
+                <div style="position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%) rotate(-45deg);
+                            font-size: 80px;
+                            font-weight: bold;
+                            color: rgba(0, 0, 0, 0.08);
+                            z-index: -1;
+                            white-space: nowrap;
+                            pointer-events: none;
+                            text-align: center;
+                            width: 100%;">
+                    PROPULSÉ BY EAZYNOVA
+                </div>
+            </t>
+        </xpath>
+
+        <!-- Footer avec mention créateur -->
+        <xpath expr="//div[hasclass('footer')]" position="inside">
+            <div style="text-align: center; font-size: 9px; color: #888; margin-top: 10px; border-top: 1px solid #ddd; padding-top: 5px;">
+                <span>Créé par EAZYNOVA | Développé par S. MOREAU</span>
+                <t t-if="not o.has_active_subscription()">
+                    <span style="margin-left: 20px; color: #e74c3c;">⚠ Version non licenciée - Abonnez-vous sur eazynova.com</span>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ==================== RAPPORT POUR BANQUES ==================== -->
+    <template id="report_businessplan_bank">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- En-tête -->
+                        <div class="text-center" style="border-bottom: 3px solid #2C3E50; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="color: #2C3E50; font-size: 32px; margin-bottom: 10px;">
+                                DOSSIER DE FINANCEMENT BANCAIRE
+                            </h1>
+                            <h2 style="color: #34495E; font-size: 24px;">
+                                <t t-esc="o.name"/>
+                            </h2>
+                            <p style="color: #7F8C8D; font-size: 14px;">
+                                Référence: <t t-esc="o.reference"/> |
+                                Date: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                            </p>
+                        </div>
+
+                        <!-- 1. RÉSUMÉ EXÉCUTIF -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #3498DB; color: white; padding: 10px; margin-bottom: 15px;">
+                                1. RÉSUMÉ EXÉCUTIF
+                            </h3>
+                            <p style="text-align: justify; line-height: 1.6;">
+                                <t t-esc="o.executive_summary or 'Non renseigné'"/>
+                            </p>
+                        </div>
+
+                        <!-- 2. PRÉSENTATION DU PROJET -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #3498DB; color: white; padding: 10px; margin-bottom: 15px;">
+                                2. PRÉSENTATION DU PROJET
+                            </h3>
+                            <table class="table table-bordered" style="width: 100%; margin-bottom: 15px;">
+                                <tr>
+                                    <td style="width: 30%; background-color: #ECF0F1;"><strong>Porteur du projet</strong></td>
+                                    <td><t t-esc="o.user_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Forme juridique</strong></td>
+                                    <td><t t-esc="dict(o._fields['legal_form'].selection).get(o.legal_form, 'Non renseigné')"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Localisation</strong></td>
+                                    <td><t t-esc="o.location or 'Non renseigné'"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Période</strong></td>
+                                    <td><t t-esc="o.date_start.strftime('%d/%m/%Y')"/> au <t t-esc="o.date_end.strftime('%d/%m/%Y')"/></td>
+                                </tr>
+                            </table>
+                            <p style="text-align: justify; line-height: 1.6;">
+                                <t t-esc="o.project_description or 'Non renseigné'"/>
+                            </p>
+                        </div>
+
+                        <!-- Saut de page -->
+                        <p style="page-break-after: always;"/>
+
+                        <!-- 3. PRÉVISIONS FINANCIÈRES (FOCUS BANQUE) -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #27AE60; color: white; padding: 10px; margin-bottom: 15px;">
+                                3. PRÉVISIONS FINANCIÈRES SUR 3 ANS
+                            </h3>
+
+                            <table class="table table-bordered" style="width: 100%; text-align: right;">
+                                <thead style="background-color: #27AE60; color: white;">
+                                    <tr>
+                                        <th style="text-align: left;">Rubrique</th>
+                                        <th>Année 1</th>
+                                        <th>Année 2</th>
+                                        <th>Année 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: left; background-color: #ECF0F1;"><strong>Chiffre d'affaires</strong></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.revenue_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.revenue_year2 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.revenue_year3 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; background-color: #ECF0F1;"><strong>Charges</strong></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.costs_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.costs_year2 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.costs_year3 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                    </tr>
+                                    <tr style="background-color: #D5F4E6; font-weight: bold;">
+                                        <td style="text-align: left;"><strong>RÉSULTAT NET</strong></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.profit_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.profit_year2 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        <td><t t-esc="'{:,.0f}'.format(o.profit_year3 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; background-color: #ECF0F1;">Marge nette (%)</td>
+                                        <td><t t-esc="'{:.1f}%'.format((o.profit_year1 / o.revenue_year1 * 100) if o.revenue_year1 else 0)"/></td>
+                                        <td><t t-esc="'{:.1f}%'.format((o.profit_year2 / o.revenue_year2 * 100) if o.revenue_year2 else 0)"/></td>
+                                        <td><t t-esc="'{:.1f}%'.format((o.profit_year3 / o.revenue_year3 * 100) if o.revenue_year3 else 0)"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="margin-top: 20px;" t-if="o.breakeven_point">
+                                <h4 style="color: #27AE60;">Seuil de rentabilité :</h4>
+                                <p style="text-align: justify; line-height: 1.6;">
+                                    <t t-esc="o.breakeven_point"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 4. PLAN DE FINANCEMENT -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #E67E22; color: white; padding: 10px; margin-bottom: 15px;">
+                                4. PLAN DE FINANCEMENT
+                            </h3>
+
+                            <table class="table table-bordered" style="width: 100%;">
+                                <tr style="background-color: #F39C12; color: white;">
+                                    <th colspan="2" style="text-align: center;">BESOINS</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 70%; background-color: #ECF0F1;"><strong>Investissement initial total</strong></td>
+                                    <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.initial_investment or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                </tr>
+                                <tr style="background-color: #F39C12; color: white;">
+                                    <th colspan="2" style="text-align: center;">RESSOURCES</th>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Apport personnel</strong></td>
+                                    <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.own_contribution or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Apport personnel (%)</strong></td>
+                                    <td style="text-align: right;">
+                                        <t t-esc="'{:.1f}%'.format((o.own_contribution / o.initial_investment * 100) if o.initial_investment else 0)"/>
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #FADBD8; font-weight: bold;">
+                                    <td><strong>BESOIN DE FINANCEMENT</strong></td>
+                                    <td style="text-align: right; font-size: 18px;">
+                                        <t t-esc="'{:,.0f}'.format(o.funding_needed or 0)"/> <t t-esc="o.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="margin-top: 20px;" t-if="o.funding_sources">
+                                <h4 style="color: #E67E22;">Sources de financement prévues :</h4>
+                                <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                    <t t-esc="o.funding_sources"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 5. GARANTIES ET RISQUES -->
+                        <div style="margin-bottom: 30px;" t-if="o.risks or o.mitigation_plan">
+                            <h3 style="background-color: #C0392B; color: white; padding: 10px; margin-bottom: 15px;">
+                                5. ANALYSE DES RISQUES
+                            </h3>
+                            <div t-if="o.risks">
+                                <h4 style="color: #C0392B;">Risques identifiés :</h4>
+                                <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                    <t t-esc="o.risks"/>
+                                </p>
+                            </div>
+                            <div t-if="o.mitigation_plan" style="margin-top: 15px;">
+                                <h4 style="color: #27AE60;">Plan de mitigation :</h4>
+                                <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                    <t t-esc="o.mitigation_plan"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Pied de page -->
+                        <div style="margin-top: 50px; border-top: 2px solid #2C3E50; padding-top: 15px; text-align: center; color: #7F8C8D;">
+                            <p>Document généré le <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/></p>
+                            <p style="font-size: 12px;">Ce document est confidentiel et destiné uniquement à l'établissement bancaire.</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ==================== RAPPORT POUR INVESTISSEURS ==================== -->
+    <template id="report_businessplan_investor">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- En-tête -->
+                        <div class="text-center" style="border-bottom: 3px solid #8E44AD; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="color: #8E44AD; font-size: 32px; margin-bottom: 10px;">
+                                DOSSIER INVESTISSEUR
+                            </h1>
+                            <h2 style="color: #9B59B6; font-size: 24px;">
+                                <t t-esc="o.name"/>
+                            </h2>
+                            <p style="color: #7F8C8D; font-size: 14px;">
+                                Référence: <t t-esc="o.reference"/> |
+                                Date: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                            </p>
+                        </div>
+
+                        <!-- 1. EXECUTIVE SUMMARY -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #8E44AD; color: white; padding: 10px; margin-bottom: 15px;">
+                                1. EXECUTIVE SUMMARY
+                            </h3>
+                            <p style="text-align: justify; line-height: 1.6; font-size: 14px;">
+                                <t t-esc="o.executive_summary or 'Non renseigné'"/>
+                            </p>
+                        </div>
+
+                        <!-- 2. OPPORTUNITÉ DE MARCHÉ -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #8E44AD; color: white; padding: 10px; margin-bottom: 15px;">
+                                2. OPPORTUNITÉ DE MARCHÉ
+                            </h3>
+
+                            <h4 style="color: #8E44AD;">Marché cible :</h4>
+                            <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                <t t-esc="o.target_market or 'Non renseigné'"/>
+                            </p>
+
+                            <h4 style="color: #8E44AD; margin-top: 15px;">Avantage concurrentiel :</h4>
+                            <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                <t t-esc="o.competitive_advantage or 'Non renseigné'"/>
+                            </p>
+
+                            <h4 style="color: #27AE60; margin-top: 15px;">Opportunités de développement :</h4>
+                            <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                <t t-esc="o.opportunities or 'Non renseigné'"/>
+                            </p>
+                        </div>
+
+                        <p style="page-break-after: always;"/>
+
+                        <!-- 3. PROJECTIONS FINANCIÈRES ET ROI -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #27AE60; color: white; padding: 10px; margin-bottom: 15px;">
+                                3. PROJECTIONS FINANCIÈRES ET ROI
+                            </h3>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 style="color: #27AE60;">Croissance du CA :</h4>
+                                    <table class="table table-sm table-bordered">
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Année 1</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.revenue_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Année 2</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.revenue_year2 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Année 3</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.revenue_year3 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;"><strong>Croissance Y1→Y3</strong></td>
+                                            <td style="text-align: right; font-weight: bold;">
+                                                <t t-esc="'{:.0f}%'.format(((o.revenue_year3 - o.revenue_year1) / o.revenue_year1 * 100) if o.revenue_year1 else 0)"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="col-6">
+                                    <h4 style="color: #27AE60;">Rentabilité :</h4>
+                                    <table class="table table-sm table-bordered">
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Résultat Année 1</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.profit_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Résultat Année 2</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.profit_year2 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;">Résultat Année 3</td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.profit_year3 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;"><strong>Marge Année 3</strong></td>
+                                            <td style="text-align: right; font-weight: bold;">
+                                                <t t-esc="'{:.1f}%'.format((o.profit_year3 / o.revenue_year3 * 100) if o.revenue_year3 else 0)"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 20px; padding: 15px; background-color: #D5F4E6; border-left: 5px solid #27AE60;">
+                                <h4 style="color: #27AE60; margin-top: 0;">Besoin d'investissement :</h4>
+                                <p style="font-size: 24px; margin: 0; font-weight: bold; color: #27AE60;">
+                                    <t t-esc="'{:,.0f}'.format(o.funding_needed or 0)"/> <t t-esc="o.currency_id.symbol"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 4. L'ÉQUIPE -->
+                        <div style="margin-bottom: 30px;" t-if="o.team_structure">
+                            <h3 style="background-color: #3498DB; color: white; padding: 10px; margin-bottom: 15px;">
+                                4. L'ÉQUIPE
+                            </h3>
+                            <p><strong>Taille de l'équipe :</strong> <t t-esc="o.team_size"/> personne(s)</p>
+                            <p style="text-align: justify; line-height: 1.6; white-space: pre-wrap;">
+                                <t t-esc="o.team_structure"/>
+                            </p>
+                        </div>
+
+                        <!-- Pied de page -->
+                        <div style="margin-top: 50px; border-top: 2px solid #8E44AD; padding-top: 15px; text-align: center; color: #7F8C8D;">
+                            <p>Document généré le <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/></p>
+                            <p style="font-size: 12px;">Document confidentiel destiné aux investisseurs potentiels.</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ==================== RAPPORT DE SUIVI MENSUEL ==================== -->
+    <template id="report_businessplan_tracking">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- En-tête -->
+                        <div class="text-center" style="border-bottom: 3px solid #16A085; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="color: #16A085; font-size: 32px; margin-bottom: 10px;">
+                                RAPPORT DE SUIVI MENSUEL
+                            </h1>
+                            <h2 style="color: #1ABC9C; font-size: 24px;">
+                                <t t-esc="o.name"/>
+                            </h2>
+                            <p style="color: #7F8C8D; font-size: 14px;">
+                                Référence: <t t-esc="o.reference"/> |
+                                Période: <t t-esc="o.date_start.strftime('%d/%m/%Y')"/> - <t t-esc="o.date_end.strftime('%d/%m/%Y')"/> |
+                                Rapport généré le: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                            </p>
+                        </div>
+
+                        <!-- 1. VUE D'ENSEMBLE -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #16A085; color: white; padding: 10px; margin-bottom: 15px;">
+                                1. VUE D'ENSEMBLE
+                            </h3>
+
+                            <div class="row">
+                                <div class="col-4 text-center" style="padding: 15px; background-color: #D5F4E6; margin-right: 10px;">
+                                    <h4 style="color: #16A085; margin-top: 0;">État</h4>
+                                    <p style="font-size: 20px; font-weight: bold; color: #16A085;">
+                                        <t t-esc="dict(o._fields['state'].selection).get(o.state)"/>
+                                    </p>
+                                </div>
+                                <div class="col-4 text-center" style="padding: 15px; background-color: #AED6F1; margin-right: 10px;">
+                                    <h4 style="color: #3498DB; margin-top: 0;">Progression</h4>
+                                    <p style="font-size: 20px; font-weight: bold; color: #3498DB;">
+                                        <t t-esc="'{:.1f}%'.format(o.progress)"/>
+                                    </p>
+                                </div>
+                                <div class="col-4 text-center" style="padding: 15px; background-color: #FADBD8;">
+                                    <h4 style="color: #E74C3C; margin-top: 0;">Indicateurs</h4>
+                                    <p style="font-size: 20px; font-weight: bold; color: #E74C3C;">
+                                        <t t-esc="o.indicator_count"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. INDICATEURS DE PERFORMANCE -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #16A085; color: white; padding: 10px; margin-bottom: 15px;">
+                                2. INDICATEURS DE PERFORMANCE
+                            </h3>
+
+                            <table class="table table-bordered" style="width: 100%;">
+                                <thead style="background-color: #16A085; color: white;">
+                                    <tr>
+                                        <th style="width: 30%;">Indicateur</th>
+                                        <th style="width: 20%; text-align: right;">Objectif</th>
+                                        <th style="width: 20%; text-align: right;">Réalisé</th>
+                                        <th style="width: 15%; text-align: center;">Progression</th>
+                                        <th style="width: 15%; text-align: center;">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.indicator_ids" t-as="ind">
+                                        <tr>
+                                            <td style="background-color: #ECF0F1;"><strong><t t-esc="ind.name"/></strong></td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(ind.target_value)"/></td>
+                                            <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(ind.current_value)"/></td>
+                                            <td style="text-align: center;">
+                                                <span t-attf-style="color: #{ind.progress >= 80 and '#27AE60' or ind.progress >= 50 and '#F39C12' or '#E74C3C'}; font-weight: bold;">
+                                                    <t t-esc="'{:.0f}%'.format(ind.progress)"/>
+                                                </span>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <span t-if="ind.progress >= 80" style="color: #27AE60; font-weight: bold;">✓ OK</span>
+                                                <span t-elif="ind.progress >= 50" style="color: #F39C12; font-weight: bold;">⚠ Attention</span>
+                                                <span t-else="" style="color: #E74C3C; font-weight: bold;">✗ Critique</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="not o.indicator_ids">
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; color: #7F8C8D; padding: 20px;">
+                                                Aucun indicateur défini. Validez le business plan pour générer les indicateurs.
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 3. ANALYSE FINANCIÈRE -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #F39C12; color: white; padding: 10px; margin-bottom: 15px;">
+                                3. SUIVI FINANCIER
+                            </h3>
+
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td style="width: 40%; background-color: #ECF0F1;"><strong>CA Prévisionnel Année 1</strong></td>
+                                    <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.revenue_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Charges Année 1</strong></td>
+                                    <td style="text-align: right;"><t t-esc="'{:,.0f}'.format(o.costs_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/></td>
+                                </tr>
+                                <tr style="background-color: #FCF3CF;">
+                                    <td><strong>Résultat Prévisionnel Année 1</strong></td>
+                                    <td style="text-align: right; font-weight: bold;">
+                                        <t t-esc="'{:,.0f}'.format(o.profit_year1 or 0)"/> <t t-esc="o.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #ECF0F1;"><strong>Marge prévue</strong></td>
+                                    <td style="text-align: right;">
+                                        <t t-esc="'{:.1f}%'.format((o.profit_year1 / o.revenue_year1 * 100) if o.revenue_year1 else 0)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- 4. POINTS D'ATTENTION -->
+                        <div style="margin-bottom: 30px;">
+                            <h3 style="background-color: #C0392B; color: white; padding: 10px; margin-bottom: 15px;">
+                                4. POINTS D'ATTENTION
+                            </h3>
+
+                            <t t-set="critical_indicators" t-value="o.indicator_ids.filtered(lambda i: i.progress &lt; 50)"/>
+                            <t t-set="warning_indicators" t-value="o.indicator_ids.filtered(lambda i: 50 &lt;= i.progress &lt; 80)"/>
+
+                            <div t-if="critical_indicators" style="padding: 15px; background-color: #FADBD8; border-left: 5px solid #C0392B; margin-bottom: 15px;">
+                                <h4 style="color: #C0392B; margin-top: 0;">⚠️ Indicateurs critiques (<t t-esc="len(critical_indicators)"/>) :</h4>
+                                <ul>
+                                    <t t-foreach="critical_indicators" t-as="ci">
+                                        <li><strong><t t-esc="ci.name"/></strong> : <t t-esc="'{:.0f}%'.format(ci.progress)"/> de réalisation</li>
+                                    </t>
+                                </ul>
+                            </div>
+
+                            <div t-if="warning_indicators" style="padding: 15px; background-color: #FCF3CF; border-left: 5px solid #F39C12; margin-bottom: 15px;">
+                                <h4 style="color: #F39C12; margin-top: 0;">⚡ Indicateurs à surveiller (<t t-esc="len(warning_indicators)"/>) :</h4>
+                                <ul>
+                                    <t t-foreach="warning_indicators" t-as="wi">
+                                        <li><strong><t t-esc="wi.name"/></strong> : <t t-esc="'{:.0f}%'.format(wi.progress)"/> de réalisation</li>
+                                    </t>
+                                </ul>
+                            </div>
+
+                            <div t-if="not critical_indicators and not warning_indicators" style="padding: 15px; background-color: #D5F4E6; border-left: 5px solid #27AE60;">
+                                <h4 style="color: #27AE60; margin-top: 0;">✓ Tous les indicateurs sont au vert !</h4>
+                                <p style="margin: 0;">Le projet avance conformément aux objectifs fixés.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pied de page -->
+                        <div style="margin-top: 50px; border-top: 2px solid #16A085; padding-top: 15px; text-align: center; color: #7F8C8D;">
+                            <p>Rapport de suivi généré le <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y à %H:%M')"/></p>
+                            <p style="font-size: 12px;">Ce rapport doit être mis à jour mensuellement pour un suivi optimal.</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

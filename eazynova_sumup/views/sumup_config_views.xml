@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sumup_config_form" model="ir.ui.view">
+        <field name="name">eazynova.sumup.config.form</field>
+        <field name="model">eazynova.sumup.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuration SumUp">
+                <header>
+                    <button name="action_test_connection" string="Tester la Connexion" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="api_key" password="True"/>
+                            <field name="merchant_code"/>
+                            <field name="api_url"/>
+                        </group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="currency_id"/>
+                            <field name="auto_validate_invoice"/>
+                            <field name="auto_reconcile"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sumup_config" model="ir.actions.act_window">
+        <field name="name">Configuration SumUp</field>
+        <field name="res_model">eazynova.sumup.config</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>

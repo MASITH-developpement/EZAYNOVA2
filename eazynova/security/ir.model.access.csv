@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eazynova_service_user,eazynova.ai.service.user,model_eazynova_ai_service,group_eazynova_user,1,1,1,0
+access_eazynova_service_manager,eazynova.ai.service.manager,model_eazynova_ai_service,group_eazynova_manager,1,1,1,1

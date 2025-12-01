@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Assets JavaScript et CSS pour le module intervention -->
+    <template id="assets_backend" name="intervention assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+        </xpath>
+    </template>
+    
+    <!-- Templates XML pour Owl -->
+    <!-- assets_web supprimé : aucun JS custom côté frontend -->
+</odoo>

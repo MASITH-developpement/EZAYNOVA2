@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard d'activité pour les interventions -->
+    <record id="board_intervention_dashboard" model="board.board">
+        <field name="name">Tableau de bord Interventions</field>
+        <field name="view_ids" eval="[(0,0,{'view_mode':'list','view_id':ref('intervention_intervention_view_list')}),
+                        (0,0,{'view_mode':'calendar','view_id':ref('action_intervention_planning')})]"/>
+    </record>
+
+    <!-- Menu pour accéder au dashboard -->
+    <menuitem id="menu_intervention_dashboard" name="Tableau de bord Interventions"
+              parent="intervention.menu_intervention_root"
+              action="board_intervention_dashboard" sequence="99"/>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vues du modèle principal chantier -->
+    <record id="view_chantier_tree" model="ir.ui.view">
+        <field name="name">eazynova.chantier.tree</field>
+        <field name="model">eazynova.chantier</field>
+        <field name="arch" type="xml">
+            <tree string="Chantiers">
+                <field name="name"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_chantier_form" model="ir.ui.view">
+        <field name="name">eazynova.chantier.form</field>
+        <field name="model">eazynova.chantier</field>
+        <field name="arch" type="xml">
+            <form string="Chantier">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="state"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_chantier" model="ir.actions.act_window">
+        <field name="name">Chantiers</field>
+        <field name="res_model">eazynova.chantier</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

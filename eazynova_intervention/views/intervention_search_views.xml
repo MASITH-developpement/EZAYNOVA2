@@ -1,0 +1,16 @@
+<odoo>
+    <record id="intervention_intervention_view_search" model="ir.ui.view">
+        <field name="name">intervention.intervention.view.search</field>
+        <field name="model">intervention.intervention</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="numero"/>
+                <field name="numero_donneur_ordre"/>
+                <field name="donneur_ordre_id"/>
+                <field name="client_final_id"/>
+                <field name="technicien_principal_id"/>
+            </search>
+        </field>
+    </record>
+</odoo>

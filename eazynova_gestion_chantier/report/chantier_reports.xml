@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rapport Chantier -->
+    <record id="action_report_chantier" model="ir.actions.report">
+        <field name="name">Fiche de chantier</field>
+        <field name="model">chantier.chantier</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">eazynova_gestion_chantier.report_chantier_template</field>
+        <field name="report_file">eazynova_gestion_chantier.report_chantier_template</field>
+        <field name="binding_model_id" ref="model_chantier_chantier"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Chantier - %s' % object.name</field>
+    </record>
+
+    <!-- Rapport Phase -->
+    <record id="action_report_chantier_phase" model="ir.actions.report">
+        <field name="name">Rapport de phase</field>
+        <field name="model">chantier.phase</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">eazynova_gestion_chantier.report_phase_template</field>
+        <field name="report_file">eazynova_gestion_chantier.report_phase_template</field>
+        <field name="binding_model_id" ref="model_chantier_phase"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Phase - %s' % object.name</field>
+    </record>
+
+    <!-- Rapport Dépenses -->
+    <record id="action_report_chantier_depenses" model="ir.actions.report">
+        <field name="name">Rapport de dépenses</field>
+        <field name="model">chantier.chantier</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">eazynova_gestion_chantier.report_depenses_template</field>
+        <field name="report_file">eazynova_gestion_chantier.report_depenses_template</field>
+        <field name="binding_model_id" ref="model_chantier_chantier"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Dépenses - %s' % object.name</field>
+    </record>
+</odoo>

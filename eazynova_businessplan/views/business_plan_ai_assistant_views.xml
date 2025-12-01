@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire de l'assistant IA -->
+    <record id="view_business_plan_ai_assistant_form" model="ir.ui.view">
+        <field name="name">business.plan.ai.assistant.form</field>
+        <field name="model">business.plan.ai.assistant</field>
+        <field name="arch" type="xml">
+            <form string="Assistant IA">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>🤖 Assistant IA pour Business Plan</h1>
+                    </div>
+
+                    <group>
+                        <field name="business_plan_id" readonly="1"/>
+                        <field name="analysis_type" readonly="1"/>
+                        <field name="score" widget="progressbar"/>
+                    </group>
+
+                    <notebook>
+                        <page string="📊 Analyse" name="result">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Résultat de l'analyse IA</strong>
+                                </div>
+                                <field name="result" nolabel="1" readonly="1"
+                                       widget="text" style="white-space: pre-wrap; font-family: monospace;"/>
+                            </group>
+                        </page>
+
+                        <page string="💡 Suggestions" name="suggestions">
+                            <group>
+                                <div class="alert alert-success" role="alert">
+                                    <strong>Suggestions d'amélioration</strong>
+                                </div>
+                                <field name="suggestions" nolabel="1" readonly="1"
+                                       widget="text" style="white-space: pre-wrap;"/>
+                            </group>
+                        </page>
+
+                        <page string="⚠️ Problèmes" name="issues">
+                            <group>
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>Problèmes détectés</strong>
+                                </div>
+                                <field name="issues" nolabel="1" readonly="1"
+                                       widget="text" style="white-space: pre-wrap;"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

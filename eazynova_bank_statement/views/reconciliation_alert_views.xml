@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reconciliation_alert_tree" model="ir.ui.view">
+        <field name="name">eazynova.reconciliation.alert.tree</field>
+        <field name="model">eazynova.reconciliation.alert</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="severity == 'critical'"
+                  decoration-warning="severity == 'warning'"
+                  decoration-muted="state in ('resolved', 'ignored')">
+                <field name="create_date"/>
+                <field name="alert_type"/>
+                <field name="severity"/>
+                <field name="message"/>
+                <field name="import_id"/>
+                <field name="state"/>
+                <field name="priority" widget="priority"/>
+                <button name="action_resolve" string="Résoudre" type="object" invisible="state != 'new'"/>
+                <button name="action_ignore" string="Ignorer" type="object" invisible="state != 'new'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_reconciliation_alert_form" model="ir.ui.view">
+        <field name="name">eazynova.reconciliation.alert.form</field>
+        <field name="model">eazynova.reconciliation.alert</field>
+        <field name="arch" type="xml">
+            <form string="Alerte de Rapprochement">
+                <header>
+                    <button name="action_in_progress" string="En Cours" type="object" states="new"/>
+                    <button name="action_resolve" string="Résoudre" type="object" states="new,in_progress"
+                            class="oe_highlight"/>
+                    <button name="action_ignore" string="Ignorer" type="object" states="new,in_progress"/>
+                    <button name="action_view_line" string="Voir la Ligne" type="object" class="oe_highlight"
+                            invisible="not line_id"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_import" type="object" class="oe_stat_button" icon="fa-upload">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Import</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Critique" bg_color="bg-danger" invisible="severity != 'critical'"/>
+                    <group>
+                        <group>
+                            <field name="alert_type"/>
+                            <field name="severity"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="import_id"/>
+                            <field name="line_id"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="resolved_by" invisible="not resolved_by"/>
+                            <field name="resolved_date" invisible="not resolved_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message"/>
+                        <field name="resolution_note" invisible="state not in ('resolved', 'ignored')"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_reconciliation_alert" model="ir.actions.act_window">
+        <field name="name">Alertes de Rapprochement</field>
+        <field name="res_model">eazynova.reconciliation.alert</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+</odoo>

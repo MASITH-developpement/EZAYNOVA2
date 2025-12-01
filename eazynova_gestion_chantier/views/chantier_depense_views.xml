@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Tree -->
+    <record id="view_chantier_depense_tree" model="ir.ui.view">
+        <field name="name">chantier.depense.tree</field>
+        <field name="model">chantier.depense</field>
+        <field name="arch" type="xml">
+            <tree string="Dépenses" editable="bottom">
+                <field name="date"/>
+                <field name="chantier_id"/>
+                <field name="name"/>
+                <field name="type_depense"/>
+                <field name="partner_id"/>
+                <field name="montant" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="facture_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Form -->
+    <record id="view_chantier_depense_form" model="ir.ui.view">
+        <field name="name">chantier.depense.form</field>
+        <field name="model">chantier.depense</field>
+        <field name="arch" type="xml">
+            <form string="Dépense">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Description de la dépense"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="chantier_id"/>
+                            <field name="date"/>
+                            <field name="type_depense"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="montant"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="facture_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Pivot -->
+    <record id="view_chantier_depense_pivot" model="ir.ui.view">
+        <field name="name">chantier.depense.pivot</field>
+        <field name="model">chantier.depense</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des dépenses">
+                <field name="chantier_id" type="row"/>
+                <field name="type_depense" type="col"/>
+                <field name="montant" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vue Graph -->
+    <record id="view_chantier_depense_graph" model="ir.ui.view">
+        <field name="name">chantier.depense.graph</field>
+        <field name="model">chantier.depense</field>
+        <field name="arch" type="xml">
+            <graph string="Graphique des dépenses" type="bar">
+                <field name="type_depense"/>
+                <field name="montant" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_chantier_depense" model="ir.actions.act_window">
+        <field name="name">Dépenses</field>
+        <field name="res_model">chantier.depense</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ajouter une dépense
+            </p>
+        </field>
+    </record>
+</odoo>

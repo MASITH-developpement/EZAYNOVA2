@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Groupe Utilisateur -->
+    <record id="group_bank_statement_user" model="res.groups">
+        <field name="name">Utilisateur Import Bancaire</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Groupe Manager -->
+    <record id="group_bank_statement_manager" model="res.groups">
+        <field name="name">Manager Import Bancaire</field>
+        <field name="implied_ids" eval="[(4, ref('group_bank_statement_user'))]"/>
+    </record>
+
+    <!-- Règles d'accès multi-sociétés -->
+    <record id="bank_statement_import_comp_rule" model="ir.rule">
+        <field name="name">Import Bancaire: multi-société</field>
+        <field name="model_id" ref="model_eazynova_bank_statement_import"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="reconciliation_alert_comp_rule" model="ir.rule">
+        <field name="name">Alertes Rapprochement: multi-société</field>
+        <field name="model_id" ref="model_eazynova_reconciliation_alert"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="reconciliation_rule_comp_rule" model="ir.rule">
+        <field name="name">Règles Rapprochement: multi-société</field>
+        <field name="model_id" ref="model_eazynova_reconciliation_rule"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

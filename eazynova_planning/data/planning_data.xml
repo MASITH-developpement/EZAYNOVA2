@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Calendriers par défaut -->
+    <record id="calendar_standard_5days" model="eazynova.planning.calendar">
+        <field name="name">Standard (5 jours - 40h)</field>
+        <field name="calendar_type">standard</field>
+        <field name="work_hours_per_day">8.0</field>
+        <field name="work_hours_per_week">40.0</field>
+        <field name="monday">True</field>
+        <field name="tuesday">True</field>
+        <field name="wednesday">True</field>
+        <field name="thursday">True</field>
+        <field name="friday">True</field>
+        <field name="saturday">False</field>
+        <field name="sunday">False</field>
+        <field name="hour_start_morning">8.0</field>
+        <field name="hour_end_morning">12.0</field>
+        <field name="hour_start_afternoon">14.0</field>
+        <field name="hour_end_afternoon">18.0</field>
+    </record>
+
+    <record id="calendar_extended_6days" model="eazynova.planning.calendar">
+        <field name="name">Étendu (6 jours - 48h)</field>
+        <field name="calendar_type">extended</field>
+        <field name="work_hours_per_day">8.0</field>
+        <field name="work_hours_per_week">48.0</field>
+        <field name="monday">True</field>
+        <field name="tuesday">True</field>
+        <field name="wednesday">True</field>
+        <field name="thursday">True</field>
+        <field name="friday">True</field>
+        <field name="saturday">True</field>
+        <field name="sunday">False</field>
+        <field name="hour_start_morning">8.0</field>
+        <field name="hour_end_morning">12.0</field>
+        <field name="hour_start_afternoon">14.0</field>
+        <field name="hour_end_afternoon">18.0</field>
+    </record>
+
+    <!-- Compétences de base -->
+    <record id="skill_electrician" model="eazynova.planning.resource.skill">
+        <field name="name">Électricien</field>
+        <field name="level_required">intermediate</field>
+        <field name="description">Compétences en électricité générale</field>
+    </record>
+
+    <record id="skill_plumber" model="eazynova.planning.resource.skill">
+        <field name="name">Plombier</field>
+        <field name="level_required">intermediate</field>
+        <field name="description">Compétences en plomberie</field>
+    </record>
+
+    <record id="skill_carpenter" model="eazynova.planning.resource.skill">
+        <field name="name">Charpentier</field>
+        <field name="level_required">intermediate</field>
+        <field name="description">Compétences en charpenterie</field>
+    </record>
+
+    <record id="skill_mason" model="eazynova.planning.resource.skill">
+        <field name="name">Maçon</field>
+        <field name="level_required">intermediate</field>
+        <field name="description">Compétences en maçonnerie</field>
+    </record>
+
+    <record id="skill_painter" model="eazynova.planning.resource.skill">
+        <field name="name">Peintre</field>
+        <field name="level_required">basic</field>
+        <field name="description">Compétences en peinture</field>
+    </record>
+
+    <record id="skill_project_manager" model="eazynova.planning.resource.skill">
+        <field name="name">Chef de projet</field>
+        <field name="level_required">advanced</field>
+        <field name="description">Gestion de projet et coordination d'équipes</field>
+    </record>
+
+    <record id="skill_forklift" model="eazynova.planning.resource.skill">
+        <field name="name">Conduite engin (CACES)</field>
+        <field name="level_required">intermediate</field>
+        <field name="description">Certification CACES pour conduite d'engins</field>
+    </record>
+
+    <!-- Jours fériés France 2024 -->
+    <record id="holiday_new_year_2024" model="eazynova.planning.holiday">
+        <field name="name">Jour de l'an</field>
+        <field name="date">2024-01-01</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_easter_monday_2024" model="eazynova.planning.holiday">
+        <field name="name">Lundi de Pâques</field>
+        <field name="date">2024-04-01</field>
+        <field name="is_recurring">False</field>
+    </record>
+
+    <record id="holiday_labour_day_2024" model="eazynova.planning.holiday">
+        <field name="name">Fête du travail</field>
+        <field name="date">2024-05-01</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_victory_day_2024" model="eazynova.planning.holiday">
+        <field name="name">Victoire 1945</field>
+        <field name="date">2024-05-08</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_ascension_2024" model="eazynova.planning.holiday">
+        <field name="name">Ascension</field>
+        <field name="date">2024-05-09</field>
+        <field name="is_recurring">False</field>
+    </record>
+
+    <record id="holiday_whit_monday_2024" model="eazynova.planning.holiday">
+        <field name="name">Lundi de Pentecôte</field>
+        <field name="date">2024-05-20</field>
+        <field name="is_recurring">False</field>
+    </record>
+
+    <record id="holiday_bastille_day_2024" model="eazynova.planning.holiday">
+        <field name="name">Fête nationale</field>
+        <field name="date">2024-07-14</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_assumption_2024" model="eazynova.planning.holiday">
+        <field name="name">Assomption</field>
+        <field name="date">2024-08-15</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_all_saints_2024" model="eazynova.planning.holiday">
+        <field name="name">Toussaint</field>
+        <field name="date">2024-11-01</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_armistice_2024" model="eazynova.planning.holiday">
+        <field name="name">Armistice 1918</field>
+        <field name="date">2024-11-11</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+    <record id="holiday_christmas_2024" model="eazynova.planning.holiday">
+        <field name="name">Noël</field>
+        <field name="date">2024-12-25</field>
+        <field name="is_recurring">True</field>
+    </record>
+
+</odoo>

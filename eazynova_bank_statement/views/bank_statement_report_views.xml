@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue rapport pour les statistiques d'import -->
+    <record id="view_bank_statement_import_pivot" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.pivot</field>
+        <field name="model">eazynova.bank.statement.import</field>
+        <field name="arch" type="xml">
+            <pivot string="Statistiques d'Import Bancaire">
+                <field name="journal_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="line_count" type="measure"/>
+                <field name="reconciled_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_bank_statement_import_graph" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.graph</field>
+        <field name="model">eazynova.bank.statement.import</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques d'Import" type="bar">
+                <field name="journal_id"/>
+                <field name="reconciled_count" type="measure"/>
+                <field name="uncertain_count" type="measure"/>
+                <field name="unreconciled_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_bank_statement_import_report" model="ir.actions.act_window">
+        <field name="name">Rapport d'Imports Bancaires</field>
+        <field name="res_model">eazynova.bank.statement.import</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <menuitem id="menu_bank_statement_report"
+              name="Rapports"
+              parent="menu_eazynova_bank_statement_root"
+              action="action_bank_statement_import_report"
+              sequence="90"/>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue planning global type diagramme par employé -->
+    <record id="action_planning_global_gantt" model="ir.actions.act_window">
+        <field name="name">Planning global (diagramme)</field>
+        <field name="res_model">eazynova.planning.assignment</field>
+        <field name="view_mode">gantt,tree,form</field>
+        <field name="view_id" ref="view_planning_assignment_gantt"/>
+        <field name="context">{"search_default_group_by_resource_id": 1}</field>
+    </record>
+
+    <record id="view_planning_assignment_gantt" model="ir.ui.view">
+        <field name="name">eazynova.planning.assignment.gantt</field>
+        <field name="model">eazynova.planning.assignment</field>
+        <field name="arch" type="xml">
+            <gantt string="Planning global" date_start="date_start" date_stop="date_end" default_group_by="resource_id" color="color">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="resource_id"/>
+                <field name="client_id"/>
+                <field name="donneur_ordre_id"/>
+                <field name="intervention_id"/>
+                <field name="chantier_id"/>
+            </gantt>
+            <search>
+                <filter name="type_intervention" string="Intervention" domain="[('type','=','intervention')]"/>
+                <filter name="type_chantier" string="Chantier" domain="[('type','=','chantier')]"/>
+                <field name="resource_id"/>
+                <field name="client_id"/>
+                <field name="donneur_ordre_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </search>
+        </field>
+    </record>
+</odoo>

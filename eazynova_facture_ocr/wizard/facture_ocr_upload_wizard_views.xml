@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_facture_ocr_upload_wizard_form" model="ir.ui.view">
+            <field name="name">facture.ocr.upload.wizard.form</field>
+            <field name="model">facture.ocr.upload.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Upload Factures OCR">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><i class="fa fa-cloud-upload"/> Upload et Traitement Automatique</h1>
+                        </div>
+                        
+                        <group>
+                            <div class="alert alert-info" role="alert">
+                                <i class="fa fa-info-circle"/> 
+                                <strong>Processus automatisé :</strong>
+                                <ol class="mb-0 mt-2">
+                                    <li>📤 Upload de vos factures (PDF ou images)</li>
+                                    <li>🔍 Extraction OCR avec Tesseract</li>
+                                    <li>🤖 Analyse intelligente avec IA (Claude/OpenAI)</li>
+                                    <li>✅ Validation automatique si confiance > 90%</li>
+                                    <li>📄 Création facture Odoo (optionnel)</li>
+                                </ol>
+                            </div>
+                        </group>
+                        
+                        <group string="Sélection des Factures">
+                            <field name="document_ids" widget="many2many_binary" nolabel="1"/>
+                        </group>
+                        
+                        <group string="Options de Traitement">
+                            <group>
+                                <field name="auto_process" widget="boolean_toggle"/>
+                                <field name="auto_validate" widget="boolean_toggle" invisible="not auto_process"/>
+                            </group>
+                            <group>
+                                <field name="auto_create_invoice" widget="boolean_toggle" invisible="not auto_validate"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <div class="alert alert-warning" role="alert" invisible="not auto_create_invoice">
+                                <i class="fa fa-exclamation-triangle"/> 
+                                <strong>Attention :</strong> La création automatique des factures ne validera que les documents avec une confiance IA supérieure à 90%. Les autres nécessiteront une validation manuelle.
+                            </div>
+                        </group>
+                    </sheet>
+                    
+                    <footer>
+                        <button string="Uploader et Traiter" name="action_upload_and_process" type="object" class="btn-primary" icon="fa-rocket"/>
+                        <button string="Annuler" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Action wizard -->
+        <record id="action_facture_ocr_upload_wizard" model="ir.actions.act_window">
+            <field name="name">Upload Factures</field>
+            <field name="res_model">facture.ocr.upload.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

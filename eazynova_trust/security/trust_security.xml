@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Groupe Utilisateur Trust -->
+    <record id="group_trust_user" model="res.groups">
+        <field name="name">Utilisateur Avis Clients</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Groupe Manager Trust -->
+    <record id="group_trust_manager" model="res.groups">
+        <field name="name">Manager Avis Clients</field>
+        <field name="implied_ids" eval="[(4, ref('group_trust_user'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_sumup_transaction" model="ir.sequence">
+        <field name="name">Transaction SumUp</field>
+        <field name="code">eazynova.sumup.transaction</field>
+        <field name="prefix">SUMUP</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

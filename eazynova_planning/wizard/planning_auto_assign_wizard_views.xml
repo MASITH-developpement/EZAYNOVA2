@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue wizard assignation automatique -->
+    <record id="view_planning_auto_assign_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.planning.auto.assign.wizard.form</field>
+        <field name="model">eazynova.planning.auto.assign.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assignation automatique de ressources">
+                <field name="state" invisible="1"/>
+                <field name="task_id" invisible="1"/>
+
+                <group invisible="state != 'select_criteria'">
+                    <group string="Critères de sélection">
+                        <field name="resource_type"/>
+                        <field name="skill_ids" widget="many2many_tags"/>
+                        <field name="required_count"/>
+                    </group>
+                    <group string="Options">
+                        <field name="check_availability"/>
+                        <field name="ignore_absences"/>
+                        <field name="allow_conflicts"/>
+                    </group>
+                </group>
+
+                <group invisible="state != 'select_resources'">
+                    <field name="message" readonly="1"/>
+                    <field name="selected_resource_ids" widget="many2many" nolabel="1"/>
+                </group>
+
+                <footer>
+                    <button string="Rechercher" name="action_search_resources" type="object" class="btn-primary" invisible="state != 'select_criteria'"/>
+                    <button string="Assigner" name="action_assign_resources" type="object" class="btn-primary" invisible="state != 'select_resources'"/>
+                    <button string="Retour" name="action_back" type="object" invisible="state != 'select_resources'"/>
+                    <button string="Annuler" name="action_cancel" type="object" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

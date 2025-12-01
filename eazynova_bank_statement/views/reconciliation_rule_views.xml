@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reconciliation_rule_tree" model="ir.ui.view">
+        <field name="name">eazynova.reconciliation.rule.tree</field>
+        <field name="model">eazynova.reconciliation.rule</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="not active">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="rule_type"/>
+                <field name="confidence_boost" widget="percentage"/>
+                <field name="match_count"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_reconciliation_rule_form" model="ir.ui.view">
+        <field name="name">eazynova.reconciliation.rule.form</field>
+        <field name="model">eazynova.reconciliation.rule</field>
+        <field name="arch" type="xml">
+            <form string="Règle de Rapprochement">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_button" options="{'terminology': 'active'}"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="rule_type"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="journal_ids" widget="many2many_tags"/>
+                            <field name="confidence_boost" widget="percentage"/>
+                        </group>
+                    </group>
+                    <group string="Critères" invisible="rule_type not in ('reference_pattern', 'description_keyword', 'partner_keyword', 'amount_range', 'combined')">
+                        <group invisible="rule_type not in ('reference_pattern', 'combined')">
+                            <field name="reference_pattern"/>
+                        </group>
+                        <group invisible="rule_type not in ('description_keyword', 'combined')">
+                            <field name="description_keywords"/>
+                        </group>
+                        <group invisible="rule_type not in ('partner_keyword', 'combined')">
+                            <field name="partner_keywords"/>
+                        </group>
+                        <group invisible="rule_type not in ('amount_range', 'combined')">
+                            <field name="amount_min"/>
+                            <field name="amount_max"/>
+                        </group>
+                    </group>
+                    <group string="Actions">
+                        <field name="partner_id"/>
+                        <field name="account_id"/>
+                    </group>
+                    <group>
+                        <field name="note" placeholder="Notes sur cette règle..."/>
+                    </group>
+                    <group string="Statistiques">
+                        <field name="match_count"/>
+                        <field name="last_match_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_reconciliation_rule" model="ir.actions.act_window">
+        <field name="name">Règles de Rapprochement</field>
+        <field name="res_model">eazynova.reconciliation.rule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

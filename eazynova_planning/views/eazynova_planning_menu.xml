@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_eazynova_planning_root" name="Planning" sequence="10"/>
+    <menuitem id="menu_eazynova_planning_global" name="Planning global" parent="menu_eazynova_planning_root" sequence="20" action="action_planning_global_gantt"/>
+</odoo>

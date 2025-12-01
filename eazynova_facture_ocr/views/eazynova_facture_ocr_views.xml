@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Vue liste factures OCR -->
+        <record id="view_facture_ocr_tree" model="ir.ui.view">
+            <field name="name">eazynova.facture.ocr.tree</field>
+            <field name="model">eazynova.facture.ocr</field>
+            <field name="arch" type="xml">
+                <tree string="Factures OCR" decoration-success="state=='invoice_created'" decoration-info="state=='extracted'" decoration-danger="state=='error'">
+                    <field name="name"/>
+                    <field name="document_filename"/>
+                    <field name="partner_id"/>
+                    <field name="invoice_number"/>
+                    <field name="invoice_date"/>
+                    <field name="amount_total" sum="Total"/>
+                    <field name="ia_confidence" widget="progressbar"/>
+                    <field name="state" widget="badge" decoration-success="state=='invoice_created'" decoration-info="state in ('extracted','validated')" decoration-danger="state=='error'"/>
+                    <field name="date_upload"/>
+                    <field name="user_id" widget="many2one_avatar_user"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Vue formulaire factures OCR -->
+        <record id="view_facture_ocr_form" model="ir.ui.view">
+            <field name="name">eazynova.facture.ocr.form</field>
+            <field name="model">eazynova.facture.ocr</field>
+            <field name="arch" type="xml">
+                <form string="Facture OCR">
+                    <header>
+                        <button name="action_process" string="Traiter avec IA" type="object" class="btn-primary" invisible="state != 'draft'" icon="fa-magic"/>
+                        <button name="action_validate" string="Valider" type="object" class="btn-success" invisible="state != 'extracted'" icon="fa-check"/>
+                        <button name="action_create_invoice" string="Créer Facture" type="object" class="btn-primary" invisible="state != 'validated'" icon="fa-file-invoice"/>
+                        <button name="action_reset" string="Retraiter" type="object" invisible="state not in ('error','extracted')" icon="fa-refresh"/>
+                        <button name="action_cancel" string="Annuler" type="object" invisible="state in ('cancelled','invoice_created')" icon="fa-times"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,processing,extracted,validated,invoice_created"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_invoice" icon="fa-file-invoice" invisible="not move_id">
+                                <field name="move_id" widget="statinfo" string="Facture"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Document">
+                                <field name="document_filename" invisible="1"/>
+                                <field name="document" widget="binary" filename="document_filename"/>
+                                <field name="document_type"/>
+                                <field name="date_upload"/>
+                                <field name="date_process" invisible="not date_process"/>
+                                <field name="user_id"/>
+                            </group>
+                            
+                            <group string="Scores de Confiance">
+                                <field name="ocr_confidence" widget="progressbar" invisible="not ocr_confidence"/>
+                                <field name="ia_confidence" widget="progressbar" invisible="not ia_confidence"/>
+                                <field name="needs_validation" invisible="state == 'draft'"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <!-- Onglet Données Extraites -->
+                            <page string="Données Extraites" name="extracted_data">
+                                <group>
+                                    <group string="Fournisseur">
+                                        <field name="partner_id" options="{'no_create': True}"/>
+                                        <field name="partner_name_extracted" readonly="1" invisible="not partner_name_extracted"/>
+                                        <field name="partner_vat_extracted" readonly="1" invisible="not partner_vat_extracted"/>
+                                    </group>
+                                    
+                                    <group string="Facture">
+                                        <field name="invoice_number"/>
+                                        <field name="invoice_date"/>
+                                        <field name="invoice_date_due"/>
+                                        <field name="currency_id" options="{'no_create': True}"/>
+                                    </group>
+                                </group>
+                                
+                                <group>
+                                    <group string="Montants">
+                                        <field name="amount_untaxed" widget="monetary"/>
+                                        <field name="amount_tax" widget="monetary"/>
+                                        <field name="amount_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                                    </group>
+                                </group>
+                                
+                                <!-- Lignes de facture -->
+                                <group string="Lignes de Facture">
+                                    <field name="invoice_line_ids" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="description"/>
+                                            <field name="quantity"/>
+                                            <field name="price_unit" widget="monetary"/>
+                                            <field name="amount" widget="monetary" sum="Total"/>
+                                            <field name="currency_id" column_invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                
+                                <group string="Validation">
+                                    <field name="validation_note" placeholder="Notes de validation..."/>
+                                </group>
+                            </page>
+                            
+                            <!-- Onglet OCR Brut -->
+                            <page string="Texte OCR" name="ocr_text" invisible="not ocr_text">
+                                <group>
+                                    <field name="ocr_text" nolabel="1" widget="text" readonly="1"/>
+                                </group>
+                            </page>
+                            
+                            <!-- Onglet IA JSON -->
+                            <page string="Extraction IA" name="ia_extraction" invisible="not ia_extraction">
+                                <group>
+                                    <field name="ia_extraction" nolabel="1" widget="text" readonly="1"/>
+                                </group>
+                            </page>
+                            
+                            <!-- Onglet Erreurs -->
+                            <page string="Erreurs" name="errors" invisible="state != 'error'">
+                                <group>
+                                    <field name="error_message" nolabel="1" widget="text" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    
+                    <!-- Chatter -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vue recherche -->
+        <record id="view_facture_ocr_search" model="ir.ui.view">
+            <field name="name">eazynova.facture.ocr.search</field>
+            <field name="model">eazynova.facture.ocr</field>
+            <field name="arch" type="xml">
+                <search string="Recherche Factures OCR">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="invoice_number"/>
+                    <field name="document_filename"/>
+                    
+                    <filter string="À traiter" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="Extraites" name="extracted" domain="[('state','=','extracted')]"/>
+                    <filter string="Validées" name="validated" domain="[('state','=','validated')]"/>
+                    <filter string="Factures créées" name="invoice_created" domain="[('state','=','invoice_created')]"/>
+                    <filter string="Erreurs" name="error" domain="[('state','=','error')]"/>
+                    
+                    <separator/>
+                    <filter string="Mes factures" name="my_invoices" domain="[('user_id','=',uid)]"/>
+                    <filter string="Nécessite validation" name="needs_validation" domain="[('needs_validation','=',True)]"/>
+                    <filter string="Haute confiance (>90%)" name="high_confidence" domain="[('ia_confidence','>',90)]"/>
+                    
+                    <group expand="0" string="Regrouper par">
+                        <filter string="État" name="group_state" context="{'group_by':'state'}"/>
+                        <filter string="Fournisseur" name="group_partner" context="{'group_by':'partner_id'}"/>
+                        <filter string="Date upload" name="group_date" context="{'group_by':'date_upload'}"/>
+                        <filter string="Responsable" name="group_user" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Vue Kanban -->
+        <record id="view_facture_ocr_kanban" model="ir.ui.view">
+            <field name="name">eazynova.facture.ocr.kanban</field>
+            <field name="model">eazynova.facture.ocr</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_group_by="state">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="ia_confidence"/>
+                    <field name="state"/>
+                    <field name="document_filename"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong><br/>
+                                        <span class="o_kanban_record_subtitle">
+                                            <field name="partner_id"/>
+                                        </span>
+                                    </div>
+                                    <span class="float-end">
+                                        <field name="amount_total" widget="monetary"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="document_filename"/>
+                                    <div class="mt-2">
+                                        <progressbar field="ia_confidence" title="Confiance IA"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="state" widget="label" options="{'classes': {'draft': 'default', 'extracted': 'info', 'validated': 'success', 'error': 'danger'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Action principale -->
+        <record id="action_facture_ocr" model="ir.actions.act_window">
+            <field name="name">Factures OCR</field>
+            <field name="res_model">eazynova.facture.ocr</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_draft': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucune facture OCR
+                </p>
+                <p>
+                    Uploadez vos factures pour extraction automatique avec l'IA !
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,633 @@
+# 🚀 Guide de Mise en Place GitHub - EAZYNOVA
+
+## 📋 Table des Matières
+
+1. [Structure du Repository](#structure-du-repository)
+2. [Initialisation Git](#initialisation-git)
+3. [Organisation des Branches](#organisation-des-branches)
+4. [Workflow de Développement](#workflow-de-développement)
+5. [CI/CD avec GitHub Actions](#cicd-avec-github-actions)
+6. [Protection des Branches](#protection-des-branches)
+
+---
+
+## 📁 STRUCTURE DU REPOSITORY
+
+### Organisation Recommandée
+
+```
+eazynova/                           # Repository racine
+│
+├── .github/
+│   ├── workflows/
+│   │   ├── tests.yml              # Tests automatiques
+│   │   ├── lint.yml               # Linting Python
+│   │   └── deploy.yml             # Déploiement automatique
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   └── PULL_REQUEST_TEMPLATE.md
+│
+├── modules/                        # Tous les modules Odoo
+│   ├── eazynova/                   # MODULE CORE ⭐
+│   │   ├── __init__.py
+│   │   ├── __manifest__.py
+│   │   ├── models/
+│   │   ├── views/
+│   │   ├── wizard/
+│   │   ├── security/
+│   │   ├── data/
+│   │   ├── static/
+│   │   ├── test/
+│   │   └── README.md
+│   │
+│   ├── eazynova_chantier/          # Gestion Chantiers
+│   ├── eazynova_compta/            # Comptabilité
+│   ├── eazynova_planning/          # Planning
+│   ├── eazynova_facture_client/    # Facturation Clients
+│   ├── eazynova_facture_fournisseur/
+│   ├── eazynova_intervention/
+│   ├── eazynova_achat/
+│   └── eazynova_stock/
+│
+├── docs/                           # Documentation complète
+│   ├── ARCHITECTURE.md             # Architecture technique
+│   ├── user/                       # Docs utilisateur
+│   ├── technical/                  # Docs technique
+│   └── developer/                  # Docs développeur
+│
+├── docker/                         # Configuration Docker
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── odoo.conf
+│
+├── scripts/                        # Scripts utilitaires
+│   ├── migrate.sh                  # Migration
+│   ├── deploy.sh                   # Déploiement
+│   └── test.sh                     # Tests
+│
+├── .gitignore
+├── .flake8
+├── .pylintrc
+├── requirements.txt
+├── README.md
+├── LICENSE
+├── CONTRIBUTING.md
+└── CHANGELOG.md
+```
+
+---
+
+## 🎬 INITIALISATION GIT
+
+### Étape 1 : Créer le Repository Local
+
+```bash
+# Se placer dans le répertoire du projet
+cd /path/to/eazynova
+
+# Initialiser Git
+git init
+
+# Créer .gitignore
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Odoo
+filestore/
+sessions/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.key
+*.pem
+.env
+secrets/
+
+# Temporary
+*.tmp
+*.bak
+*.old
+EOF
+
+# Première commit
+git add .
+git commit -m "Initial commit: EAZYNOVA modular architecture"
+```
+
+### Étape 2 : Créer le Repository sur GitHub
+
+1. Aller sur https://github.com/new
+2. Nom du repository : `eazynova`
+3. Description : "Solution de gestion d'entreprise pour Odoo 19 CE - Secteur BTP"
+4. Public ou Privé selon vos besoins
+5. Ne pas initialiser avec README (on a déjà le nôtre)
+
+### Étape 3 : Lier au Repository GitHub
+
+```bash
+# Ajouter remote
+git remote add origin https://github.com/YOUR_USERNAME/eazynova.git
+
+# Vérifier
+git remote -v
+
+# Push initial
+git branch -M main
+git push -u origin main
+```
+
+---
+
+## 🌿 ORGANISATION DES BRANCHES
+
+### Structure des Branches
+
+```
+main (production)
+  │
+  ├── develop (développement)
+  │     │
+  │     ├── feature/chantier-gps
+  │     ├── feature/compta-analytique
+  │     ├── feature/planning-gantt
+  │     │
+  │     ├── bugfix/facture-total
+  │     └── bugfix/ocr-pdf
+  │
+  └── hotfix/critical-security
+```
+
+### Créer les Branches de Base
+
+```bash
+# Créer et push la branche develop
+git checkout -b develop
+git push -u origin develop
+
+# Retour sur main
+git checkout main
+```
+
+### Workflow Git Flow
+
+#### Feature (Nouvelle fonctionnalité)
+
+```bash
+# Créer une feature
+git checkout develop
+git pull origin develop
+git checkout -b feature/nom-feature
+
+# Développer...
+git add .
+git commit -m "Add: Description de la feature"
+
+# Push
+git push -u origin feature/nom-feature
+
+# Créer une Pull Request sur GitHub
+# develop ← feature/nom-feature
+```
+
+#### Bugfix (Correction de bug)
+
+```bash
+# Créer un bugfix
+git checkout develop
+git checkout -b bugfix/nom-bug
+
+# Corriger...
+git add .
+git commit -m "Fix: Description du fix"
+
+# Push et PR
+git push -u origin bugfix/nom-bug
+```
+
+#### Hotfix (Correction urgente en production)
+
+```bash
+# Créer un hotfix depuis main
+git checkout main
+git checkout -b hotfix/critical-issue
+
+# Corriger...
+git add .
+git commit -m "Hotfix: Description"
+
+# Merge dans main ET develop
+git checkout main
+git merge --no-ff hotfix/critical-issue
+git push origin main
+
+git checkout develop
+git merge --no-ff hotfix/critical-issue
+git push origin develop
+
+git branch -d hotfix/critical-issue
+```
+
+#### Release (Mise en production)
+
+```bash
+# Créer une release
+git checkout develop
+git checkout -b release/19.0.1.0.0
+
+# Tests finaux, corrections mineures...
+git add .
+git commit -m "Release: 19.0.1.0.0"
+
+# Merge dans main
+git checkout main
+git merge --no-ff release/19.0.1.0.0
+git tag -a v19.0.1.0.0 -m "Version 19.0.1.0.0"
+git push origin main --tags
+
+# Merge dans develop
+git checkout develop
+git merge --no-ff release/19.0.1.0.0
+git push origin develop
+
+git branch -d release/19.0.1.0.0
+```
+
+---
+
+## 🔄 WORKFLOW DE DÉVELOPPEMENT
+
+### 1. Récupérer les Dernières Modifications
+
+```bash
+git checkout develop
+git pull origin develop
+```
+
+### 2. Créer une Branche de Travail
+
+```bash
+# Pour une fonctionnalité
+git checkout -b feature/nom-descriptif
+
+# Pour un bug
+git checkout -b bugfix/nom-descriptif
+```
+
+### 3. Développer et Committer
+
+```bash
+# Commits atomiques et descriptifs
+git add fichier1.py fichier2.xml
+git commit -m "Add: Nouvelle fonctionnalité X"
+
+# Plusieurs commits si nécessaire
+git add autre_fichier.py
+git commit -m "Fix: Correction validation champ Y"
+```
+
+### 4. Push et Pull Request
+
+```bash
+# Push de la branche
+git push -u origin feature/nom-descriptif
+
+# Sur GitHub:
+# 1. Aller dans l'onglet "Pull Requests"
+# 2. Cliquer "New Pull Request"
+# 3. Base: develop ← Compare: feature/nom-descriptif
+# 4. Remplir titre et description
+# 5. Assigner des reviewers
+# 6. Créer la PR
+```
+
+### 5. Code Review et Merge
+
+- Les reviewers vérifient le code
+- Les tests automatiques doivent passer (CI/CD)
+- Corrections si nécessaire
+- Merge après approbation
+
+---
+
+## 🤖 CI/CD AVEC GITHUB ACTIONS
+
+### Tests Automatiques
+
+Créer `.github/workflows/tests.yml` :
+
+```yaml
+name: Tests
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        sudo apt-get update
+        sudo apt-get install -y tesseract-ocr
+    
+    - name: Run tests
+      env:
+        DATABASE_URL: postgresql://odoo:odoo@localhost:5432/test_db
+      run: |
+        python odoo-bin -c odoo.conf -d test_db \
+          --test-enable --stop-after-init \
+          -i eazynova,eazynova_chantier
+```
+
+### Linting Python
+
+Créer `.github/workflows/lint.yml` :
+
+```yaml
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install linters
+      run: |
+        pip install flake8 pylint black
+    
+    - name: Lint with flake8
+      run: |
+        flake8 modules/ --count --select=E9,F63,F7,F82 --show-source --statistics
+    
+    - name: Check with black
+      run: |
+        black --check modules/
+    
+    - name: Lint with pylint
+      run: |
+        pylint modules/eazynova modules/eazynova_chantier
+```
+
+### Déploiement Automatique sur Railway
+
+Créer `.github/workflows/deploy.yml` :
+
+```yaml
+name: Deploy to Railway
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        npm i -g @railway/cli
+        railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+        railway up
+```
+
+---
+
+## 🛡️ PROTECTION DES BRANCHES
+
+### Configuration sur GitHub
+
+1. **Settings** > **Branches** > **Add rule**
+
+2. **Branch name pattern** : `main`
+   - ✅ Require a pull request before merging
+   - ✅ Require approvals (minimum 1)
+   - ✅ Require status checks to pass before merging
+     - Sélectionner : `test`, `lint`
+   - ✅ Require branches to be up to date
+   - ✅ Include administrators
+
+3. **Branch name pattern** : `develop`
+   - ✅ Require a pull request before merging
+   - ✅ Require status checks to pass before merging
+     - Sélectionner : `test`, `lint`
+
+---
+
+## 📝 TEMPLATES GITHUB
+
+### Pull Request Template
+
+Créer `.github/PULL_REQUEST_TEMPLATE.md` :
+
+```markdown
+## Description
+<!-- Décrivez vos changements -->
+
+## Type de changement
+- [ ] 🐛 Bug fix
+- [ ] ✨ Nouvelle fonctionnalité
+- [ ] 📝 Documentation
+- [ ] ♻️ Refactoring
+- [ ] ⚡ Performance
+
+## Modules concernés
+- [ ] eazynova (CORE)
+- [ ] eazynova_chantier
+- [ ] eazynova_compta
+- [ ] Autre: ___________
+
+## Checklist
+- [ ] Mon code suit les standards du projet
+- [ ] J'ai ajouté des tests
+- [ ] J'ai mis à jour la documentation
+- [ ] Tous les tests passent
+- [ ] J'ai vérifié le linting
+
+## Tests effectués
+<!-- Décrivez les tests que vous avez effectués -->
+
+## Screenshots
+<!-- Si applicable, ajoutez des screenshots -->
+```
+
+### Bug Report Template
+
+Créer `.github/ISSUE_TEMPLATE/bug_report.md` :
+
+```markdown
+---
+name: Bug Report
+about: Signaler un bug
+title: '[BUG] '
+labels: bug
+assignees: ''
+---
+
+## Description du Bug
+<!-- Description claire du problème -->
+
+## Reproduction
+1. Aller sur '...'
+2. Cliquer sur '...'
+3. Voir l'erreur
+
+## Comportement Attendu
+<!-- Ce qui devrait se passer -->
+
+## Screenshots
+<!-- Si applicable -->
+
+## Environnement
+- OS: [ex. Ubuntu 22.04]
+- Odoo: [ex. 19.0]
+- Module: [ex. eazynova_chantier]
+- Version: [ex. 19.0.1.0.0]
+
+## Logs
+```
+<!-- Collez les logs pertinents ici -->
+```
+
+## Contexte Additionnel
+<!-- Toute information additionnelle utile -->
+```
+
+---
+
+## 🎯 COMMANDES UTILES
+
+### Git Quotidien
+
+```bash
+# Status
+git status
+
+# Voir les changements
+git diff
+
+# Historique
+git log --oneline --graph --all
+
+# Branches
+git branch -a
+
+# Changer de branche
+git checkout nom-branche
+
+# Mettre à jour
+git pull origin develop
+
+# Stash (mettre de côté)
+git stash
+git stash pop
+```
+
+### Git Avancé
+
+```bash
+# Rebase interactif
+git rebase -i HEAD~3
+
+# Cherry-pick
+git cherry-pick <commit-hash>
+
+# Recherche dans l'historique
+git log --grep="search term"
+
+# Annuler dernier commit (garder les changements)
+git reset --soft HEAD~1
+
+# Tag
+git tag -a v19.0.1.0.0 -m "Release version"
+git push origin v19.0.1.0.0
+```
+
+---
+
+## ✅ CHECKLIST AVANT CHAQUE COMMIT
+
+- [ ] Le code est commenté en français
+- [ ] Les docstrings sont présents
+- [ ] Les tests passent localement
+- [ ] Le linting est OK (flake8, pylint)
+- [ ] La documentation est à jour
+- [ ] Les migrations sont testées
+- [ ] Pas de secrets committés (.env, keys, etc.)
+
+---
+
+## 📞 SUPPORT
+
+Questions sur Git/GitHub :
+- 📖 [Pro Git Book](https://git-scm.com/book/fr/v2)
+- 📖 [GitHub Docs](https://docs.github.com/fr)
+- 📧 Email: dev@eazynova.com
+
+---
+
+**Version** : 1.0.0  
+**Dernière mise à jour** : 2025-11-22

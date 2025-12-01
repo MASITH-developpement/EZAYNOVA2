@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_statement_ocr_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.ocr.wizard.form</field>
+        <field name="model">eazynova.bank.statement.ocr.wizard</field>
+        <field name="arch" type="xml">
+            <form string="OCR Relevé Bancaire">
+                <group>
+                    <field name="import_id" invisible="1"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="file_data" filename="file_name"/>
+                    <field name="use_ai"/>
+                </group>
+                <group string="Texte Extrait" invisible="not extracted_text">
+                    <field name="extracted_text" widget="text" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Extraire" name="action_extract_text" type="object" class="btn-primary"
+                            invisible="extracted_text"/>
+                    <button string="Valider" name="action_validate" type="object" class="btn-primary"
+                            invisible="not extracted_text"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

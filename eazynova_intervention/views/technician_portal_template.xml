@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="technician_portal_template" name="Portail Technicien Intervention">
+        <t t-call="website.layout">
+            <div class="container" style="max-width:600px; margin:auto;">
+                <h2 class="text-center mt-4 mb-4">Mes interventions à traiter</h2>
+                <t t-if="not interventions">
+                    <div class="alert alert-info text-center">Aucune intervention à traiter.</div>
+                </t>
+                <t t-foreach="interventions" t-as="intervention">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Intervention <t t-esc="intervention['numero']"/></h5>
+                            <p class="card-text mb-2">
+                                <strong>Client :</strong> <t t-esc="intervention['client_final_id'] and intervention['client_final_id'][1] or ''"/><br/>
+                                <strong>Adresse :</strong> <t t-esc="intervention['adresse_intervention'] or ''"/><br/>
+                                <strong>Date :</strong> <t t-esc="intervention['date_prevue_fmt'] or ''"/><br/>
+                                <strong>Distance :</strong> <t t-esc="intervention['distance_km'] is not None and '%.1f km' % intervention['distance_km'] or 'N/A'"/><br/>
+                                <strong>Temps de trajet :</strong> <t t-esc="intervention['duree_trajet_min'] is not None and '%d min' % intervention['duree_trajet_min'] or 'N/A'"/>
+                            </p>
+                            <div class="mb-2">
+                                <t t-if="intervention['lien_waze']">
+                                    <a t-att-href="intervention['lien_waze']" class="btn btn-outline-primary btn-sm me-2" target="_blank" title="Navigation Waze">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Waze_Logo.png" alt="Waze" style="height:20px;vertical-align:middle;margin-right:4px;"/>Waze
+                                    </a>
+                                </t>
+                                <t t-if="intervention['lien_google_maps']">
+                                    <a t-att-href="intervention['lien_google_maps']" class="btn btn-outline-success btn-sm" target="_blank" title="Navigation Google Maps">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Google_Maps_Logo_2020.png" alt="Google Maps" style="height:20px;vertical-align:middle;margin-right:4px;"/>Google Maps
+                                    </a>
+                                </t>
+                            </div>
+                            <t t-if="intervention['statut_terrain'] in ['planifie', 'en_route']">
+                                <form t-attf-action="/intervention/technicien/arrivee/{{ intervention['id'] }}" method="post">
+                                    <button type="submit" class="btn btn-success btn-block btn-lg mb-2 w-100">📍 Arrivé sur site</button>
+                                </form>
+                            </t>
+                            <t t-if="intervention['statut_terrain'] == 'sur_site'">
+                                <span class="badge bg-success">Vous êtes sur site</span>
+                            </t>
+                            <t t-if="intervention['statut_terrain'] == 'en_cours'">
+                                <span class="badge bg-warning">Intervention en cours</span>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </div>
+            <style>
+                @media (max-width: 600px) {
+                    .container { padding: 0 5px; }
+                    .card { font-size: 1rem; }
+                    .btn-lg { font-size: 1.1rem; padding: 0.7rem 1rem; }
+                }
+            </style>
+        </t>
+    </template>
+  </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_price_source_user,eazynova.price.source user,model_eazynova_price_source,group_prix_user,1,0,0,0
+access_price_source_manager,eazynova.price.source manager,model_eazynova_price_source,group_prix_manager,1,1,1,1
+access_price_check_user,eazynova.price.check user,model_eazynova_price_check,group_prix_user,1,1,1,0
+access_price_check_manager,eazynova.price.check manager,model_eazynova_price_check,group_prix_manager,1,1,1,1
+access_price_verification_wizard,eazynova.price.verification.wizard,model_eazynova_price_verification_wizard,group_prix_user,1,1,1,1

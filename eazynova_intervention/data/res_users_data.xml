@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Assigner l'utilisateur admin au groupe administrateur plomberie -->
+    <record id="base.user_admin" model="res.users">
+        <field name="groups_id" eval="[(4, ref('group_plomberie_admin'))]"/>
+    </record>
+
+    <!-- Assigner l'utilisateur demo au groupe gestionnaire plomberie (si existe) -->
+    <record id="base.user_demo" model="res.users">
+        <field name="groups_id" eval="[(4, ref('group_plomberie_gestionnaire'))]"/>
+    </record>
+</odoo>

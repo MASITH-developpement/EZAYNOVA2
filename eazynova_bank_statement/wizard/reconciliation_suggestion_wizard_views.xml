@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reconciliation_suggestion_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.reconciliation.suggestion.wizard.form</field>
+        <field name="model">eazynova.reconciliation.suggestion.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rapprochement Bancaire">
+                <group>
+                    <field name="line_id" readonly="1"/>
+                    <field name="mode" widget="radio"/>
+                </group>
+                <group invisible="mode != 'suggestion'">
+                    <field name="suggestion_ids" invisible="1"/>
+                    <field name="selected_suggestion_id" domain="[('id', 'in', suggestion_ids)]"/>
+                    <button name="action_refresh_suggestions" string="Rafraîchir" type="object"/>
+                </group>
+                <group invisible="mode != 'manual'">
+                    <field name="manual_move_line_id"/>
+                </group>
+                <footer>
+                    <button string="Appliquer" name="action_apply" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

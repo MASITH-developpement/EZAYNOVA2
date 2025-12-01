@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Principal -->
+    <menuitem id="menu_prix_root"
+              name="Vérification Prix"
+              parent="eazynova.menu_eazynova_root"
+              sequence="60"
+              web_icon="eazynova_prix,static/description/icon.png"/>
+
+    <!-- Sous-menus -->
+    <menuitem id="menu_prix_verification"
+              name="Vérifications"
+              parent="menu_prix_root"
+              action="action_price_check"
+              sequence="10"/>
+
+    <menuitem id="menu_prix_sources"
+              name="Sources de Prix"
+              parent="menu_prix_root"
+              action="action_price_source"
+              sequence="20"/>
+
+    <menuitem id="menu_prix_config"
+              name="Configuration"
+              parent="menu_prix_root"
+              sequence="100"
+              groups="eazynova_prix.group_prix_manager"/>
+</odoo>

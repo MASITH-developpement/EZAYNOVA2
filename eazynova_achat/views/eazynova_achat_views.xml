@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_form_ocr" model="ir.ui.view">
+        <field name="name">purchase.order.form.ocr</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Reconnaissance de caractères (OCR) &amp; IA">
+                    <field name="ocr_attachment_id"/>
+                    <field name="ocr_extracted_text"/>
+                    <field name="ia_suggestion"/>
+                    <field name="chantier_id"/>
+                    <button name="action_ocr_extract" type="object" string="Extraire texte OCR" class="oe_highlight"/>
+                    <button name="action_ia_extract_products" type="object" string="Remplir produits (IA)" class="oe_highlight"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_tree_ocr" model="ir.ui.view">
+        <field name="name">purchase.order.tree.ocr</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="chantier_id"/>
+                <field name="ocr_attachment_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

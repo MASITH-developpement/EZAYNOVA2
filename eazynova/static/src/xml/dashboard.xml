@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="eazynova.Dashboard" owl="1">
+        <div class="eazynova_dashboard">
+            <h2>Tableau de Bord EAZYNOVA</h2>
+            <div class="eazynova_widget">
+                <h3>Bienvenue sur EAZYNOVA</h3>
+                <p>Module CORE installé avec succès.</p>
+            </div>
+        </div>
+    </t>
+</templates>

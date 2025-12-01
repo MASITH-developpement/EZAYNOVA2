@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Form Wizard -->
+    <record id="view_chantier_close_wizard_form" model="ir.ui.view">
+        <field name="name">chantier.close.wizard.form</field>
+        <field name="model">chantier.close.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Clôture de chantier">
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="phase_terminee_count == phase_count and (tache_count == 0 or tache_terminee_count == tache_count)">
+                        <i class="fa fa-warning"/> Attention: Toutes les phases/tâches ne sont pas terminées.
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="chantier_id" readonly="1"/>
+                            <field name="date_fin_reelle"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group string="État d'avancement">
+                        <group>
+                            <label for="phase_count" string="Phases"/>
+                            <div>
+                                <field name="phase_count" class="oe_inline"/> phases
+                                (<field name="phase_terminee_count" class="oe_inline"/> terminées)
+                            </div>
+                            <label for="tache_count" string="Tâches"/>
+                            <div>
+                                <field name="tache_count" class="oe_inline"/> tâches
+                                (<field name="tache_terminee_count" class="oe_inline"/> terminées)
+                            </div>
+                        </group>
+                    </group>
+
+                    <group string="Bilan financier">
+                        <group>
+                            <field name="montant_devis" readonly="1"/>
+                            <field name="montant_facture" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="montant_depense" readonly="1"/>
+                            <field name="marge" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="note_cloture" placeholder="Remarques sur la clôture du chantier..."/>
+                    </group>
+
+                    <group>
+                        <field name="force_close" invisible="phase_terminee_count == phase_count and (tache_count == 0 or tache_terminee_count == tache_count)"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Clôturer" name="action_close_chantier" type="object" class="btn-primary"/>
+                    <button string="Annuler" name="action_cancel" type="object" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Wizard -->
+    <record id="action_chantier_close_wizard" model="ir.actions.act_window">
+        <field name="name">Clôture de chantier</field>
+        <field name="res_model">chantier.close.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_chantier_chantier"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>
