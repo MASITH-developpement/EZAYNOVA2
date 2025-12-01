@@ -1,0 +1,119 @@
+/* EAZYNOVA Styles */
+
+.eazynova_dashboard {
+    padding: 20px;
+}
+
+.eazynova_widget {
+    margin: 10px;
+    padding: 15px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.eazynova_ai_badge {
+    background: #4CAF50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+/* Facial Recognition Styles */
+
+.o_facial_capture_widget {
+    padding: 20px;
+    text-align: center;
+}
+
+.o_facial_camera_container {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.o_facial_video_wrapper {
+    position: relative;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.o_facial_video_active,
+.o_facial_video_inactive {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.o_facial_video_inactive {
+    opacity: 0.5;
+}
+
+.o_facial_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.o_facial_face_guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.o_facial_guide_circle {
+    width: 200px;
+    height: 200px;
+    border: 3px solid rgba(76, 175, 80, 0.7);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+.o_facial_controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.o_facial_preview_container {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.o_facial_canvas {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.o_facial_canvas_hidden {
+    display: none;
+}
+
+.o_facial_webcam_container {
+    margin: 15px 0;
+}
+
+.o_facial_capture_button {
+    font-size: 16px;
+    padding: 10px 20px;
+}

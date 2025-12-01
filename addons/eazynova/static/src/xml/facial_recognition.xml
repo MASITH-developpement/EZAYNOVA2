@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Template for Facial Capture Widget -->
+    <t t-name="eazynova.FacialCaptureWidget" owl="1">
+        <div class="o_facial_capture_widget">
+            <div class="o_facial_camera_container" t-if="!state.hasPhoto">
+                <div t-if="state.error" class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation-triangle"/> <t t-esc="state.error"/>
+                </div>
+
+                <div class="o_facial_video_wrapper">
+                    <video t-ref="video"
+                           t-att-class="state.streaming ? 'o_facial_video_active' : 'o_facial_video_inactive'"
+                           autoplay="autoplay"
+                           playsinline="playsinline">
+                    </video>
+
+                    <div class="o_facial_overlay" t-if="state.streaming">
+                        <div class="o_facial_face_guide">
+                            <div class="o_facial_guide_circle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_facial_controls mt-3">
+                    <button t-if="!state.streaming"
+                            class="btn btn-primary"
+                            t-on-click="() => this.startCamera()">
+                        <i class="fa fa-video-camera"/> Démarrer la Caméra
+                    </button>
+
+                    <t t-if="state.streaming">
+                        <button class="btn btn-success me-2"
+                                t-on-click="() => this.capturePhoto()">
+                            <i class="fa fa-camera"/> Capturer
+                        </button>
+                        <button class="btn btn-secondary"
+                                t-on-click="() => this.stopCamera()">
+                            <i class="fa fa-stop"/> Arrêter
+                        </button>
+                    </t>
+                </div>
+            </div>
+
+            <div class="o_facial_preview_container" t-if="state.hasPhoto">
+                <h5>Photo Capturée</h5>
+                <canvas t-ref="canvas" class="o_facial_canvas"></canvas>
+
+                <div class="o_facial_controls mt-3">
+                    <button class="btn btn-primary"
+                            t-on-click="() => this.resetCapture()">
+                        <i class="fa fa-refresh"/> Nouvelle Capture
+                    </button>
+                </div>
+            </div>
+
+            <canvas t-ref="canvas"
+                    t-if="!state.hasPhoto"
+                    class="o_facial_canvas_hidden"
+                    style="display: none;">
+            </canvas>
+        </div>
+    </t>
+
+</templates>

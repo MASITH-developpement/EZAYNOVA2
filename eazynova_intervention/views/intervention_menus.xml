@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu principal - Racine -->
+        <menuitem id="menu_interventions_main"
+                  name="Interventions"
+                  sequence="60"
+                  web_icon="intervention,static/description/icon.png"/>
+
+        <!-- Menu Interventions (liste) -->
+        <menuitem id="menu_interventions_list"
+                  name="Interventions"
+                  parent="menu_interventions_main"
+                  action="action_intervention"
+                  sequence="10"/>
+
+        <!-- Menu pour le planning -->
+        <menuitem id="menu_interventions_planning"
+                  name="Planning"
+                  parent="menu_interventions_main"
+                  action="action_intervention_planning"
+                  sequence="20"/>
+
+        <!-- Menu Configuration -->
+        <menuitem id="menu_intervention_config"
+                  name="Configuration"
+                  parent="menu_interventions_main"
+                  sequence="100"/>
+    </data>
+</odoo>

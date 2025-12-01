@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_facial_registration_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.facial.registration.wizard.form</field>
+        <field name="model">eazynova.facial.registration.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enregistrement Facial">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Enregistrement Facial</h1>
+                    </div>
+
+                    <group invisible="state == 'done'">
+                        <group>
+                            <field name="user_id" options="{'no_create': True}"/>
+                            <field name="photo_source" widget="radio"/>
+                        </group>
+                    </group>
+
+                    <notebook invisible="state == 'done'">
+                        <page string="Photo" name="photo_page">
+                            <group>
+                                <field name="photo"
+                                       widget="image"
+                                       class="oe_avatar"
+                                       options="{'size': [150, 150]}"
+                                       invisible="state == 'processing'"/>
+
+                                <!-- Webcam capture widget (will be implemented in JS) -->
+                                <div class="o_facial_webcam_container"
+                                     invisible="photo_source != 'webcam' or state == 'processing'">
+                                    <button string="📷 Capturer depuis la Webcam"
+                                            name="action_capture_webcam"
+                                            type="object"
+                                            class="btn btn-primary o_facial_capture_button"
+                                            invisible="state != 'draft'"/>
+                                </div>
+                            </group>
+
+                            <div class="alert alert-info" invisible="state != 'draft'" role="alert">
+                                <p><strong>Conseils pour une bonne capture:</strong></p>
+                                <ul>
+                                    <li>Assurez-vous d'avoir un bon éclairage</li>
+                                    <li>Regardez directement la caméra</li>
+                                    <li>Évitez les lunettes de soleil ou masques</li>
+                                    <li>Le visage doit occuper environ 20% de l'image</li>
+                                </ul>
+                            </div>
+                        </page>
+                    </notebook>
+
+                    <!-- Results display -->
+                    <group invisible="state != 'done'">
+                        <div class="alert alert-success" role="alert">
+                            <field name="result_message" readonly="1"/>
+                        </div>
+                        <group>
+                            <field name="face_count" readonly="1"/>
+                            <field name="quality_score" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button string="Enregistrer"
+                            name="action_register"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"
+                            confirm="Êtes-vous sûr de vouloir enregistrer cette photo faciale ?"/>
+
+                    <button string="Nouvel Enregistrement"
+                            name="action_reset"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'done'"/>
+
+                    <button string="Fermer"
+                            special="cancel"
+                            class="btn-secondary"
+                            invisible="state != 'done'"/>
+
+                    <button string="Annuler"
+                            name="action_cancel"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state == 'done'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the wizard -->
+    <record id="action_facial_registration_wizard" model="ir.actions.act_window">
+        <field name="name">Enregistrement Facial</field>
+        <field name="res_model">eazynova.facial.registration.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_users"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_move_form_inherit_sumup" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.sumup</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_pay_with_sumup"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-credit-card"
+                        invisible="state != 'posted' or payment_state == 'paid'"
+                        groups="eazynova_sumup.group_sumup_user">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Payer</span>
+                        <span class="o_stat_text">SumUp</span>
+                    </div>
+                </button>
+
+                <button name="action_view_sumup_transactions"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-list"
+                        invisible="sumup_transaction_count == 0"
+                        groups="eazynova_sumup.group_sumup_user">
+                    <field name="sumup_transaction_count" widget="statinfo" string="Transactions"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

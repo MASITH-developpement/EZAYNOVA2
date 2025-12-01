@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sumup_transaction_tree" model="ir.ui.view">
+        <field name="name">eazynova.sumup.transaction.tree</field>
+        <field name="model">eazynova.sumup.transaction</field>
+        <field name="arch" type="xml">
+            <tree string="Transactions SumUp" decoration-success="state == 'successful'" decoration-danger="state == 'failed'">
+                <field name="name"/>
+                <field name="transaction_date"/>
+                <field name="partner_id"/>
+                <field name="invoice_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sumup_transaction" model="ir.actions.act_window">
+        <field name="name">Transactions SumUp</field>
+        <field name="res_model">eazynova.sumup.transaction</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

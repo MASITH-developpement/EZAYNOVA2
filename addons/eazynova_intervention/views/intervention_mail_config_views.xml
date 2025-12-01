@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_intervention_mail_config_tree" model="ir.ui.view">
+        <field name="name">intervention.mail.config.tree</field>
+        <field name="model">intervention.mail.config</field>
+    <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Emails autorisés">
+                <field name="email"/>
+                <field name="donneur_ordre_id"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_intervention_mail_config_form" model="ir.ui.view">
+        <field name="name">intervention.mail.config.form</field>
+        <field name="model">intervention.mail.config</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Configuration email">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="email" string="Adresse email"/>
+                        <h1>
+                            <field name="email" placeholder="ex: client@exemple.com"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="donneur_ordre_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_intervention_mail_config_search" model="ir.ui.view">
+        <field name="name">intervention.mail.config.search</field>
+        <field name="model">intervention.mail.config</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="email"/>
+                <field name="donneur_ordre_id"/>
+                <filter string="Actifs" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactifs" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Menu Action -->
+    <record id="action_intervention_mail_config" model="ir.actions.act_window">
+        <field name="name">Configuration Emails Entrants</field>
+        <field name="res_model">intervention.mail.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configurez les adresses email autorisées à créer des interventions
+            </p>
+            <p>
+                Pour chaque adresse email, vous pouvez définir le donneur d'ordre par défaut qui sera
+                automatiquement associé aux interventions créées depuis cette adresse.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item sous Paramètres/Interventions -->
+    <menuitem id="menu_intervention_mail_config"
+              name="Emails autorisés"
+              parent="menu_intervention_config"
+              action="action_intervention_mail_config"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action absences -->
+    <record id="action_planning_absence" model="ir.actions.act_window">
+        <field name="name">Absences</field>
+        <field name="res_model">eazynova.planning.absence</field>
+        <field name="view_mode">tree,form,calendar</field>
+    </record>
+</odoo>

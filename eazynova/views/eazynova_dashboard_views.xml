@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard simple pour l'instant -->
+    <record id="eazynova_dashboard_action" model="ir.actions.client">
+        <field name="name">Tableau de Bord EAZYNOVA</field>
+        <field name="tag">eazynova_dashboard</field>
+    </record>
+
+
+</odoo>

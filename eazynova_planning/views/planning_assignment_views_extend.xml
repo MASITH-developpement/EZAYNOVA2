@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue tree assignation : ajout smart button calendrier -->
+    <record id="view_planning_assignment_tree" model="ir.ui.view">
+        <field name="name">eazynova.planning.assignment.tree</field>
+        <field name="model">eazynova.planning.assignment</field>
+        <field name="arch" type="xml">
+            <tree string="Assignations">
+                <field name="name"/>
+                <field name="task_id"/>
+                <field name="resource_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state"/>
+                <field name="calendar_event_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue form assignation : smart button calendrier -->
+    <record id="view_planning_assignment_form" model="ir.ui.view">
+        <field name="name">eazynova.planning.assignment.form</field>
+        <field name="model">eazynova.planning.assignment</field>
+        <field name="arch" type="xml">
+            <form string="Assignation">
+                <header>
+                    <button name="action_view_calendar_event" type="object" string="Voir calendrier" icon="fa-calendar" attrs="{'invisible': [('calendar_event_id','=',False)]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="task_id"/>
+                        <field name="resource_id"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="state"/>
+                        <field name="calendar_event_id" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

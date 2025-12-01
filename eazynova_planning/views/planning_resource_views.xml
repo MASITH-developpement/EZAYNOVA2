@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action ressources -->
+    <record id="action_planning_resource" model="ir.actions.act_window">
+        <field name="name">Ressources</field>
+        <field name="res_model">eazynova.planning.resource</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <!-- Action compétences -->
+    <record id="action_planning_resource_skill" model="ir.actions.act_window">
+        <field name="name">Compétences</field>
+        <field name="res_model">eazynova.planning.resource.skill</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

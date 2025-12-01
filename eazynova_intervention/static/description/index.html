@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interventions - Module Odoo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        .feature-card h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .feature-card ul {
+            padding-left: 20px;
+        }
+        .feature-card li {
+            margin-bottom: 8px;
+        }
+        .screenshot {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .screenshot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .benefits {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .benefits h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .contact-info {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .contact-info h2 {
+            margin-top: 0;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 Interventions</h1>
+        <p>Module complet de gestion des interventions technique de depannage </p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>📅 Planification Intelligente</h3>
+            <ul>
+                <li>Calendrier intégré avec vue planning</li>
+                <li>Gestion des disponibilités des techniciens</li>
+                <li>Optimisation des trajets et distances</li>
+                <li>Notifications automatiques</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <h3>👥 Gestion d'Équipe</h3>
+            <ul>
+                <li>Profils techniciens détaillés</li>
+                <li>Attribution automatique des interventions</li>
+                <li>Suivi des compétences et formations</li>
+                <li>Gestion des équipes multi-techniciens</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <h3>🗺️ Géolocalisation</h3>
+            <ul>
+                <li>Calcul automatique des distances</li>
+                <li>Intégration Waze et Google Maps</li>
+                <li>Suivi GPS des techniciens</li>
+                <li>Optimisation des trajets</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <h3>📸 Documentation Visuelle</h3>
+            <ul>
+                <li>Photos avant/après intervention</li>
+                <li>Signature électronique client</li>
+                <li>Rapports PDF automatiques</li>
+                <li>Historique complet des interventions</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <h3>💰 Facturation Automatique</h3>
+            <ul>
+                <li>Génération automatique de devis</li>
+                <li>Création de factures intégrée</li>
+                <li>Gestion des matériaux utilisés</li>
+                <li>Suivi des paiements</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <h3>📱 Interface Mobile</h3>
+            <ul>
+                <li>Interface responsive optimisée</li>
+                <li>Vue Kanban pour mobile</li>
+                <li>Navigation tactile intuitive</li>
+                <li>Synchronisation en temps réel</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="benefits">
+        <h2>🚀 Avantages du Module</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div>
+                <h4>✅ Gain de Temps</h4>
+                <p>Automatisation des tâches répétitives, planification intelligente et génération automatique de documents.</p>
+            </div>
+            <div>
+                <h4>📊 Visibilité Totale</h4>
+                <p>Suivi en temps réel des interventions, rapports détaillés et analyses de performance.</p>
+            </div>
+            <div>
+                <h4>💼 Professionnalisme</h4>
+                <p>Interface moderne, documents professionnels et communication client optimisée.</p>
+            </div>
+            <div>
+                <h4>🔗 Intégration Complète</h4>
+                <p>Intégration native avec tous les modules Odoo (CRM, Comptabilité, Ventes, etc.).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="screenshot">
+        <h2>📱 Aperçu de l'Interface</h2>
+        <p>Interface moderne et intuitive pour une gestion efficace des interventions</p>
+        <!-- Placeholder pour l'image de capture d'écran -->
+        <div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
+            <p style="color: #666; font-size: 1.2em;">📸 Capture d'écran de l'interface</p>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h2>💬 Besoin d'Aide ?</h2>
+        <p>Notre équipe est là pour vous accompagner dans l'implémentation et l'utilisation du module.</p>
+        <a href="mailto:contact@masith.fr" class="btn">📧 Support Email</a>
+        <a href="https://www.masith.fr" class="btn">🏠 Site Web</a>
+    </div>
+</body>
+</html> 

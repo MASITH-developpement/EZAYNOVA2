@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Formulaire Business Plan - GUIDÉ -->
+    <record id="view_business_plan_form" model="ir.ui.view">
+        <field name="name">business.plan.form</field>
+        <field name="model">business.plan</field>
+        <field name="arch" type="xml">
+            <form string="Business Plan">
+                <header>
+                    <button name="action_ai_analyze" string="🤖 Analyser avec l'IA" type="object"
+                            class="btn-info"/>
+                    <button name="action_ai_check_financial" string="💰 Vérifier Finances" type="object"
+                            class="btn-warning"/>
+                    <button name="action_generate_monthly_indicators" string="📊 Générer Indicateurs Mensuels"
+                            type="object" class="btn-secondary"
+                            invisible="state == 'draft'"
+                            help="Créer les indicateurs mensuels pour toute la période du business plan"/>
+                    <button name="action_refresh_all_monthly_indicators" string="🔄 Actualiser Indicateurs"
+                            type="object" class="btn-secondary"
+                            invisible="monthly_indicator_count == 0"
+                            help="Mettre à jour tous les indicateurs depuis les données Odoo"/>
+                    <button name="action_generate_all_financial_tables" string="📋 Générer Tableaux Financiers"
+                            type="object" class="btn-primary"
+                            help="Générer tous les tableaux financiers prévisionnels (Trésorerie, Financement, Bilan, Compte de Résultat)"/>
+                    <button name="action_validate" string="✓ Valider le Business Plan" type="object"
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_done" string="✓ Terminer" type="object"
+                            invisible="state != 'validated'" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                    <field name="monthly_indicator_count" invisible="1"/>
+                    <field name="cash_flow_count" invisible="1"/>
+                    <field name="financing_count" invisible="1"/>
+                    <field name="balance_sheet_count" invisible="1"/>
+                    <field name="income_statement_count" invisible="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button name="action_view_indicators" type="object"
+                                class="oe_stat_button" icon="fa-line-chart">
+                            <field name="indicator_count" widget="statbutton" string="Indicateurs"/>
+                        </button>
+                        <button name="action_view_monthly_indicators" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="monthly_indicator_count" widget="statbutton" string="Suivi Mensuel"/>
+                        </button>
+                        <button name="action_ai_smart_suggestions" type="object"
+                                class="oe_stat_button" icon="fa-lightbulb-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Suggestions IA</span>
+                            </div>
+                        </button>
+                        <button name="%(action_report_businessplan_bank)d" type="action"
+                                class="oe_stat_button" icon="fa-bank">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">PDF Banque</span>
+                            </div>
+                        </button>
+                        <button name="%(action_report_businessplan_investor)d" type="action"
+                                class="oe_stat_button" icon="fa-money">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">PDF Investisseur</span>
+                            </div>
+                        </button>
+                        <button name="%(action_report_businessplan_tracking)d" type="action"
+                                class="oe_stat_button" icon="fa-calendar-check-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Suivi Mensuel</span>
+                            </div>
+                        </button>
+                        <button name="action_view_cash_flow" type="object"
+                                class="oe_stat_button" icon="fa-area-chart">
+                            <field name="cash_flow_count" widget="statbutton" string="Trésorerie"/>
+                        </button>
+                        <button name="action_view_financing" type="object"
+                                class="oe_stat_button" icon="fa-euro">
+                            <field name="financing_count" widget="statbutton" string="Financement"/>
+                        </button>
+                        <button name="action_view_balance_sheet" type="object"
+                                class="oe_stat_button" icon="fa-balance-scale">
+                            <field name="balance_sheet_count" widget="statbutton" string="Bilan"/>
+                        </button>
+                        <button name="action_view_income_statement" type="object"
+                                class="oe_stat_button" icon="fa-calculator">
+                            <field name="income_statement_count" widget="statbutton" string="Résultat"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Ex: Création d'une boulangerie artisanale..."/></h1>
+                        <h3><field name="reference"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="legal_form"/>
+                            <field name="location" placeholder="Ex: Paris, Lyon, Marseille..."/>
+                            <field name="progress" widget="progressbar" invisible="state == 'draft'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- 1. RÉSUMÉ EXÉCUTIF -->
+                        <page string="📋 Résumé" name="executive_summary">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Objectif :</strong> Présentez votre projet en quelques lignes.
+                                    Ce résumé doit convaincre le lecteur de l'intérêt de votre projet.
+                                </div>
+                                <field name="executive_summary" nolabel="1"
+                                       placeholder="Exemple : &#10;Notre projet consiste à créer une boulangerie artisanale bio à Paris. &#10;Nous visons une clientèle urbaine soucieuse de la qualité et du local. &#10;Notre avantage : des produits 100% bio avec des farines locales. &#10;Objectif : 200 000€ de CA la première année."/>
+                            </group>
+                        </page>
+
+                        <!-- 2. PRÉSENTATION DU PROJET -->
+                        <page string="🎯 Projet" name="project">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>À remplir :</strong> Description détaillée de votre activité, votre vision, vos objectifs.
+                                </div>
+                                <field name="project_description" nolabel="1"
+                                       placeholder="Décrivez votre projet en détail :&#10;- Quelle est votre activité ?&#10;- Quelle est votre vision ?&#10;- Pourquoi ce projet ?&#10;- Quels sont vos objectifs à court et moyen terme ?"/>
+                            </group>
+                        </page>
+
+                        <!-- 3. PRODUITS ET SERVICES -->
+                        <page string="🛍️ Produits/Services" name="products">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>À décrire :</strong> Vos produits/services et ce qui fait votre différence.
+                                </div>
+                                <field name="products_services" nolabel="1"
+                                       placeholder="Listez vos produits et services :&#10;- Que vendez-vous exactement ?&#10;- Quelles sont les caractéristiques ?&#10;- Quels sont les prix envisagés ?&#10;&#10;Ex : Pains artisanaux bio, viennoiseries, pâtisseries, sandwichs..."/>
+
+                                <separator string="Proposition de valeur"/>
+                                <field name="value_proposition" nolabel="1"
+                                       placeholder="Quelle valeur unique apportez-vous à vos clients ?&#10;Ex : Produits 100% bio, farines locales, recettes traditionnelles, goût authentique..."/>
+                            </group>
+                        </page>
+
+                        <!-- 4. MARCHÉ -->
+                        <page string="📊 Marché" name="market">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Analyser :</strong> Votre marché cible, vos concurrents et vos avantages.
+                                </div>
+
+                                <separator string="Marché cible"/>
+                                <field name="target_market" nolabel="1"
+                                       placeholder="Décrivez votre marché :&#10;- Qui sont vos clients cibles ? (âge, CSP, besoins...)&#10;- Quelle est la taille du marché ?&#10;- Le marché est-il en croissance ?&#10;&#10;Ex : Urbains 25-50 ans, CSP+, sensibles au bio et local, marché du bio +15%/an..."/>
+
+                                <separator string="Concurrence"/>
+                                <field name="competitors" nolabel="1"
+                                       placeholder="Analysez la concurrence :&#10;- Qui sont vos concurrents directs ?&#10;- Quels sont leurs forces et faiblesses ?&#10;- Quelle est leur part de marché ?"/>
+
+                                <separator string="Avantages concurrentiels"/>
+                                <field name="competitive_advantage" nolabel="1"
+                                       placeholder="Pourquoi vous choisir ?&#10;- Qu'est-ce qui vous différencie ?&#10;- Quel est votre 'plus' unique ?&#10;&#10;Ex : Seule boulangerie 100% bio du quartier, farines d'un moulin local à 30km..."/>
+                            </group>
+                        </page>
+
+                        <!-- 5. STRATÉGIE COMMERCIALE -->
+                        <page string="📢 Stratégie" name="strategy">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Expliquer :</strong> Comment vous allez vous faire connaître et vendre.
+                                </div>
+
+                                <separator string="Stratégie Marketing"/>
+                                <field name="marketing_strategy" nolabel="1"
+                                       placeholder="Comment allez-vous vous faire connaître ?&#10;- Quels canaux ? (réseaux sociaux, flyers, bouche-à-oreille...)&#10;- Quel budget communication ?&#10;- Partenariats locaux ?&#10;&#10;Ex : Instagram, Facebook local, partenariat avec magasin bio, marché local..."/>
+
+                                <separator string="Stratégie Commerciale"/>
+                                <field name="sales_strategy" nolabel="1"
+                                       placeholder="Comment allez-vous vendre ?&#10;- Canaux de vente ? (boutique, livraison, grossistes...)&#10;- Politique de prix ?&#10;- Distribution ?"/>
+
+                                <separator string="Acquisition des premiers clients"/>
+                                <field name="customer_acquisition" nolabel="1"
+                                       placeholder="Plan d'action pour vos premiers clients :&#10;- Offre de lancement ?&#10;- Programme de fidélité ?&#10;- Événement d'ouverture ?"/>
+                            </group>
+                        </page>
+
+                        <!-- 6. ÉQUIPE ET ORGANISATION -->
+                        <page string="👥 Équipe" name="team">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Présenter :</strong> Votre équipe et vos partenaires clés.
+                                </div>
+
+                                <group>
+                                    <field name="team_size"/>
+                                </group>
+
+                                <separator string="Structure de l'équipe"/>
+                                <field name="team_structure" nolabel="1"
+                                       placeholder="Qui compose l'équipe ?&#10;- Nom, rôle, compétences&#10;- Expérience pertinente&#10;- Complémentarité de l'équipe&#10;&#10;Ex :&#10;- Jean Dupont (moi) : Boulanger, CAP, 10 ans d'expérience&#10;- Marie Martin : Gestion/commerce, BTS, 5 ans grande distribution"/>
+
+                                <separator string="Partenaires clés"/>
+                                <field name="key_partners" nolabel="1"
+                                       placeholder="Listez vos partenaires stratégiques :&#10;- Fournisseurs principaux&#10;- Distributeurs&#10;- Partenaires commerciaux&#10;&#10;Ex : Moulin Dupuy (farine bio locale), Ferme Martin (œufs bio)..."/>
+                            </group>
+                        </page>
+
+                        <!-- 7. FINANCES -->
+                        <page string="💰 Finances" name="finances">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Chiffrer :</strong> Vos prévisions financières sur 3 ans.
+                                </div>
+
+                                <separator string="Prévisions Année 1"/>
+                                <group>
+                                    <field name="revenue_year1"/>
+                                    <field name="costs_year1"/>
+                                    <field name="profit_year1" readonly="1"/>
+                                </group>
+
+                                <separator string="Prévisions Année 2"/>
+                                <group>
+                                    <field name="revenue_year2"/>
+                                    <field name="costs_year2"/>
+                                    <field name="profit_year2" readonly="1"/>
+                                </group>
+
+                                <separator string="Prévisions Année 3"/>
+                                <group>
+                                    <field name="revenue_year3"/>
+                                    <field name="costs_year3"/>
+                                    <field name="profit_year3" readonly="1"/>
+                                </group>
+
+                                <separator string="Seuil de rentabilité"/>
+                                <field name="breakeven_point" nolabel="1"
+                                       placeholder="À partir de quel CA mensuel êtes-vous rentable ?&#10;Ex : Avec 15 000€ de CA mensuel, nous couvrons toutes nos charges."/>
+                            </group>
+                        </page>
+
+                        <!-- 8. FINANCEMENT -->
+                        <page string="💵 Financement" name="funding">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Détailler :</strong> Vos besoins de financement et sources.
+                                </div>
+
+                                <separator string="Besoins de financement"/>
+                                <group>
+                                    <field name="initial_investment"/>
+                                    <field name="own_contribution"/>
+                                    <field name="funding_needed" readonly="1"
+                                           class="oe_inline oe_right"
+                                           widget="monetary"/>
+                                </group>
+
+                                <separator string="Sources de financement"/>
+                                <field name="funding_sources" nolabel="1"
+                                       placeholder="Comment financer votre projet ?&#10;&#10;Ex :&#10;- Apport personnel : 50 000€&#10;- Prêt bancaire : 80 000€&#10;- Love money (famille) : 20 000€&#10;- Aide région : 10 000€&#10;&#10;TOTAL : 160 000€"/>
+                            </group>
+                        </page>
+
+                        <!-- 9. RISQUES -->
+                        <page string="⚠️ Risques" name="risks">
+                            <group>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Anticiper :</strong> Les risques et comment les gérer.
+                                </div>
+
+                                <separator string="Risques identifiés"/>
+                                <field name="risks" nolabel="1"
+                                       placeholder="Quels sont les principaux risques ?&#10;&#10;Ex :&#10;- Concurrence accrue d'une grande enseigne&#10;- Difficulté à trouver des farines bio locales&#10;- Baisse de fréquentation du quartier&#10;- Retard dans l'obtention du local"/>
+
+                                <separator string="Plan de mitigation"/>
+                                <field name="mitigation_plan" nolabel="1"
+                                       placeholder="Comment gérer ces risques ?&#10;&#10;Ex :&#10;- Se différencier par la qualité et le local&#10;- Identifier 3 fournisseurs alternatifs&#10;- Développer la livraison et vente en ligne&#10;- Prévoir un planning avec marge de sécurité"/>
+
+                                <separator string="Opportunités"/>
+                                <field name="opportunities" nolabel="1"
+                                       placeholder="Quelles opportunités de développement ?&#10;&#10;Ex :&#10;- Partenariat avec restaurants locaux&#10;- Ouverture d'un deuxième point de vente&#10;- Développement d'ateliers pâtisserie&#10;- Vente B2B (entreprises, collectivités)"/>
+                            </group>
+                        </page>
+
+                        <!-- 10. INDICATEURS -->
+                        <page string="📈 Indicateurs" name="indicators" invisible="state == 'draft'">
+                            <group>
+                                <div class="alert alert-success" role="alert">
+                                    <strong>Suivi :</strong> Mettez à jour régulièrement vos indicateurs pour suivre vos performances.
+                                </div>
+                                <field name="indicator_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste -->
+    <record id="view_business_plan_list" model="ir.ui.view">
+        <field name="name">business.plan.list</field>
+        <field name="model">business.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="legal_form"/>
+                <field name="revenue_year1"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Recherche -->
+    <record id="view_business_plan_search" model="ir.ui.view">
+        <field name="name">business.plan.search</field>
+        <field name="model">business.plan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <filter string="Mes Business Plans" name="my_plans" domain="[('user_id', '=', uid)]"/>
+                <filter string="En cours" name="validated" domain="[('state', '=', 'validated')]"/>
+                <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
+                <filter string="Responsable" name="group_user" context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_business_plan" model="ir.actions.act_window">
+        <field name="name">Business Plans</field>
+        <field name="res_model">business.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_my_plans': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer votre Business Plan
+            </p>
+            <p>
+                Ce module vous guide pour créer un business plan complet en 9 étapes.
+            </p>
+        </field>
+    </record>
+
+</odoo>

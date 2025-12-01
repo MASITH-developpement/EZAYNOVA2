@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_business_plan_financing_tree" model="ir.ui.view">
+        <field name="name">business.plan.financing.tree</field>
+        <field name="model">business.plan.financing</field>
+        <field name="arch" type="xml">
+            <list string="Plan de Financement" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="line_type" widget="badge" decoration-success="line_type == 'source'" decoration-info="line_type == 'use'"/>
+                <field name="category"/>
+                <field name="name"/>
+                <field name="amount" sum="Total"/>
+                <field name="monthly_payment" optional="show" sum="Total Mensualités"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_business_plan_financing_form" model="ir.ui.view">
+        <field name="name">business.plan.financing.form</field>
+        <field name="model">business.plan.financing</field>
+        <field name="arch" type="xml">
+            <form string="Plan de Financement">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="business_plan_id" readonly="1"/>
+                            <field name="line_type"/>
+                            <field name="category"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Détails emprunt" invisible="not is_loan">
+                        <group>
+                            <field name="is_loan" invisible="1"/>
+                            <field name="interest_rate"/>
+                            <field name="duration_months"/>
+                        </group>
+                        <group>
+                            <field name="monthly_payment" widget="monetary" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Notes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard -->
+    <record id="view_business_plan_financing_wizard_form" model="ir.ui.view">
+        <field name="name">business.plan.financing.wizard.form</field>
+        <field name="model">business.plan.financing.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assistant Plan de Financement">
+                <group string="💰 Sources de Financement">
+                    <group>
+                        <field name="equity_amount" widget="monetary"/>
+                        <field name="loan_amount" widget="monetary"/>
+                        <field name="loan_rate"/>
+                        <field name="loan_duration"/>
+                    </group>
+                    <group>
+                        <field name="honor_loan_amount" widget="monetary"/>
+                        <field name="subsidy_amount" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+                <group string="💼 Emplois (Besoins)">
+                    <group>
+                        <field name="equipment_amount" widget="monetary"/>
+                        <field name="vehicle_amount" widget="monetary"/>
+                        <field name="furniture_amount" widget="monetary"/>
+                        <field name="it_amount" widget="monetary"/>
+                    </group>
+                    <group>
+                        <field name="stock_amount" widget="monetary"/>
+                        <field name="bfr_amount" widget="monetary"/>
+                        <field name="setup_costs_amount" widget="monetary"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Générer" name="action_generate" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,58 @@
+/* Override des couleurs Odoo pour le module Intervention - SEULEMENT dans les vues intervention */
+
+/* Applique les couleurs personnalisées UNIQUEMENT dans les vues du module intervention */
+/* Les boutons Odoo standards utilisent la couleur configurée dans Paramètres généraux */
+
+/* En-têtes de liste dans les vues intervention */
+.o_form_view.o_form_plomberie .o_list_view thead th,
+.o_form_view.o_form_plomberie .o_list_table thead th,
+.o_action_manager[data-action*="intervention"] .o_list_view thead th,
+.o_action_manager[data-action*="intervention"] .o_list_table thead th {
+    background-color: var(--intervention-primary) !important;
+    background-image: linear-gradient(135deg, var(--intervention-primary-dark), var(--intervention-primary)) !important;
+    color: white !important;
+    border-color: var(--intervention-primary-dark) !important;
+}
+
+/* Liens dans les vues intervention */
+.o_form_view.o_form_plomberie a,
+.o_action_manager[data-action*="intervention"] a {
+    color: var(--intervention-primary) !important;
+}
+
+.o_form_view.o_form_plomberie a:hover,
+.o_action_manager[data-action*="intervention"] a:hover {
+    color: var(--intervention-primary-dark) !important;
+}
+
+/* Onglets actifs dans les formulaires intervention */
+.o_form_view.o_form_plomberie .o_notebook .nav-link.active {
+    color: var(--intervention-primary) !important;
+    border-bottom-color: var(--intervention-primary) !important;
+}
+
+/* Barre de statut dans les formulaires intervention */
+.o_form_view.o_form_plomberie .o_form_statusbar .o_statusbar_status .btn.btn-primary {
+    background: var(--intervention-primary) !important;
+    border-color: var(--intervention-primary) !important;
+}
+
+/* KPIs et statistiques dans les vues intervention */
+.o_action_manager[data-action*="intervention"] .o_kanban_view .oe_kanban_card {
+    border-top: 3px solid var(--intervention-primary) !important;
+}
+
+/* Surbrillance des lignes sélectionnées dans les listes intervention */
+.o_action_manager[data-action*="intervention"] .o_list_view .o_list_table .o_data_row.o_selected_row {
+    background-color: var(--intervention-bg-medium) !important;
+}
+
+/* Icônes colorées dans les vues intervention */
+.o_form_view.o_form_plomberie .fa-primary,
+.o_form_view.o_form_plomberie .text-primary,
+.o_action_manager[data-action*="intervention"] .fa-primary,
+.o_action_manager[data-action*="intervention"] .text-primary {
+    color: var(--intervention-primary) !important;
+}
+
+

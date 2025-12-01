@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Template du rapport PDF -->
+    <template id="rapport_intervention_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.company_id or doc.company_id.sudo()"/>
+                <t t-call="(company.report_layout_id and company.report_layout_id.name) or 'web.external_layout'">
+                    <div class="page">
+                        <t t-if="rapport_html">
+                            <t t-raw="rapport_html"/>
+                        </t>
+                        <t t-if="not rapport_html">
+                            <!-- En-tête du rapport -->
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h2>RAPPORT D'INTERVENTION</h2>
+                                    <h4 t-field="doc.numero"/>
+                                    <p>
+                                        <strong>Email société :</strong>
+                                        <span t-field="company.email"/>
+                                    </p>
+                                    <hr/>
+                                </div>
+                            </div>
+                            
+                            <!-- Informations générales -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>Date d'intervention:</strong>
+                                    <span t-field="doc.date_prevue" t-options='{"widget": "datetime"}'/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Type:</strong>
+                                    <span t-field="doc.type_intervention"/>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <strong>Technicien:</strong>
+                                    <span t-field="doc.technicien_principal_id.name"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Statut:</strong>
+                                    <span t-field="doc.statut_terrain"/>
+                                </div>
+                            </div>
+                            
+                            <!-- Informations client -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Informations Client</h4>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Donneur d'ordre:</strong></td>
+                                            <td t-field="doc.donneur_ordre_id.name"/>
+                                        </tr>
+                                        <tr t-if="doc.client_final_id">
+                                            <td><strong>Client final:</strong></td>
+                                            <td t-field="doc.client_final_id.name"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Adresse intervention:</strong></td>
+                                            <td t-field="doc.adresse_intervention"/>
+                                        </tr>
+                                        <tr t-if="doc.numero_donneur_ordre">
+                                            <td><strong>N° donneur d'ordre:</strong></td>
+                                            <td t-field="doc.numero_donneur_ordre"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Détails intervention -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Détails de l'intervention</h4>
+                                    
+                                    <div t-if="doc.description">
+                                        <strong>Description du problème:</strong>
+                                        <p t-field="doc.description"/>
+                                    </div>
+                                    
+                                    <div t-if="doc.travaux_realises">
+                                        <strong>Travaux réalisés:</strong>
+                                        <p t-field="doc.travaux_realises"/>
+                                    </div>
+                                    
+                                    <div t-if="doc.observations">
+                                        <strong>Observations:</strong>
+                                        <p t-field="doc.observations"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Matériaux utilisés -->
+                            <div class="row mt-4" t-if="doc.materiel_ids">
+                                <div class="col-12">
+                                    <h4>Matériaux utilisés</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Quantité</th>
+                                                <th>Unité</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.materiel_ids" t-as="materiel">
+                                                <tr>
+                                                    <td t-field="materiel.produit_id.name"/>
+                                                    <td t-field="materiel.quantite"/>
+                                                    <td t-field="materiel.unite"/>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Temps et distance -->
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <h4>Temps</h4>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Durée prévue:</strong></td>
+                                            <td><span t-field="doc.duree_prevue"/> h</td>
+                                        </tr>
+                                        <tr t-if="doc.duree_reelle">
+                                            <td><strong>Durée réelle:</strong></td>
+                                            <td><span t-field="doc.duree_reelle"/> h</td>
+                                        </tr>
+                                        <tr t-if="doc.heure_arrivee">
+                                            <td><strong>Heure d'arrivée:</strong></td>
+                                            <td t-field="doc.heure_arrivee" t-options='{"widget": "datetime"}'/>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-6" t-if="doc.distance_km">
+                                    <h4>Distance</h4>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>Distance:</strong></td>
+                                            <td><span t-field="doc.distance_km"/> km</td>
+                                        </tr>
+                                        <tr t-if="doc.duree_trajet_min">
+                                            <td><strong>Durée trajet:</strong></td>
+                                            <td><span t-field="doc.duree_trajet_min"/> min</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Validation client -->
+                            <div class="row mt-4" t-if="doc.validation_client">
+                                <div class="col-12">
+                                    <h4>Validation Client</h4>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p><strong>Signataire:</strong> <span t-field="doc.nom_signataire"/></p>
+                                            <p><strong>Date signature:</strong> <span t-field="doc.date_signature" t-options='{"widget": "datetime"}'/></p>
+                                        </div>
+                                        <div class="col-6 text-center" t-if="doc.signature_client">
+                                            <p><strong>Signature:</strong></p>
+                                            <img t-att-src="'data:image/png;base64,' + doc.signature_client.decode('utf-8')" 
+                                                 style="max-width: 200px; max-height: 100px; border: 1px solid #ccc;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pied de page -->
+                            <div class="row mt-5">
+                                <div class="col-12 text-center">
+                                    <hr/>
+                                    <p><small>Rapport généré automatiquement le <span t-esc="datetime.datetime.now().strftime('%d/%m/%Y à %H:%M')"/></small></p>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Action rapport PDF -->
+    <record id="action_rapport_intervention_pdf" model="ir.actions.report">
+        <field name="name">Rapport d'intervention</field>
+        <field name="model">intervention.intervention</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">intervention.rapport_intervention_document</field>
+        <field name="report_file">intervention.rapport_intervention_document</field>
+        <field name="binding_model_id" ref="model_intervention_intervention"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

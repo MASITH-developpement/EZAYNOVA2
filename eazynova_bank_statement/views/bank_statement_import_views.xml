@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire Import -->
+    <record id="view_bank_statement_import_form" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.form</field>
+        <field name="model">eazynova.bank.statement.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Relevé Bancaire">
+                <header>
+                    <button name="action_detect_file_type" string="Détecter Type" type="object"
+                            states="draft" class="oe_highlight"/>
+                    <button name="action_parse_file" string="Analyser Fichier" type="object"
+                            states="draft,uploaded" class="oe_highlight"/>
+                    <button name="action_auto_reconcile" string="Rapprocher" type="object"
+                            states="parsed" class="oe_highlight"/>
+                    <button name="action_create_bank_statement" string="Créer Relevé Bancaire" type="object"
+                            states="reconciled,parsed" class="oe_highlight"/>
+                    <button name="action_reset_to_draft" string="Réinitialiser" type="object"
+                            states="uploaded,parsing,parsed,error"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,uploaded,parsed,reconciled,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lines" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="line_count" widget="statinfo" string="Lignes"/>
+                        </button>
+                        <button name="action_view_alerts" type="object" class="oe_stat_button" icon="fa-exclamation-triangle">
+                            <field name="alert_count" widget="statinfo" string="Alertes"/>
+                        </button>
+                        <button name="%(action_bank_statement)d" type="action" class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not statement_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Relevé</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="file_type"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="file_data" filename="file_name"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="balance_start"/>
+                            <field name="balance_end"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Options">
+                            <field name="auto_reconcile"/>
+                            <field name="use_ai"/>
+                            <field name="confidence_threshold" widget="percentage"/>
+                        </group>
+                        <group string="Statistiques" invisible="state in ('draft', 'uploaded')">
+                            <field name="reconciled_count"/>
+                            <field name="uncertain_count"/>
+                            <field name="unreconciled_count"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Lignes Importées" name="lines">
+                            <field name="line_ids" readonly="1">
+                                <tree decoration-success="reconciliation_state == 'reconciled'"
+                                      decoration-warning="reconciliation_state == 'uncertain'"
+                                      decoration-danger="reconciliation_state == 'not_reconciled'">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="partner_name"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="reconciliation_state"/>
+                                    <field name="confidence_score" widget="percentage"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Alertes" name="alerts" invisible="alert_count == 0">
+                            <field name="alert_ids" readonly="1">
+                                <tree decoration-danger="severity == 'error'"
+                                      decoration-warning="severity == 'warning'">
+                                    <field name="alert_type"/>
+                                    <field name="severity"/>
+                                    <field name="message"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Log" name="log" invisible="not parsing_log">
+                            <field name="parsing_log" readonly="1"/>
+                        </page>
+                        <page string="Erreur" name="error" invisible="not error_message">
+                            <field name="error_message" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue arbre Import -->
+    <record id="view_bank_statement_import_tree" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.tree</field>
+        <field name="model">eazynova.bank.statement.import</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'"
+                  decoration-success="state == 'done'"
+                  decoration-danger="state == 'error'"
+                  decoration-warning="state in ('parsing', 'reconciling')">
+                <field name="name"/>
+                <field name="journal_id"/>
+                <field name="file_type"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="line_count"/>
+                <field name="reconciled_count"/>
+                <field name="alert_count"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue recherche Import -->
+    <record id="view_bank_statement_import_search" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.search</field>
+        <field name="model">eazynova.bank.statement.import</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="journal_id"/>
+                <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="En Cours" name="in_progress" domain="[('state', 'in', ['parsing', 'reconciling'])]"/>
+                <filter string="Terminé" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Erreur" name="error" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter string="Avec Alertes" name="with_alerts" domain="[('alert_count', '>', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Journal" name="by_journal" context="{'group_by': 'journal_id'}"/>
+                    <filter string="État" name="by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Type" name="by_type" context="{'group_by': 'file_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Import -->
+    <record id="action_bank_statement_import" model="ir.actions.act_window">
+        <field name="name">Imports Bancaires</field>
+        <field name="res_model">eazynova.bank.statement.import</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouvel import de relevé bancaire
+            </p>
+            <p>
+                Importez vos relevés bancaires au format CSV, OFX ou PDF.<br/>
+                Le rapprochement automatique vous fera gagner un temps précieux !
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour account.bank.statement -->
+    <record id="action_bank_statement" model="ir.actions.act_window">
+        <field name="name">Relevé Bancaire</field>
+        <field name="res_model">account.bank.statement</field>
+        <field name="view_mode">form</field>
+        <field name="domain">[('id', '=', statement_id)]</field>
+    </record>
+</odoo>

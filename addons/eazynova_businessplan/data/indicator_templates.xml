@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Templates d'indicateurs prédéfinis (optionnel) -->
+        <!-- Ces templates peuvent servir de base pour la génération automatique -->
+
+        <!-- Note: Les indicateurs sont générés automatiquement par la méthode _generate_indicators -->
+        <!-- Ce fichier peut être utilisé pour définir des templates personnalisés si nécessaire -->
+
+    </data>
+</odoo>

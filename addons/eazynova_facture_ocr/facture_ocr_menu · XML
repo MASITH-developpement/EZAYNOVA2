@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Menu principal OCR Factures sous EAZYNOVA -->
+        <menuitem id="menu_facture_ocr_root"
+                  name="OCR Factures"
+                  parent="eazynova.menu_eazynova_root"
+                  sequence="20"
+                  groups="group_facture_ocr_user"/>
+        
+        <!-- Sous-menu Upload -->
+        <menuitem id="menu_facture_ocr_upload"
+                  name="📤 Upload Factures"
+                  parent="menu_facture_ocr_root"
+                  action="action_facture_ocr_upload_wizard"
+                  sequence="1"/>
+        
+        <!-- Sous-menu Liste -->
+        <menuitem id="menu_facture_ocr_list"
+                  name="📋 Toutes les Factures"
+                  parent="menu_facture_ocr_root"
+                  action="action_facture_ocr"
+                  sequence="2"/>
+        
+        <!-- Sous-menu À traiter -->
+        <menuitem id="menu_facture_ocr_draft"
+                  name="⏳ À Traiter"
+                  parent="menu_facture_ocr_root"
+                  action="action_facture_ocr"
+                  sequence="3"/>
+        
+        <!-- Sous-menu À valider -->
+        <menuitem id="menu_facture_ocr_validate"
+                  name="✅ À Valider"
+                  parent="menu_facture_ocr_root"
+                  action="action_facture_ocr"
+                  sequence="4"/>
+        
+        <!-- Sous-menu Erreurs -->
+        <menuitem id="menu_facture_ocr_errors"
+                  name="❌ Erreurs"
+                  parent="menu_facture_ocr_root"
+                  action="action_facture_ocr"
+                  sequence="5"/>
+        
+        <!-- Actions avec contexte -->
+        <record id="action_facture_ocr_draft" model="ir.actions.act_window">
+            <field name="name">À Traiter</field>
+            <field name="res_model">eazynova.facture.ocr</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_draft': 1}</field>
+            <field name="domain">[('state', '=', 'draft')]</field>
+        </record>
+        
+        <record id="action_facture_ocr_validate" model="ir.actions.act_window">
+            <field name="name">À Valider</field>
+            <field name="res_model">eazynova.facture.ocr</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_extracted': 1}</field>
+            <field name="domain">[('state', '=', 'extracted')]</field>
+        </record>
+        
+        <record id="action_facture_ocr_errors" model="ir.actions.act_window">
+            <field name="name">Erreurs</field>
+            <field name="res_model">eazynova.facture.ocr</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_error': 1}</field>
+            <field name="domain">[('state', '=', 'error')]</field>
+        </record>
+        
+        <!-- Mise à jour des menus avec les bonnes actions -->
+        <record id="menu_facture_ocr_draft" model="ir.ui.menu">
+            <field name="action" ref="action_facture_ocr_draft"/>
+        </record>
+        
+        <record id="menu_facture_ocr_validate" model="ir.ui.menu">
+            <field name="action" ref="action_facture_ocr_validate"/>
+        </record>
+        
+        <record id="menu_facture_ocr_errors" model="ir.ui.menu">
+            <field name="action" ref="action_facture_ocr_errors"/>
+        </record>
+        
+    </data>
+</odoo>

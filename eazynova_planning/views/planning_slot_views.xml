@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action créneaux -->
+    <record id="action_planning_slot" model="ir.actions.act_window">
+        <field name="name">Créneaux de planning</field>
+        <field name="res_model">eazynova.planning.slot</field>
+        <field name="view_mode">tree,form,calendar</field>
+    </record>
+</odoo>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Page de connexion par reconnaissance faciale -->
+    <template id="facial_login_page" name="Facial Recognition Login">
+        <t t-call="web.login_layout">
+            <t t-set="head">
+                <link rel="stylesheet" type="text/css" href="/eazynova/static/src/css/facial_auth.css"/>
+                <script type="text/javascript" src="/eazynova/static/src/js/facial_auth.js"/>
+            </t>
+
+            <div class="o_facial_login_container">
+                <div class="text-center mb-4">
+                    <h3>
+                        <i class="fa fa-user-circle-o"/> Connexion par Reconnaissance Faciale
+                    </h3>
+                    <p class="text-muted">
+                        Regardez la caméra pour vous identifier
+                    </p>
+                </div>
+
+                <!-- Message d'erreur si reconnaissance faciale non disponible -->
+                <div t-if="not facial_available" class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation-triangle"/>
+                    <strong>Service non disponible</strong>
+                    <p>
+                        La reconnaissance faciale n'est pas disponible sur ce serveur.
+                        Veuillez installer les bibliothèques nécessaires ou utiliser
+                        <a href="/web/login">la connexion classique</a>.
+                    </p>
+                </div>
+
+                <!-- Interface de capture faciale -->
+                <div t-if="facial_available" class="o_facial_auth_widget">
+                    <!-- Zone vidéo pour webcam -->
+                    <div class="o_facial_video_container">
+                        <video id="facial_video" autoplay="autoplay" playsinline="playsinline"></video>
+                        <canvas id="facial_canvas" style="display: none;"></canvas>
+
+                        <!-- Overlay avec guide -->
+                        <div class="o_facial_overlay">
+                            <div class="o_facial_guide">
+                                <div class="o_facial_guide_circle"></div>
+                                <div class="o_facial_guide_text">
+                                    Positionnez votre visage dans le cercle
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Indicateur de statut -->
+                        <div class="o_facial_status" id="facial_status">
+                            <i class="fa fa-circle-o-notch fa-spin"/> Initialisation...
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="o_facial_messages">
+                        <div class="alert alert-info" id="facial_info_message" style="display: none;">
+                            <i class="fa fa-info-circle"/> <span id="facial_info_text"></span>
+                        </div>
+                        <div class="alert alert-danger" id="facial_error_message" style="display: none;">
+                            <i class="fa fa-exclamation-triangle"/> <span id="facial_error_text"></span>
+                        </div>
+                        <div class="alert alert-success" id="facial_success_message" style="display: none;">
+                            <i class="fa fa-check-circle"/> <span id="facial_success_text"></span>
+                        </div>
+                    </div>
+
+                    <!-- Boutons de contrôle -->
+                    <div class="o_facial_controls text-center">
+                        <button type="button" class="btn btn-primary btn-lg" id="btn_start_camera">
+                            <i class="fa fa-video-camera"/> Démarrer la Caméra
+                        </button>
+                        <button type="button" class="btn btn-success btn-lg" id="btn_identify" style="display: none;">
+                            <i class="fa fa-user-circle"/> M'identifier
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btn_retry" style="display: none;">
+                            <i class="fa fa-refresh"/> Réessayer
+                        </button>
+                    </div>
+
+                    <!-- Conseils -->
+                    <div class="o_facial_tips mt-4">
+                        <h6><i class="fa fa-lightbulb-o"/> Conseils pour une meilleure identification:</h6>
+                        <ul>
+                            <li>Assurez-vous d'avoir un bon éclairage</li>
+                            <li>Regardez directement la caméra</li>
+                            <li>Retirez les lunettes de soleil ou masques</li>
+                            <li>Restez immobile pendant la capture</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Lien vers connexion classique -->
+                <div class="text-center mt-4">
+                    <a href="/web/login" class="btn btn-link">
+                        <i class="fa fa-key"/> Utiliser la connexion classique
+                    </a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Extension de la page de login standard pour ajouter bouton facial -->
+    <template id="web_login_facial_option" inherit_id="web.login" name="Facial Login Option">
+        <xpath expr="//form[@class='oe_login_form']" position="after">
+            <div t-if="facial_auth_available" class="text-center mt-3">
+                <div class="o_facial_login_divider">
+                    <span>OU</span>
+                </div>
+                <a href="/web/facial_login" class="btn btn-primary btn-block o_facial_login_button">
+                    <i class="fa fa-user-circle-o"/> Se connecter par reconnaissance faciale
+                </a>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Message dans le menu utilisateur pour l'enregistrement facial -->
+    <template id="user_menu_facial_registration" inherit_id="web.user_menu" name="Facial Registration Link">
+        <xpath expr="//a[@data-menu='settings']" position="after">
+            <a role="menuitem" href="#" data-menu="facial_registration" class="dropdown-item">
+                <i class="fa fa-user-circle-o fa-fw"/> Mon enregistrement facial
+            </a>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_business_plan_balance_sheet_tree" model="ir.ui.view">
+        <field name="name">business.plan.balance.sheet.tree</field>
+        <field name="model">business.plan.balance.sheet</field>
+        <field name="arch" type="xml">
+            <list string="Bilan Prévisionnel" decoration-warning="is_balanced == False">
+                <field name="year"/>
+                <field name="year_label"/>
+                <field name="total_assets" sum="Total"/>
+                <field name="total_equity_liabilities" sum="Total"/>
+                <field name="balance_difference"/>
+                <field name="is_balanced" widget="boolean_toggle"/>
+                <field name="working_capital"/>
+                <field name="working_capital_requirement"/>
+                <field name="net_cash"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_business_plan_balance_sheet_form" model="ir.ui.view">
+        <field name="name">business.plan.balance.sheet.form</field>
+        <field name="model">business.plan.balance.sheet</field>
+        <field name="arch" type="xml">
+            <form string="Bilan Prévisionnel">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="year_label"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="business_plan_id" readonly="1"/>
+                        <field name="year"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="📊 ACTIF">
+                            <group string="Actif Immobilisé">
+                                <group>
+                                    <field name="intangible_assets" widget="monetary"/>
+                                    <field name="tangible_assets" widget="monetary"/>
+                                    <field name="financial_assets" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="total_fixed_assets" widget="monetary" readonly="1" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <group string="Actif Circulant">
+                                <group>
+                                    <field name="inventory" widget="monetary"/>
+                                    <field name="accounts_receivable" widget="monetary"/>
+                                    <field name="other_receivables" widget="monetary"/>
+                                    <field name="cash" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="total_current_assets" widget="monetary" readonly="1" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="total_assets" widget="monetary" readonly="1" class="oe_subtotal_footer_separator" style="font-size:1.2em;font-weight:bold;"/>
+                            </group>
+                        </page>
+                        <page string="📊 PASSIF">
+                            <group string="Capitaux Propres">
+                                <group>
+                                    <field name="share_capital" widget="monetary"/>
+                                    <field name="reserves" widget="monetary"/>
+                                    <field name="retained_earnings" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="total_equity" widget="monetary" readonly="1" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <group string="Dettes">
+                                <group>
+                                    <field name="long_term_debt" widget="monetary"/>
+                                    <field name="short_term_debt" widget="monetary"/>
+                                    <field name="accounts_payable" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="tax_payable" widget="monetary"/>
+                                    <field name="other_payables" widget="monetary"/>
+                                    <field name="total_liabilities" widget="monetary" readonly="1" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="total_equity_liabilities" widget="monetary" readonly="1" class="oe_subtotal_footer_separator" style="font-size:1.2em;font-weight:bold;"/>
+                            </group>
+                        </page>
+                        <page string="📈 Ratios Financiers">
+                            <group>
+                                <group>
+                                    <field name="working_capital" widget="monetary" readonly="1"/>
+                                    <field name="working_capital_requirement" widget="monetary" readonly="1"/>
+                                    <field name="net_cash" widget="monetary" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="current_ratio" readonly="1"/>
+                                    <field name="debt_to_equity_ratio" readonly="1"/>
+                                </group>
+                            </group>
+                            <group string="Vérification">
+                                <field name="is_balanced" widget="boolean_toggle"/>
+                                <field name="balance_difference" widget="monetary"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

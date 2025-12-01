@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rapport PDF d'intervention -->
+    <record id="action_rapport_intervention_pdf" model="ir.actions.report">
+        <field name="name">Rapport d'intervention</field>
+        <field name="model">intervention.intervention</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">intervention.rapport_intervention_document</field>
+        <field name="report_file">intervention.rapport_intervention_document</field>
+        <field name="print_report_name">'Rapport_Intervention_%s' % (object.numero)</field>
+        <field name="binding_model_id" ref="model_intervention_intervention"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

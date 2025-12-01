@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_eazynova_facial_data_tree" model="ir.ui.view">
+        <field name="name">eazynova.facial.data.tree</field>
+        <field name="model">eazynova.facial.data</field>
+        <field name="arch" type="xml">
+            <list string="Enregistrements Faciaux" decoration-muted="not active">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="registration_date"/>
+                <field name="quality_score" widget="percentage"/>
+                <field name="verification_count"/>
+                <field name="last_verification_date"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_eazynova_facial_data_form" model="ir.ui.view">
+        <field name="name">eazynova.facial.data.form</field>
+        <field name="model">eazynova.facial.data</field>
+        <field name="arch" type="xml">
+            <form string="Enregistrement Facial">
+                <header>
+                    <button name="action_register_face"
+                            string="Réenregistrer"
+                            type="object"
+                            class="btn-primary"
+                            invisible="not photo"
+                            confirm="Cela remplacera l'encodage facial actuel. Continuer ?"/>
+
+                    <button name="action_deactivate"
+                            string="Désactiver"
+                            type="object"
+                            class="btn-warning"
+                            invisible="not active"
+                            confirm="Êtes-vous sûr de vouloir désactiver cet enregistrement facial ?"/>
+
+                    <button name="action_reactivate"
+                            string="Réactiver"
+                            type="object"
+                            class="btn-primary"
+                            invisible="active"/>
+
+                    <field name="active" widget="boolean_toggle" invisible="1"/>
+                </header>
+
+                <sheet>
+                    <!-- Bouton de statistiques supprimé car la méthode action_view_verifications n'existe pas -->
+
+                    <field name="photo" widget="image" class="oe_avatar" options="{'size': [150, 150]}"/>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Informations Utilisateur">
+                            <field name="user_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+
+                        <group string="Statistiques">
+                            <field name="registration_date" readonly="1"/>
+                            <field name="last_verification_date" readonly="1"/>
+                            <field name="face_count" readonly="1"/>
+                            <field name="quality_score" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Données Techniques" name="technical">
+                            <group>
+                                <field name="encoding_data" readonly="1" widget="text"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Notes et remarques..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_eazynova_facial_data_kanban" model="ir.ui.view">
+        <field name="name">eazynova.facial.data.kanban</field>
+        <field name="model">eazynova.facial.data</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="photo"/>
+                <field name="quality_score"/>
+                <field name="verification_count"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('eazynova.facial.data', 'photo', record.id.raw_value)"
+                                     alt="Photo"
+                                     class="o_image_64_cover"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="user_id"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="badge text-bg-success" t-if="record.active.raw_value">Actif</span>
+                                        <span class="badge text-bg-secondary" t-else="">Inactif</span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <span class="badge text-bg-info">
+                                            <i class="fa fa-check"/> <t t-esc="record.verification_count.value"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_eazynova_facial_data_search" model="ir.ui.view">
+        <field name="name">eazynova.facial.data.search</field>
+        <field name="model">eazynova.facial.data</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher Enregistrements Faciaux">
+                <field name="name" string="Nom"/>
+                <field name="user_id" string="Utilisateur"/>
+
+                <filter string="Actifs" name="filter_active" domain="[('active', '=', True)]"/>
+                <filter string="Inactifs" name="filter_inactive" domain="[('active', '=', False)]"/>
+                <filter string="Qualité Élevée" name="filter_high_quality" domain="[('quality_score', '>=', 70)]"/>
+                <filter string="Qualité Moyenne" name="filter_medium_quality" domain="[('quality_score', '>=', 40), ('quality_score', '&lt;', 70)]"/>
+                <filter string="Qualité Faible" name="filter_low_quality" domain="[('quality_score', '&lt;', 40)]"/>
+                <group expand="0" string="Grouper Par">
+                    <filter string="Utilisateur"
+                            name="group_user"
+                            context="{'group_by': 'user_id'}"/>
+                    <filter string="Société"
+                            name="group_company"
+                            context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                    <filter string="Mois d'Enregistrement"
+                            name="group_registration_month"
+                            context="{'group_by': 'registration_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_eazynova_facial_data" model="ir.actions.act_window">
+        <field name="name">Enregistrements Faciaux</field>
+        <field name="res_model">eazynova.facial.data</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouvel enregistrement facial
+            </p>
+            <p>
+                Les enregistrements faciaux permettent d'identifier les utilisateurs
+                via reconnaissance faciale.
+            </p>
+        </field>
+    </record>
+</odoo>

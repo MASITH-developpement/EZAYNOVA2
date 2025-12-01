@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Tree -->
+    <record id="view_chantier_equipe_tree" model="ir.ui.view">
+        <field name="name">chantier.equipe.tree</field>
+        <field name="model">chantier.equipe</field>
+        <field name="arch" type="xml">
+            <tree string="Équipes">
+                <field name="name"/>
+                <field name="chef_equipe_id" widget="many2one_avatar_user"/>
+                <field name="specialite"/>
+                <field name="membre_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Form -->
+    <record id="view_chantier_equipe_form" model="ir.ui.view">
+        <field name="name">chantier.equipe.form</field>
+        <field name="model">chantier.equipe</field>
+        <field name="arch" type="xml">
+            <form string="Équipe">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Nom de l'équipe"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="chef_equipe_id" widget="many2one_avatar_user"/>
+                            <field name="specialite"/>
+                        </group>
+                        <group>
+                            <field name="membre_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Membres" name="membres">
+                            <field name="membre_ids">
+                                <tree editable="bottom">
+                                    <field name="employee_id" widget="many2one_avatar_employee"/>
+                                    <field name="role"/>
+                                    <field name="date_debut"/>
+                                    <field name="date_fin"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Chantiers" name="chantiers">
+                            <field name="chantier_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="partner_id"/>
+                                    <field name="date_debut"/>
+                                    <field name="date_fin_prevue"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban -->
+    <record id="view_chantier_equipe_kanban" model="ir.ui.view">
+        <field name="name">chantier.equipe.kanban</field>
+        <field name="model">chantier.equipe</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="chef_equipe_id"/>
+                <field name="specialite"/>
+                <field name="membre_count"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div>
+                                    <span class="badge badge-pill"><field name="specialite"/></span>
+                                </div>
+                                <div>
+                                    <i class="fa fa-users"/> <field name="membre_count"/> membre(s)
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="chef_equipe_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_chantier_equipe" model="ir.actions.act_window">
+        <field name="name">Équipes</field>
+        <field name="res_model">chantier.equipe</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer une nouvelle équipe
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Tree -->
+    <record id="view_chantier_tree" model="ir.ui.view">
+        <field name="name">chantier.chantier.tree</field>
+        <field name="model">chantier.chantier</field>
+        <field name="arch" type="xml">
+            <list string="Chantiers" decoration-info="state=='draft'" decoration-success="state=='done'" decoration-danger="state=='cancel'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="partner_id"/>
+                <field name="city"/>
+                <field name="date_debut"/>
+                <field name="date_fin_prevue"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="montant_devis" sum="Total"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='done'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Form -->
+    <record id="view_chantier_form" model="ir.ui.view">
+        <field name="name">chantier.chantier.form</field>
+        <field name="model">chantier.chantier</field>
+        <field name="arch" type="xml">
+            <form string="Chantier">
+                <header>
+                    <button name="action_prepare" string="Préparer" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Démarrer" type="object" class="oe_highlight" invisible="state != 'preparation'"/>
+                    <button name="action_pause" string="Mettre en pause" type="object" invisible="state != 'in_progress'"/>
+                    <button name="action_resume" string="Reprendre" type="object" class="oe_highlight" invisible="state != 'pause'"/>
+                    <button name="action_done" string="Terminer" type="object" class="oe_highlight" invisible="state not in ('in_progress', 'pause')"/>
+                    <button name="action_cancel" string="Annuler" type="object" invisible="state == 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,preparation,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_phases" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <field name="phase_count" widget="statinfo" string="Phases"/>
+                        </button>
+                        <button name="action_view_photos" type="object" class="oe_stat_button" icon="fa-camera">
+                            <field name="photo_count" widget="statinfo" string="Photos"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Numéro"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <label for="title"/>
+                        <h2>
+                            <field name="title" placeholder="Nom du chantier"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type_chantier"/>
+                            <field name="partner_id" context="{'res_partner_search_mode': 'customer'}"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="conducteur_travaux_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="date_debut"/>
+                            <field name="date_fin_prevue"/>
+                            <field name="date_fin_reelle" invisible="state != 'done'"/>
+                            <field name="duree_prevue"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Adresse" name="address">
+                            <group>
+                                <group>
+                                    <field name="street" placeholder="Rue"/>
+                                    <field name="street2"/>
+                                    <field name="city" placeholder="Ville"/>
+                                    <field name="state_id" placeholder="État/Province"/>
+                                    <field name="zip" placeholder="Code postal"/>
+                                    <field name="country_id" placeholder="Pays"/>
+                                </group>
+                                <group>
+                                    <label for="latitude" string="Coordonnées GPS"/>
+                                    <div class="o_row">
+                                        <field name="latitude" placeholder="Latitude"/>
+                                        <field name="longitude" placeholder="Longitude"/>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Phases" name="phases">
+                            <field name="phase_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="date_debut"/>
+                                    <field name="date_fin"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Équipes" name="equipes">
+                            <field name="equipe_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="specialite"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Matériel" name="materiel">
+                            <field name="materiel_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantite"/>
+                                    <field name="date_debut"/>
+                                    <field name="date_fin"/>
+                                    <field name="cout_location" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Dépenses" name="depenses">
+                            <field name="depense_ids">
+                                <tree editable="bottom">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="type_depense"/>
+                                    <field name="partner_id"/>
+                                    <field name="montant" sum="Total"/>
+                                    <!-- Champ product_id supprimé si présent -->
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="montant_depense"/>
+                            </group>
+                        </page>
+                        <page string="Financier" name="financier">
+                            <group>
+                                <group>
+                                    <field name="montant_devis"/>
+                                    <field name="montant_facture"/>
+                                    <field name="montant_depense"/>
+                                </group>
+                                <group>
+                                    <field name="marge"/>
+                                    <field name="sale_order_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents" name="documents">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="description"/>
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban -->
+    <record id="view_chantier_kanban" model="ir.ui.view">
+        <field name="name">chantier.chantier.kanban</field>
+        <field name="model">chantier.chantier</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/> - <field name="title"/></strong>
+                                </div>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="partner_id"/>
+                                <field name="city"/>
+                                <progressbar t-att-value="record.progress.value" t-att-max="100"/>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'in_progress': 'success'}}"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_chantier" model="ir.actions.act_window">
+        <field name="name">Chantiers</field>
+        <field name="res_model">chantier.chantier</field>
+        <field name="view_mode">list,form,kanban,calendar</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouveau chantier
+            </p>
+        </field>
+    </record>
+</odoo>

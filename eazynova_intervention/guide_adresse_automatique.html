@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Guide - Adresse Automatique d'Intervention</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                line-height: 1.6;
+                background-color: #f5f5f5;
+            }
+            .container {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #2c3e50;
+                border-bottom: 3px solid #3498db;
+                padding-bottom: 10px;
+            }
+            h2 {
+                color: #27ae60;
+                margin-top: 30px;
+            }
+            .step {
+                background: #ecf0f1;
+                padding: 15px;
+                margin: 15px 0;
+                border-left: 4px solid #3498db;
+                border-radius: 5px;
+            }
+            .success {
+                background: #d5edda;
+                border-left-color: #27ae60;
+                color: #155724;
+            }
+            .warning {
+                background: #fff3cd;
+                border-left-color: #ffc107;
+                color: #856404;
+            }
+            .info {
+                background: #d1ecf1;
+                border-left-color: #17a2b8;
+                color: #0c5460;
+            }
+            code {
+                background: #e9ecef;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: "Courier New", monospace;
+            }
+            .screenshot-placeholder {
+                background: #f8f9fa;
+                border: 2px dashed #6c757d;
+                padding: 40px;
+                text-align: center;
+                margin: 20px 0;
+                border-radius: 5px;
+                color: #6c757d;
+            }
+            .feature-list {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }
+            .feature-list ul {
+                margin: 0;
+                padding-left: 20px;
+            }
+            .technical-note {
+                background: #f1f3f4;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 20px 0;
+                font-size: 0.9em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🏠 Fonctionnalité Adresse Automatique d'Intervention</h1>
+
+            <p>
+                Cette fonctionnalité remplit automatiquement le champ
+                <strong>"Adresse d'intervention"</strong> avec l'adresse
+                complète du client sélectionné, vous faisant gagner du temps
+                lors de la création d'interventions.
+            </p>
+
+            <h2>🎯 Comment ça fonctionne</h2>
+
+            <div class="step">
+                <strong>Étape 1 :</strong> Vous sélectionnez un
+                <code>Client final</code> dans le formulaire d'intervention
+            </div>
+
+            <div class="step">
+                <strong>Étape 2 :</strong> L'adresse du client se remplit
+                automatiquement dans le champ
+                <code>Adresse d'intervention</code>
+            </div>
+
+            <div class="step">
+                <strong>Étape 3 :</strong> Vous pouvez modifier l'adresse si
+                nécessaire avant de sauvegarder
+            </div>
+
+            <h2>🧪 Comment tester</h2>
+
+            <div class="step info">
+                <strong>Prérequis :</strong> Connectez-vous à Odoo avec un
+                utilisateur ayant les droits de création de clients et
+                d'interventions
+            </div>
+
+            <div class="step">
+                <strong>1. Créer un client avec une adresse complète</strong>
+                <ul>
+                    <li>
+                        Allez dans <code>Contacts</code> → <code>Créer</code>
+                    </li>
+                    <li>Remplissez : Nom, Rue, Code postal, Ville, Pays</li>
+                    <li>Sauvegardez le contact</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <strong>2. Créer une nouvelle intervention</strong>
+                <ul>
+                    <li>
+                        Allez dans <code>Interventions</code> →
+                        <code>Créer</code>
+                    </li>
+                    <li>
+                        Remplissez les champs obligatoires (Donneur d'ordre,
+                        Type, Date, Technicien)
+                    </li>
+                    <li>
+                        Dans le champ <code>Client final</code>, sélectionnez le
+                        client créé à l'étape 1
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step success">
+                <strong>3. Observer le résultat</strong><br />
+                Le champ <code>Adresse d'intervention</code> devrait se remplir
+                automatiquement avec l'adresse complète du client sélectionné.
+            </div>
+
+            <h2>✨ Fonctionnalités incluses</h2>
+
+            <div class="feature-list">
+                <h3>🔧 Côté technique :</h3>
+                <ul>
+                    <li>
+                        <strong>Widget JavaScript personnalisé</strong> : Gère
+                        l'interaction en temps réel
+                    </li>
+                    <li>
+                        <strong>Méthode onchange Python</strong> : Traitement
+                        côté serveur pour robustesse
+                    </li>
+                    <li>
+                        <strong>Formatage intelligent</strong> : Combine rue,
+                        code postal, ville, région, pays
+                    </li>
+                    <li>
+                        <strong>Gestion d'erreurs</strong> : Continue de
+                        fonctionner même en cas de problème
+                    </li>
+                </ul>
+            </div>
+
+            <div class="feature-list">
+                <h3>👤 Côté utilisateur :</h3>
+                <ul>
+                    <li>
+                        <strong>Gain de temps</strong> : Plus besoin de retaper
+                        l'adresse manuellement
+                    </li>
+                    <li>
+                        <strong>Réduction d'erreurs</strong> : L'adresse est
+                        copiée exactement depuis le contact
+                    </li>
+                    <li>
+                        <strong>Flexibilité</strong> : Vous pouvez toujours
+                        modifier l'adresse après remplissage
+                    </li>
+                    <li>
+                        <strong>Transparence</strong> : Le processus est
+                        immédiat et visible
+                    </li>
+                </ul>
+            </div>
+
+            <h2>⚙️ Configuration avancée</h2>
+
+            <div class="step warning">
+                <strong>Permissions requises :</strong><br />
+                L'utilisateur doit avoir le droit
+                <code>Créer clients finaux</code> pour voir le widget avec
+                auto-complétion. Sinon, le champ sera en lecture seule.
+            </div>
+
+            <div class="technical-note">
+                <h3>📝 Notes techniques :</h3>
+                <p>
+                    <strong>Widget JavaScript :</strong>
+                    <code>intervention_client_field</code>
+                </p>
+                <p>
+                    <strong>Méthode Python :</strong>
+                    <code>_onchange_client_final_id()</code>
+                </p>
+                <p>
+                    <strong>Champs utilisés :</strong> street, street2, zip,
+                    city, state_id, country_id
+                </p>
+                <p>
+                    <strong>Format de sortie :</strong> "Rue, Complément, Code
+                    postal Ville, Région, Pays"
+                </p>
+            </div>
+
+            <h2>🚀 Utilisation dans d'autres formulaires</h2>
+
+            <div class="step info">
+                Cette fonctionnalité est également disponible dans :
+                <ul>
+                    <li>
+                        <strong>Assistant de création rapide</strong> : Menu "➕
+                        Création rapide"
+                    </li>
+                    <li>
+                        <strong>Formulaire d'intervention standard</strong> :
+                        Menu "Interventions" → "Créer"
+                    </li>
+                </ul>
+            </div>
+
+            <h2>❓ Dépannage</h2>
+
+            <div class="step warning">
+                <strong>L'adresse ne se remplit pas ?</strong>
+                <ul>
+                    <li>
+                        Vérifiez que le client sélectionné a bien une adresse
+                        renseignée
+                    </li>
+                    <li>
+                        Rechargez la page (Ctrl+F5) pour vider le cache du
+                        navigateur
+                    </li>
+                    <li>
+                        Vérifiez vos droits d'accès (droit "Créer clients
+                        finaux")
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step info">
+                <strong>Besoin d'aide ?</strong><br />
+                Consultez la documentation complète dans le fichier
+                <code>PERMISSIONS.md</code>
+                du module intervention.
+            </div>
+
+            <hr style="margin: 40px 0" />
+
+            <div style="text-align: center; color: #6c757d; font-size: 0.9em">
+                <p>
+                    🔧 Module Intervention - Fonctionnalité Adresse Automatique
+                </p>
+                <p>
+                    Développé pour optimiser la saisie des interventions de
+                    plomberie et électricité
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

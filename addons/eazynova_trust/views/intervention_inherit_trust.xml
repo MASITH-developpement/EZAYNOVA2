@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Server action to safely trigger the review request -->
+    <record id="action_create_review_request_server" model="ir.actions.server">
+      <field name="name">Demander avis (Trust)</field>
+      <field name="model_id" ref="eazynova_intervention.model_intervention_intervention"/>
+      <field name="state">code</field>
+      <field name="code">action = records.action_create_review_request()</field>
+    </record>
+
+  <record id="view_intervention_form_inherit_trust_review" model="ir.ui.view">
+    <field name="name">intervention.intervention.form.inherit.trust</field>
+    <field name="model">intervention.intervention</field>
+    <field name="inherit_id" ref="eazynova_intervention.view_intervention_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(action_create_review_request_server)d" type="action" string="Demander avis" class="oe_highlight" groups="eazynova_intervention.group_intervention_gestionnaire,eazynova_intervention.group_intervention_admin"/>
+      </xpath>
+      
+    </field>
+  </record>
+  </data>
+</odoo>

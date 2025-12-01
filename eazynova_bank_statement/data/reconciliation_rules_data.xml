@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Règles de rapprochement par défaut -->
+
+    <!-- Règle pour les virements avec référence -->
+    <record id="rule_virement_with_ref" model="eazynova.reconciliation.rule">
+        <field name="name">Virement avec Référence</field>
+        <field name="sequence">10</field>
+        <field name="rule_type">reference_pattern</field>
+        <field name="reference_pattern">VIR\d+|VIRT\d+</field>
+        <field name="confidence_boost">0.3</field>
+        <field name="note">Détecte les virements avec un numéro de référence</field>
+    </record>
+
+    <!-- Règle pour les prélèvements -->
+    <record id="rule_prelevement" model="eazynova.reconciliation.rule">
+        <field name="name">Prélèvement</field>
+        <field name="sequence">20</field>
+        <field name="rule_type">description_keyword</field>
+        <field name="description_keywords">PRELEVEMENT,PRLV,SEPA</field>
+        <field name="confidence_boost">0.2</field>
+        <field name="note">Détecte les prélèvements SEPA</field>
+    </record>
+
+    <!-- Règle pour les cartes bancaires -->
+    <record id="rule_carte_bancaire" model="eazynova.reconciliation.rule">
+        <field name="name">Paiement Carte Bancaire</field>
+        <field name="sequence">30</field>
+        <field name="rule_type">description_keyword</field>
+        <field name="description_keywords">CB,CARTE,PAIEMENT CARTE</field>
+        <field name="confidence_boost">0.15</field>
+        <field name="note">Détecte les paiements par carte bancaire</field>
+    </record>
+
+    <!-- Règle pour les chèques -->
+    <record id="rule_cheque" model="eazynova.reconciliation.rule">
+        <field name="name">Chèque</field>
+        <field name="sequence">40</field>
+        <field name="rule_type">description_keyword</field>
+        <field name="description_keywords">CHEQUE,CHQ</field>
+        <field name="confidence_boost">0.2</field>
+        <field name="note">Détecte les paiements par chèque</field>
+    </record>
+
+    <!-- Règle pour les frais bancaires -->
+    <record id="rule_frais_bancaires" model="eazynova.reconciliation.rule">
+        <field name="name">Frais Bancaires</field>
+        <field name="sequence">50</field>
+        <field name="rule_type">description_keyword</field>
+        <field name="description_keywords">FRAIS,COMMISSION,COTISATION</field>
+        <field name="confidence_boost">0.25</field>
+        <field name="note">Détecte les frais et commissions bancaires</field>
+    </record>
+
+    <!-- Règle pour les petits montants -->
+    <record id="rule_small_amounts" model="eazynova.reconciliation.rule">
+        <field name="name">Petits Montants</field>
+        <field name="sequence">60</field>
+        <field name="rule_type">amount_range</field>
+        <field name="amount_min">0.01</field>
+        <field name="amount_max">50.0</field>
+        <field name="confidence_boost">0.1</field>
+        <field name="note">Boost pour les petits montants (plus faciles à rapprocher)</field>
+    </record>
+
+    <!-- Règle pour les gros montants -->
+    <record id="rule_large_amounts" model="eazynova.reconciliation.rule">
+        <field name="name">Gros Montants</field>
+        <field name="sequence">70</field>
+        <field name="rule_type">amount_range</field>
+        <field name="amount_min">5000.0</field>
+        <field name="confidence_boost">0.15</field>
+        <field name="note">Boost pour les gros montants (uniques, plus faciles à identifier)</field>
+    </record>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_statement_import_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.bank.statement.import.wizard.form</field>
+        <field name="model">eazynova.bank.statement.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importer un Relevé Bancaire">
+                <group>
+                    <field name="journal_id" options="{'no_create': True}"/>
+                    <field name="file_type"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="file_data" filename="file_name"/>
+                </group>
+                <group string="Options">
+                    <field name="auto_reconcile"/>
+                    <field name="use_ai"/>
+                    <field name="confidence_threshold" widget="percentage" invisible="not auto_reconcile"/>
+                    <field name="create_statement"/>
+                </group>
+                <footer>
+                    <button string="Importer" name="action_import" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bank_statement_import_wizard" model="ir.actions.act_window">
+        <field name="name">Importer un Relevé Bancaire</field>
+        <field name="res_model">eazynova.bank.statement.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

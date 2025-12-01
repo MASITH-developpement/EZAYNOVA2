@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menu racine -->
+    <menuitem id="menu_plomberie_root" 
+              name="Interventions" 
+              sequence="15"
+              groups="plomberie_clean.group_plomberie_technicien"
+              web_icon="fa-wrench"/>
+
+    <!-- Menu principal pour techniciens -->
+    <menuitem id="menu_plomberie_interventions_technicien"
+              name="Mes Interventions" 
+              parent="menu_plomberie_root"
+              action="action_plomberie_intervention_technicien"
+              groups="plomberie_clean.group_plomberie_technicien"
+              sequence="10"/>
+
+    <!-- Menu principal pour gestionnaires et admins -->
+    <menuitem id="menu_plomberie_interventions_gestionnaire"
+              name="Toutes les Interventions" 
+              parent="menu_plomberie_root"
+              action="action_plomberie_intervention"
+              groups="plomberie_clean.group_plomberie_gestionnaire"
+              sequence="20"/>
+
+    <!-- Menu pour comptables -->
+    <menuitem id="menu_plomberie_interventions_comptable"
+              name="Interventions - Comptabilité" 
+              parent="menu_plomberie_root"
+              action="action_plomberie_intervention_comptable"
+              groups="plomberie_clean.group_plomberie_comptable"
+              sequence="30"/>
+
+    <!-- Menus pour gestion commerciale (gestionnaires et admins uniquement) -->
+    <menuitem id="menu_plomberie_clients"
+              name="Clients / Donneurs d'ordre" 
+              parent="menu_plomberie_root"
+              action="action_plomberie_clients"
+              groups="plomberie_clean.group_plomberie_gestionnaire"
+              sequence="40"/>
+
+    <menuitem id="menu_plomberie_ventes"
+              name="Devis / Commandes" 
+              parent="menu_plomberie_root"
+              action="sale.action_orders"
+              groups="plomberie_clean.group_plomberie_gestionnaire"
+              sequence="50"/>
+
+    <!-- Menu pour le calendrier des interventions -->
+    <menuitem id="menu_plomberie_calendar"
+              name="Planning - Calendrier" 
+              parent="menu_plomberie_root"
+              action="calendar.action_calendar_event"
+              groups="plomberie_clean.group_plomberie_technicien"
+              sequence="15"/>
+
+</odoo>

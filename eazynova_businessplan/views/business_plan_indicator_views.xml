@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Formulaire Indicateur (SIMPLIFIÉ) -->
+    <record id="view_business_plan_indicator_form" model="ir.ui.view">
+        <field name="name">business.plan.indicator.form</field>
+        <field name="model">business.plan.indicator</field>
+        <field name="arch" type="xml">
+            <form string="Indicateur">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="business_plan_id"/>
+                        <field name="target_value"/>
+                        <field name="current_value"/>
+                        <field name="progress" widget="progressbar"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste Indicateur (SIMPLIFIÉ) -->
+    <record id="view_business_plan_indicator_list" model="ir.ui.view">
+        <field name="name">business.plan.indicator.list</field>
+        <field name="model">business.plan.indicator</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="business_plan_id"/>
+                <field name="target_value"/>
+                <field name="current_value"/>
+                <field name="progress" widget="progressbar"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action Indicateur -->
+    <record id="action_business_plan_indicator" model="ir.actions.act_window">
+        <field name="name">Indicateurs</field>
+        <field name="res_model">business.plan.indicator</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

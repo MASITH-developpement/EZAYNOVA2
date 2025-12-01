@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Séquence pour les vérifications de prix -->
+    <record id="seq_price_check" model="ir.sequence">
+        <field name="name">Vérification Prix</field>
+        <field name="code">eazynova.price.check</field>
+        <field name="prefix">VPX</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <!-- Source de prix par défaut -->
+    <record id="price_source_manual" model="eazynova.price.source">
+        <field name="name">Manuel</field>
+        <field name="source_type">manual</field>
+        <field name="sequence">100</field>
+        <field name="active">True</field>
+        <field name="margin_warning">20.0</field>
+    </record>
+</odoo>

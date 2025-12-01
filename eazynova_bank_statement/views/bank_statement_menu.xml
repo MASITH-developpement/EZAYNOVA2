@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu principal -->
+    <menuitem id="menu_eazynova_bank_statement_root"
+              name="Imports Bancaires"
+              parent="account.menu_finance"
+              sequence="50"/>
+
+    <!-- Import -->
+    <menuitem id="menu_bank_statement_import"
+              name="Imports"
+              parent="menu_eazynova_bank_statement_root"
+              action="action_bank_statement_import"
+              sequence="10"/>
+
+    <!-- Nouvel import (wizard) -->
+    <menuitem id="menu_bank_statement_import_wizard"
+              name="Nouvel Import"
+              parent="menu_eazynova_bank_statement_root"
+              action="action_bank_statement_import_wizard"
+              sequence="5"/>
+
+    <!-- Alertes -->
+    <menuitem id="menu_reconciliation_alert"
+              name="Alertes"
+              parent="menu_eazynova_bank_statement_root"
+              action="action_reconciliation_alert"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_bank_statement_config"
+              name="Configuration"
+              parent="menu_eazynova_bank_statement_root"
+              sequence="100"/>
+
+    <!-- Règles de rapprochement -->
+    <menuitem id="menu_reconciliation_rule"
+              name="Règles de Rapprochement"
+              parent="menu_bank_statement_config"
+              action="action_reconciliation_rule"
+              sequence="10"/>
+</odoo>

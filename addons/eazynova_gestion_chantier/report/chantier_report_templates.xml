@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template principal Chantier -->
+    <template id="report_chantier_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>
+                            <span t-field="o.name"/> - <span t-field="o.title"/>
+                        </h2>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Client:</strong> <span t-field="o.partner_id"/><br/>
+                                <strong>Type:</strong> <span t-field="o.type_chantier"/><br/>
+                                <strong>État:</strong> <span t-field="o.state"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Chef de chantier:</strong> <span t-field="o.user_id"/><br/>
+                                <strong>Date de début:</strong> <span t-field="o.date_debut"/><br/>
+                                <strong>Date de fin prévue:</strong> <span t-field="o.date_fin_prevue"/><br/>
+                                <t t-if="o.date_fin_reelle">
+                                    <strong>Date de fin réelle:</strong> <span t-field="o.date_fin_reelle"/><br/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <h3>Adresse du chantier</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <span t-field="o.street"/><br/>
+                                <t t-if="o.street2">
+                                    <span t-field="o.street2"/><br/>
+                                </t>
+                                <span t-field="o.zip"/> <span t-field="o.city"/><br/>
+                                <t t-if="o.state_id">
+                                    <span t-field="o.state_id"/><br/>
+                                </t>
+                                <span t-field="o.country_id"/><br/>
+                            </div>
+                        </div>
+
+                        <h3 class="mt32">Informations financières</h3>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Montant devis:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.montant_devis" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Montant facturé:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.montant_facture" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dépenses:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.montant_depense" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr class="border-top">
+                                <td><strong>Marge:</strong></td>
+                                <td class="text-right">
+                                    <strong>
+                                        <span t-field="o.marge" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <t t-if="o.phase_ids">
+                            <h3 class="mt32">Phases du chantier</h3>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Phase</th>
+                                        <th>Date début</th>
+                                        <th>Date fin</th>
+                                        <th class="text-right">Avancement</th>
+                                        <th>État</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.phase_ids" t-as="phase">
+                                        <tr>
+                                            <td><span t-field="phase.name"/></td>
+                                            <td><span t-field="phase.date_debut"/></td>
+                                            <td><span t-field="phase.date_fin"/></td>
+                                            <td class="text-right"><span t-field="phase.progress"/>%</td>
+                                            <td><span t-field="phase.state"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <t t-if="o.equipe_ids">
+                            <h3 class="mt32">Équipes affectées</h3>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Équipe</th>
+                                        <th>Chef d'équipe</th>
+                                        <th>Spécialité</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.equipe_ids" t-as="equipe">
+                                        <tr>
+                                            <td><span t-field="equipe.name"/></td>
+                                            <td><span t-field="equipe.chef_equipe_id"/></td>
+                                            <td><span t-field="equipe.specialite"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <t t-if="o.description">
+                            <h3 class="mt32">Description</h3>
+                            <div t-field="o.description"/>
+                        </t>
+
+                        <t t-if="o.note">
+                            <h3 class="mt32">Notes</h3>
+                            <div t-field="o.note"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Template Rapport Phase -->
+    <template id="report_phase_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Rapport de phase - <span t-field="o.name"/></h2>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Chantier:</strong> <span t-field="o.chantier_id"/><br/>
+                                <strong>Date de début:</strong> <span t-field="o.date_debut"/><br/>
+                                <strong>Date de fin:</strong> <span t-field="o.date_fin"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>État:</strong> <span t-field="o.state"/><br/>
+                                <strong>Avancement:</strong> <span t-field="o.progress"/>%<br/>
+                            </div>
+                        </div>
+
+                        <t t-if="o.description">
+                            <h3>Description</h3>
+                            <div t-field="o.description"/>
+                        </t>
+
+                        <t t-if="o.tache_ids">
+                            <h3 class="mt32">Tâches</h3>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Tâche</th>
+                                        <th>Responsable</th>
+                                        <th>Date début</th>
+                                        <th>Date fin</th>
+                                        <th class="text-right">Avancement</th>
+                                        <th>État</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.tache_ids" t-as="tache">
+                                        <tr>
+                                            <td><span t-field="tache.name"/></td>
+                                            <td><span t-field="tache.user_id"/></td>
+                                            <td><span t-field="tache.date_debut"/></td>
+                                            <td><span t-field="tache.date_fin"/></td>
+                                            <td class="text-right"><span t-field="tache.progress"/>%</td>
+                                            <td><span t-field="tache.state"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Template Rapport Dépenses -->
+    <template id="report_depenses_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Rapport de dépenses - <span t-field="o.name"/></h2>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Chantier:</strong> <span t-field="o.title"/><br/>
+                                <strong>Client:</strong> <span t-field="o.partner_id"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Période:</strong> <span t-field="o.date_debut"/> - <span t-field="o.date_fin_prevue"/><br/>
+                            </div>
+                        </div>
+
+                        <h3>Synthèse financière</h3>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Budget initial:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.montant_devis" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total dépenses:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.montant_depense" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr class="border-top">
+                                <td><strong>Écart:</strong></td>
+                                <td class="text-right">
+                                    <strong>
+                                        <span t-esc="o.montant_devis - o.montant_depense" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <t t-if="o.depense_ids">
+                            <h3 class="mt32">Détail des dépenses</h3>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Fournisseur</th>
+                                        <th class="text-right">Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.depense_ids" t-as="depense">
+                                        <tr>
+                                            <td><span t-field="depense.date"/></td>
+                                            <td><span t-field="depense.name"/></td>
+                                            <td><span t-field="depense.type_depense"/></td>
+                                            <td><span t-field="depense.partner_id"/></td>
+                                            <td class="text-right">
+                                                <span t-field="depense.montant" t-options='{"widget": "monetary", "display_currency": depense.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="border-top">
+                                        <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                                        <td class="text-right">
+                                            <strong>
+                                                <span t-field="o.montant_depense" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,88 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+
+
+class FactureOcrUploadWizard(models.TransientModel):
+    """
+    Wizard simplifié pour upload et traitement automatique des factures
+    """
+    _name = 'facture.ocr.upload.wizard'
+    _description = 'Upload Facture OCR'
+    
+    # Upload multiple de documents
+    document_ids = fields.Many2many(
+        'ir.attachment',
+        string="Factures",
+        required=True,
+        help="Uploadez une ou plusieurs factures (PDF ou images)"
+    )
+    
+    auto_process = fields.Boolean(
+        string="Traiter automatiquement",
+        default=True,
+        help="Lance le traitement OCR+IA immédiatement après l'upload"
+    )
+    
+    auto_validate = fields.Boolean(
+        string="Validation automatique",
+        default=False,
+        help="Valide automatiquement si confiance > 90%"
+    )
+    
+    auto_create_invoice = fields.Boolean(
+        string="Créer factures automatiquement",
+        default=False,
+        help="Crée les factures Odoo automatiquement après validation"
+    )
+    
+    def action_upload_and_process(self):
+        """
+        Upload et traite les factures
+        """
+        if not self.document_ids:
+            raise UserError(_("Veuillez sélectionner au moins une facture."))
+        
+        facture_ocr_obj = self.env['eazynova.facture.ocr']
+        factures_created = self.env['eazynova.facture.ocr']
+        
+        for attachment in self.document_ids:
+            # Création du record OCR
+            facture_ocr = facture_ocr_obj.create({
+                'document': attachment.datas,
+                'document_filename': attachment.name,
+                'needs_validation': not self.auto_validate,
+            })
+            
+            factures_created |= facture_ocr
+            
+            # Traitement automatique si demandé
+            if self.auto_process:
+                try:
+                    facture_ocr.action_process()
+                    
+                    # Validation automatique si confiance élevée
+                    if self.auto_validate and facture_ocr.ia_confidence >= 90:
+                        facture_ocr.action_validate()
+                        
+                        # Création facture automatique
+                        if self.auto_create_invoice:
+                            facture_ocr.action_create_invoice()
+                            
+                except Exception as e:
+                    # Continue avec les autres factures en cas d'erreur
+                    facture_ocr.write({
+                        'state': 'error',
+                        'error_message': str(e)
+                    })
+        
+        # Retour vers la liste des factures créées
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Factures OCR'),
+            'res_model': 'eazynova.facture.ocr',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', factures_created.ids)],
+            'context': {'create': False},
+        }

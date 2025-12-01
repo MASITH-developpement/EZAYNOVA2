@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue formulaire pour l'assistant de création rapide -->
+    <record id="view_intervention_quick_create_form" model="ir.ui.view">
+        <field name="name">intervention.quick.create.form</field>
+        <field name="model">intervention.quick.create</field>
+        <field name="arch" type="xml">
+            <form string="Création rapide d'intervention">
+                <header>
+                    <button name="action_create_intervention" type="object" 
+                            string="Créer l'intervention" class="oe_highlight"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Assistant de création rapide</h1>
+                        <h2>Nouvelle intervention</h2>
+                    </div>
+                    
+                    <group>
+                        <group string="👥 Informations Client">
+                            <!-- Donneur d'ordre : selon les droits -->
+                            <field name="donneur_ordre_id" 
+                                   options="{'no_create': True}" 
+                                   groups="!intervention.group_create_donneur_ordre"/>
+                            <field name="donneur_ordre_id" 
+                                   groups="intervention.group_create_donneur_ordre"/>
+                            
+                            <!-- Client final : selon les droits -->
+                            <field name="client_final_id" 
+                                   options="{'no_create': True}" 
+                                   groups="!intervention.group_create_client_final"/>
+                            <field name="client_final_id" 
+                                   widget="intervention_client_auto"
+                                   groups="intervention.group_create_client_final"/>
+                        </group>
+                        <group string="🔧 Type d'intervention">
+                            <field name="type_intervention" widget="radio"/>
+                            <field name="priorite"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="📅 Planning">
+                            <field name="date_prevue"/>
+                            <field name="duree_prevue"/>
+                            <field name="technicien_principal_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="📍 Localisation">
+                            <field name="adresse_intervention" placeholder="Saisissez l'adresse complète..."/>
+                        </group>
+                    </group>
+                    
+                    <group string="📝 Description">
+                        <field name="description" placeholder="Décrivez le problème à résoudre..." nolabel="1"/>
+                    </group>
+                    
+                    <group string="⚙️ Options automatiques">
+                        <field name="creer_devis"/>
+                        <field name="creer_evenement_calendrier"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir l'assistant -->
+    <record id="action_intervention_quick_create" model="ir.actions.act_window">
+        <field name="name">Création rapide d'intervention</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">intervention.quick.create</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

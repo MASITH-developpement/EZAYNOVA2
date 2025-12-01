@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template pour afficher les avis sur le site web -->
+    <template id="website_customer_reviews" name="Avis Clients">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Avis de nos clients</h1>
+                <!-- Trustpilot Review Collector widget (configurable) -->
+                <t t-set="conf" t-value="request.env['eazynova.trust.config'].sudo().search([], limit=1)"/>
+                <t t-if="conf and conf.trustpilot_enabled">
+                    <script type="text/javascript" t-att-src="conf.trustpilot_script_url" async="async"></script>
+                    <div class="trustpilot-widget"
+                         t-att-data-locale="conf.trustpilot_locale or 'fr-FR'"
+                         t-att-data-template-id="conf.trustpilot_template_id"
+                         t-att-data-businessunit-id="conf.trustpilot_business_unit_id"
+                         data-style-height="52px" data-style-width="100%"
+                         t-att-data-token="conf.trustpilot_widget_token">
+                        <a t-att-href="conf.trustpilot_review_url" target="_blank" rel="noopener">Trustpilot</a>
+                    </div>
+                </t>
+                <t t-set="reviews" t-value="request.env['eazynova.customer.review'].sudo().search([('state','=','published')])"/>
+                <div class="row">
+                    <t t-foreach="reviews" t-as="rev">
+                        <div class="col-md-4 mb-3">
+                            <div class="card p-3 h-100">
+                                <div class="d-flex justify-content-between">
+                                    <strong t-esc="rev.reviewer_name"/>
+                                    <span>
+                                        <t t-esc="'⭐'*rev.rating_value"/>
+                                    </span>
+                                </div>
+                                <p class="mt-2" t-esc="rev.review_text"/>
+                                <small class="text-muted" t-esc="rev.review_date"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Formulaire de soumission d'avis -->
+    <template id="review_submit_page" name="Soumettre un avis">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Donner votre avis</h1>
+                <t t-if="error">
+                    <div class="alert alert-danger" t-esc="error"/>
+                </t>
+                <form t-att-action="'/review/submit/%s' % review_request.id" method="post">
+                    <input type="hidden" name="token" t-att-value="review_request.access_token"/>
+                    <div class="mb-3">
+                        <label class="form-label">Votre nom</label>
+                        <input type="text" class="form-control" name="reviewer_name" t-att-value="review_request.partner_id.name"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note</label>
+                        <select class="form-select" name="rating" required="required">
+                            <option value="">Choisir...</option>
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="1">⭐</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Commentaire</label>
+                        <textarea class="form-control" name="review_text" rows="4" placeholder="Votre expérience"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Envoyer mon avis</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+    <!-- Page lien invalide / expiré -->
+    <template id="review_link_invalid" name="Lien invalide">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Lien de soumission invalide</h1>
+                <p t-if="reason == 'expired'">Ce lien a expiré.</p>
+                <p t-if="reason == 'used'">Ce lien a déjà été utilisé.</p>
+                <p t-if="reason == 'state'">La demande est clôturée.</p>
+                <p t-if="reason == 'invalid'">Token invalide.</p>
+            </div>
+        </t>
+    </template>
+
+    <!-- Page de remerciement -->
+    <template id="review_thanks" name="Merci">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1>Merci pour votre avis !</h1>
+                <p>Votre retour a bien été enregistré.</p>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_sync_planning_assignments" model="ir.cron">
+        <field name="name">Synchronisation planning global</field>
+        <field name="model_id" ref="model_eazynova_planning_assignment"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_sync_assignments()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

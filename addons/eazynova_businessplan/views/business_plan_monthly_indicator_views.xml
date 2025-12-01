@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Formulaire Indicateur Mensuel -->
+    <record id="view_business_plan_monthly_indicator_form" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.form</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <form string="Indicateur Mensuel">
+                <header>
+                    <button name="action_refresh_data" string="🔄 Actualiser depuis Odoo" type="object"
+                            class="btn-primary"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button class="oe_stat_button" icon="fa-percent">
+                            <field name="performance_score" widget="statbutton" string="Performance"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="period_date" widget="date"/></h1>
+                        <h3><field name="business_plan_id"/></h3>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="auto_filled" readonly="1"/>
+                            <field name="last_update" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Onglet Financier -->
+                        <page string="💰 Financier" name="financial">
+                            <group string="Chiffre d'Affaires">
+                                <group>
+                                    <field name="revenue_target"/>
+                                    <field name="revenue_actual"/>
+                                </group>
+                                <group>
+                                    <field name="revenue_variance"
+                                           decoration-success="revenue_variance &gt;= 0"
+                                           decoration-danger="revenue_variance &lt; 0"/>
+                                    <field name="revenue_variance_pct"
+                                           decoration-success="revenue_variance_pct &gt;= 0"
+                                           decoration-danger="revenue_variance_pct &lt; -10"/>
+                                </group>
+                            </group>
+
+                            <group string="Charges">
+                                <group>
+                                    <field name="costs_target"/>
+                                    <field name="costs_actual"/>
+                                </group>
+                                <group>
+                                    <field name="costs_variance"
+                                           decoration-success="costs_variance &lt;= 0"
+                                           decoration-danger="costs_variance &gt; 0"/>
+                                    <field name="costs_variance_pct"
+                                           decoration-success="costs_variance_pct &lt;= 0"
+                                           decoration-warning="costs_variance_pct &gt; 10"/>
+                                </group>
+                            </group>
+
+                            <group string="Résultat">
+                                <group>
+                                    <field name="profit_target" readonly="1"/>
+                                    <field name="profit_actual" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="profit_variance" readonly="1"
+                                           decoration-success="profit_variance &gt;= 0"
+                                           decoration-danger="profit_variance &lt; 0"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Onglet Opérationnel -->
+                        <page string="👥 Opérationnel" name="operational">
+                            <group string="Clients">
+                                <group>
+                                    <field name="customers_target"/>
+                                    <field name="customers_actual"/>
+                                </group>
+                                <group>
+                                    <field name="customers_variance"
+                                           decoration-success="customers_variance &gt;= 0"
+                                           decoration-danger="customers_variance &lt; -5"/>
+                                </group>
+                            </group>
+
+                            <group string="Commandes">
+                                <group>
+                                    <field name="orders_target"/>
+                                    <field name="orders_actual"/>
+                                </group>
+                                <group>
+                                    <field name="orders_variance"
+                                           decoration-success="orders_variance &gt;= 0"
+                                           decoration-danger="orders_variance &lt; -5"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Onglet Alertes et Notes -->
+                        <page string="⚠️ Alertes &amp; Notes" name="alerts">
+                            <group>
+                                <field name="alert" nolabel="1" readonly="1"
+                                       widget="text"
+                                       class="alert alert-warning"/>
+                            </group>
+                            <separator string="Notes"/>
+                            <field name="notes" nolabel="1" placeholder="Ajoutez vos commentaires sur ce mois..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste -->
+    <record id="view_business_plan_monthly_indicator_tree" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.tree</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <list string="Indicateurs Mensuels"
+                  decoration-success="status == 'excellent'"
+                  decoration-info="status == 'good'"
+                  decoration-warning="status == 'warning'"
+                  decoration-danger="status == 'critical'">
+                <field name="period_date"/>
+                <field name="business_plan_id"/>
+                <field name="revenue_target"/>
+                <field name="revenue_actual"/>
+                <field name="revenue_variance"
+                       decoration-success="revenue_variance &gt;= 0"
+                       decoration-danger="revenue_variance &lt; 0"/>
+                <field name="profit_actual"/>
+                <field name="customers_actual"/>
+                <field name="orders_actual"/>
+                <field name="performance_score" widget="progressbar"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'excellent'"
+                       decoration-info="status == 'good'"
+                       decoration-warning="status == 'warning'"
+                       decoration-danger="status == 'critical'"/>
+                <field name="auto_filled" invisible="1"/>
+                <button name="action_refresh_data" string="🔄" type="object"
+                        title="Actualiser les données"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Kanban (Tableau de Bord) -->
+    <record id="view_business_plan_monthly_indicator_kanban" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.kanban</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="period_date"/>
+                <field name="period_month"/>
+                <field name="period_year"/>
+                <field name="revenue_target"/>
+                <field name="revenue_actual"/>
+                <field name="revenue_variance_pct"/>
+                <field name="profit_actual"/>
+                <field name="performance_score"/>
+                <field name="status"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click
+                                          #{record.status.raw_value == 'excellent' ? 'oe_kanban_color_10' : ''}
+                                          #{record.status.raw_value == 'good' ? 'oe_kanban_color_9' : ''}
+                                          #{record.status.raw_value == 'warning' ? 'oe_kanban_color_3' : ''}
+                                          #{record.status.raw_value == 'critical' ? 'oe_kanban_color_2' : ''}">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <strong><field name="period_date" widget="date"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn btn-primary" name="action_refresh_data" type="object">
+                                            🔄 Actualiser
+                                        </button>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-attf-class="badge
+                                                          #{record.status.raw_value == 'excellent' ? 'badge-success' : ''}
+                                                          #{record.status.raw_value == 'good' ? 'badge-info' : ''}
+                                                          #{record.status.raw_value == 'warning' ? 'badge-warning' : ''}
+                                                          #{record.status.raw_value == 'critical' ? 'badge-danger' : ''}">
+                                            <field name="status"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <span class="text-muted">CA Réalisé:</span>
+                                        <strong><field name="revenue_actual" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="text-muted">Résultat:</span>
+                                        <strong><field name="profit_actual" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar"
+                                                 t-attf-style="width: #{record.performance_score.raw_value}%;"
+                                                 t-attf-aria-valuenow="#{record.performance_score.raw_value}"
+                                                 aria-valuemin="0" aria-valuemax="100">
+                                                <t t-esc="Math.round(record.performance_score.raw_value)"/>%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vue Graphique -->
+    <record id="view_business_plan_monthly_indicator_graph" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.graph</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <graph string="Évolution Mensuelle" type="line" stacked="False">
+                <field name="period_date" type="row" interval="month"/>
+                <field name="revenue_actual" type="measure"/>
+                <field name="revenue_target" type="measure"/>
+                <field name="profit_actual" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vue Pivot -->
+    <record id="view_business_plan_monthly_indicator_pivot" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.pivot</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse Pivot">
+                <field name="period_month" type="col"/>
+                <field name="business_plan_id" type="row"/>
+                <field name="revenue_actual" type="measure"/>
+                <field name="profit_actual" type="measure"/>
+                <field name="performance_score" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vue Recherche (corrigée, filtres dynamiques supprimés) -->
+    <record id="view_business_plan_monthly_indicator_search" model="ir.ui.view">
+        <field name="name">business.plan.monthly.indicator.search</field>
+        <field name="model">business.plan.monthly.indicator</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="business_plan_id"/>
+                <filter string="Excellent" name="excellent" domain="[('status', '=', 'excellent')]"/>
+                <filter string="Bon" name="good" domain="[('status', '=', 'good')]"/>
+                <filter string="Attention" name="warning" domain="[('status', '=', 'warning')]"/>
+                <filter string="Critique" name="critical" domain="[('status', '=', 'critical')]"/>
+                <filter string="Rempli automatiquement" name="auto_filled" domain="[('auto_filled', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action pour tous les indicateurs mensuels -->
+    <record id="action_business_plan_monthly_indicator" model="ir.actions.act_window">
+        <field name="name">📊 Tableau de Bord Mensuel</field>
+        <field name="res_model">business.plan.monthly.indicator</field>
+        <field name="view_mode">kanban,graph,pivot,list,form</field>
+        <field name="context">{'search_default_current_year': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un indicateur mensuel
+            </p>
+            <p>
+                Les indicateurs mensuels permettent de suivre vos performances mois par mois.<br/>
+                Ils peuvent être remplis automatiquement depuis vos données Odoo (ventes, factures).
+            </p>
+        </field>
+    </record>
+
+</odoo>

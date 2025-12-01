@@ -1,0 +1,377 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+import base64
+import logging
+import json
+from datetime import datetime
+
+_logger = logging.getLogger(__name__)
+
+
+class EazynovaFactureOcr(models.Model):
+    _name = 'eazynova.facture.ocr'
+    _description = 'Facture OCR'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'date_upload desc, id desc'
+
+    name = fields.Char(string="Référence", required=True, copy=False, readonly=True, default=lambda self: _('Nouveau'), tracking=True)
+    document = fields.Binary(string="Document", required=True, attachment=True, help="Facture PDF ou image à traiter")
+    document_filename = fields.Char(string="Nom du fichier")
+    document_type = fields.Selection([('pdf', 'PDF'), ('image', 'Image')], string="Type de document", compute='_compute_document_type', store=True)
+    date_upload = fields.Datetime(string="Date d'upload", default=fields.Datetime.now, required=True, tracking=True)
+    date_process = fields.Datetime(string="Date de traitement", readonly=True, tracking=True)
+    state = fields.Selection([
+        ('draft', 'Brouillon'),
+        ('processing', 'En traitement'),
+        ('extracted', 'Données extraites'),
+        ('validated', 'Validé'),
+        ('invoice_created', 'Facture créée'),
+        ('error', 'Erreur'),
+        ('cancelled', 'Annulé'),
+    ], string="État", default='draft', required=True, tracking=True)
+    ocr_text = fields.Text(string="Texte OCR brut", readonly=True, help="Texte extrait par OCR (Tesseract)")
+    ocr_confidence = fields.Float(string="Confiance OCR (%)", readonly=True, help="Score de confiance de l'OCR")
+    ia_extraction = fields.Text(string="Extraction IA (JSON)", readonly=True, help="Données structurées extraites par l'IA")
+    ia_confidence = fields.Float(string="Confiance IA (%)", readonly=True, help="Score de confiance de l'IA")
+    partner_id = fields.Many2one('res.partner', string="Fournisseur", tracking=True, domain=[('supplier_rank', '>', 0)])
+    partner_name_extracted = fields.Char(string="Nom fournisseur (extrait)", help="Nom extrait automatiquement")
+    partner_vat_extracted = fields.Char(string="N° TVA (extrait)", help="Numéro de TVA extrait")
+    invoice_number = fields.Char(string="N° de facture", tracking=True)
+    invoice_date = fields.Date(string="Date de facture", tracking=True)
+    invoice_date_due = fields.Date(string="Date d'échéance", tracking=True)
+    amount_untaxed = fields.Monetary(string="Montant HT", currency_field='currency_id', tracking=True)
+    amount_tax = fields.Monetary(string="Montant TVA", currency_field='currency_id', tracking=True)
+    amount_total = fields.Monetary(string="Montant TTC", currency_field='currency_id', required=True, tracking=True)
+    currency_id = fields.Many2one('res.currency', string="Devise", required=True, default=lambda self: self.env.company.currency_id)
+    invoice_line_ids = fields.One2many('eazynova.facture.ocr.line', 'facture_ocr_id', string="Lignes de facture")
+    move_id = fields.Many2one('account.move', string="Facture comptable", readonly=True, help="Facture fournisseur créée dans Odoo")
+    needs_validation = fields.Boolean(string="Nécessite validation", default=True, help="Nécessite une validation manuelle avant création")
+    validation_note = fields.Text(string="Notes de validation", help="Notes pour la validation manuelle")
+    error_message = fields.Text(string="Message d'erreur", readonly=True)
+    company_id = fields.Many2one('res.company', string="Société", required=True, default=lambda self: self.env.company)
+    user_id = fields.Many2one('res.users', string="Responsable", default=lambda self: self.env.user, tracking=True)
+
+    _sql_constraints = [
+        ('name_unique', 'UNIQUE(name)', 'La référence doit être unique !'),
+    ]
+
+    @api.depends('document_filename')
+    def _compute_document_type(self):
+        for record in self:
+            if record.document_filename:
+                filename = record.document_filename.lower()
+                if filename.endswith('.pdf'):
+                    record.document_type = 'pdf'
+                elif filename.endswith(('.jpg', '.jpeg', '.png', '.tiff', '.bmp')):
+                    record.document_type = 'image'
+                else:
+                    record.document_type = False
+            else:
+                record.document_type = False
+
+    @api.model
+    def create(self, vals):
+        if vals.get('name', _('Nouveau')) == _('Nouveau'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('eazynova.facture.ocr') or _('Nouveau')
+        return super(EazynovaFactureOcr, self).create(vals)
+
+    def action_process(self):
+        self.ensure_one()
+        if not self.document:
+            raise UserError(_("Aucun document à traiter."))
+        ocr_enabled = self.env['ir.config_parameter'].sudo().get_param('eazynova.ocr_enabled', 'False')
+        if ocr_enabled != 'True':
+            raise UserError(_("L'OCR n'est pas activé dans les paramètres."))
+        ai_enabled = self.env['ir.config_parameter'].sudo().get_param('eazynova.ai_assistance_enabled', 'False')
+        if ai_enabled != 'True':
+            raise UserError(_("L'assistance IA n'est pas activée dans les paramètres."))
+        self.write({'state': 'processing'})
+        try:
+            ocr_result = self._extract_text_ocr()
+            self.write({'ocr_text': ocr_result.get('text', ''), 'ocr_confidence': ocr_result.get('confidence', 0.0) * 100})
+            ia_result = self._extract_data_ia(ocr_result.get('text', ''))
+            extracted_data = ia_result.get('data', {})
+            self.write({'ia_extraction': json.dumps(extracted_data, indent=2, ensure_ascii=False), 'ia_confidence': ia_result.get('confidence', 0.0) * 100, 'state': 'extracted', 'date_process': fields.Datetime.now()})
+            self._fill_fields_from_extraction(extracted_data)
+            self._identify_partner(extracted_data)
+            return self._return_view()
+        except Exception as e:
+            _logger.error(f"Erreur lors du traitement OCR/IA: {str(e)}")
+            self.write({'state': 'error', 'error_message': str(e)})
+            raise UserError(_("Erreur lors du traitement: %s") % str(e))
+
+    def _extract_text_ocr(self):
+        import io
+        from PIL import Image
+        try:
+            document_data = base64.b64decode(self.document)
+            if self.document_type == 'pdf':
+                return self._extract_text_from_pdf(document_data)
+            else:
+                return self._extract_text_from_image(document_data)
+        except Exception as e:
+            raise UserError(_("Erreur lors de l'extraction OCR: %s") % str(e))
+
+    def _extract_text_from_pdf(self, pdf_data):
+        try:
+            import PyPDF2
+            import io
+            from PIL import Image
+            import pdf2image
+            import pytesseract
+            pdf_file = io.BytesIO(pdf_data)
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text()
+            if text.strip():
+                return {'text': text, 'confidence': 0.95}
+            images = pdf2image.convert_from_bytes(pdf_data)
+            text = ""
+            total_confidence = 0
+            for image in images:
+                ocr_data = pytesseract.image_to_data(image, lang='fra', output_type=pytesseract.Output.DICT)
+                page_text = pytesseract.image_to_string(image, lang='fra')
+                text += page_text + "\n"
+                confidences = [int(conf) for conf in ocr_data['conf'] if conf != '-1']
+                if confidences:
+                    total_confidence += sum(confidences) / len(confidences)
+            avg_confidence = total_confidence / len(images) if images else 0
+            return {'text': text, 'confidence': avg_confidence / 100.0}
+        except ImportError as e:
+            raise UserError(_("Bibliothèques manquantes pour OCR PDF: %s") % str(e))
+        except Exception as e:
+            raise UserError(_("Erreur traitement PDF: %s") % str(e))
+
+    def _extract_text_from_image(self, image_data):
+        try:
+            import pytesseract
+            from PIL import Image
+            import io
+            image = Image.open(io.BytesIO(image_data))
+            ocr_data = pytesseract.image_to_data(image, lang='fra', output_type=pytesseract.Output.DICT)
+            text = pytesseract.image_to_string(image, lang='fra')
+            confidences = [int(conf) for conf in ocr_data['conf'] if conf != '-1']
+            avg_confidence = sum(confidences) / len(confidences) if confidences else 0
+            return {'text': text, 'confidence': avg_confidence / 100.0}
+        except ImportError:
+            raise UserError(_("Tesseract n'est pas installé."))
+        except Exception as e:
+            raise UserError(_("Erreur traitement image: %s") % str(e))
+
+    def _extract_data_ia(self, ocr_text):
+        provider = self.env['ir.config_parameter'].sudo().get_param('eazynova.ai_provider', 'anthropic')
+        if provider == 'anthropic':
+            return self._extract_with_anthropic(ocr_text)
+        elif provider == 'openai':
+            return self._extract_with_openai(ocr_text)
+        else:
+            raise UserError(_("Provider IA non configuré."))
+
+    def _extract_with_anthropic(self, ocr_text):
+        try:
+            import anthropic
+            api_key = self.env['ir.config_parameter'].sudo().get_param('eazynova.ai_api_key', '')
+            if not api_key:
+                raise UserError(_("Clé API Anthropic non configurée."))
+            client = anthropic.Anthropic(api_key=api_key)
+            system_prompt = """Tu es un expert en extraction de données de factures.
+Tu reçois le texte OCR d'une facture et tu dois extraire les informations structurées.
+
+IMPORTANT: Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après.
+Ne mets JAMAIS de markdown (```json) autour du JSON.
+
+Format de réponse EXACT:
+{
+  "fournisseur": {
+    "nom": "string",
+    "adresse": "string",
+    "code_postal": "string",
+    "ville": "string",
+    "pays": "string",
+    "tva": "string",
+    "siret": "string"
+  },
+  "facture": {
+    "numero": "string",
+    "date": "YYYY-MM-DD",
+    "date_echeance": "YYYY-MM-DD"
+  },
+  "montants": {
+    "ht": 0.00,
+    "tva": 0.00,
+    "ttc": 0.00
+  },
+  "lignes": [
+    {
+      "description": "string",
+      "quantite": 0.00,
+      "prix_unitaire": 0.00,
+      "montant": 0.00
+    }
+  ],
+  "confiance": 0.95
+}
+
+Extrais les informations avec précision."""
+            message = client.messages.create(model="claude-sonnet-4-20250514", max_tokens=2000, temperature=0, system=system_prompt, messages=[{"role": "user", "content": f"Voici le texte OCR de la facture à analyser:\n\n{ocr_text}"}])
+            response_text = message.content[0].text.strip()
+            response_text = response_text.replace('```json', '').replace('```', '').strip()
+            extracted_data = json.loads(response_text)
+            confidence = extracted_data.pop('confiance', 0.85)
+            return {'data': extracted_data, 'confidence': confidence}
+        except ImportError:
+            raise UserError(_("Bibliothèque Anthropic non installée."))
+        except json.JSONDecodeError:
+            raise UserError(_("Erreur analyse IA: réponse invalide."))
+        except Exception as e:
+            raise UserError(_("Erreur API IA: %s") % str(e))
+
+    def _extract_with_openai(self, ocr_text):
+        try:
+            import openai
+            api_key = self.env['ir.config_parameter'].sudo().get_param('eazynova.ai_api_key', '')
+            if not api_key:
+                raise UserError(_("Clé API OpenAI non configurée."))
+            client = openai.OpenAI(api_key=api_key)
+            response = client.chat.completions.create(model="gpt-4", temperature=0, response_format={"type": "json_object"}, messages=[{"role": "system", "content": "Tu extrais les données des factures au format JSON."}, {"role": "user", "content": f"Extrait les données de cette facture:\n\n{ocr_text}"}])
+            extracted_data = json.loads(response.choices[0].message.content)
+            return {'data': extracted_data, 'confidence': 0.85}
+        except ImportError:
+            raise UserError(_("Bibliothèque OpenAI non installée."))
+        except Exception as e:
+            raise UserError(_("Erreur API OpenAI: %s") % str(e))
+
+    def _fill_fields_from_extraction(self, extracted_data):
+        vals = {}
+        if 'fournisseur' in extracted_data:
+            fournisseur = extracted_data['fournisseur']
+            vals['partner_name_extracted'] = fournisseur.get('nom', '')
+            vals['partner_vat_extracted'] = fournisseur.get('tva', '')
+        if 'facture' in extracted_data:
+            facture = extracted_data['facture']
+            vals['invoice_number'] = facture.get('numero', '')
+            if facture.get('date'):
+                try:
+                    vals['invoice_date'] = datetime.strptime(facture['date'], '%Y-%m-%d').date()
+                except Exception:
+                    pass
+            if facture.get('date_echeance'):
+                try:
+                    vals['invoice_date_due'] = datetime.strptime(facture['date_echeance'], '%Y-%m-%d').date()
+                except Exception:
+                    pass
+        if 'montants' in extracted_data:
+            montants = extracted_data['montants']
+            vals['amount_untaxed'] = float(montants.get('ht', 0))
+            vals['amount_tax'] = float(montants.get('tva', 0))
+            vals['amount_total'] = float(montants.get('ttc', 0))
+        self.write(vals)
+        if 'lignes' in extracted_data:
+            self._create_invoice_lines(extracted_data['lignes'])
+
+    def _create_invoice_lines(self, lignes_data):
+        self.invoice_line_ids.unlink()
+        for ligne in lignes_data:
+            self.env['eazynova.facture.ocr.line'].create({
+                'facture_ocr_id': self.id,
+                'description': ligne.get('description', ''),
+                'quantity': float(ligne.get('quantite', 1)),
+                'price_unit': float(ligne.get('prix_unitaire', 0)),
+                'amount': float(ligne.get('montant', 0)),
+            })
+
+    def _identify_partner(self, extracted_data):
+        if not extracted_data.get('fournisseur'):
+            return
+        fournisseur = extracted_data['fournisseur']
+        if fournisseur.get('tva'):
+            partner = self.env['res.partner'].search([('vat', '=ilike', fournisseur['tva']), ('supplier_rank', '>', 0)], limit=1)
+            if partner:
+                self.write({'partner_id': partner.id})
+                return
+        if fournisseur.get('nom'):
+            partner = self.env['res.partner'].search([('name', 'ilike', fournisseur['nom']), ('supplier_rank', '>', 0)], limit=1)
+            if partner:
+                self.write({'partner_id': partner.id})
+                return
+
+    def action_validate(self):
+        self.ensure_one()
+        if self.state != 'extracted':
+            raise UserError(_("Seules les factures extraites peuvent être validées."))
+        if not self.partner_id:
+            raise UserError(_("Veuillez sélectionner un fournisseur."))
+        if not self.invoice_number:
+            raise UserError(_("Le numéro de facture est obligatoire."))
+        if not self.amount_total:
+            raise UserError(_("Le montant total est obligatoire."))
+        self.write({'state': 'validated', 'needs_validation': False})
+        return self._return_view()
+
+    def action_create_invoice(self):
+        self.ensure_one()
+        if self.state != 'validated':
+            raise UserError(_("La facture doit être validée avant création."))
+        if self.move_id:
+            raise UserError(_("Une facture a déjà été créée pour ce document."))
+        invoice_vals = {
+            'move_type': 'in_invoice',
+            'partner_id': self.partner_id.id,
+            'ref': self.invoice_number,
+            'invoice_date': self.invoice_date or fields.Date.today(),
+            'invoice_date_due': self.invoice_date_due,
+            'currency_id': self.currency_id.id,
+            'company_id': self.company_id.id,
+        }
+        invoice_line_vals = []
+        for line in self.invoice_line_ids:
+            invoice_line_vals.append((0, 0, {'name': line.description, 'quantity': line.quantity, 'price_unit': line.price_unit}))
+        invoice_vals['invoice_line_ids'] = invoice_line_vals
+        invoice = self.env['account.move'].create(invoice_vals)
+        self.env['ir.attachment'].create({'name': self.document_filename, 'type': 'binary', 'datas': self.document, 'res_model': 'account.move', 'res_id': invoice.id})
+        self.write({'state': 'invoice_created', 'move_id': invoice.id})
+        return {'type': 'ir.actions.act_window', 'name': _('Facture créée'), 'res_model': 'account.move', 'res_id': invoice.id, 'view_mode': 'form', 'target': 'current'}
+
+    def action_view_invoice(self):
+        self.ensure_one()
+        if not self.move_id:
+            return {}
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Facture'),
+            'res_model': 'account.move',
+            'res_id': self.move_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
+    def action_cancel(self):
+        self.write({'state': 'cancelled'})
+
+    def action_reset(self):
+        self.write({'state': 'draft', 'ocr_text': False, 'ia_extraction': False, 'error_message': False})
+
+    def _return_view(self):
+        return {'type': 'ir.actions.act_window', 'res_model': self._name, 'res_id': self.id, 'view_mode': 'form', 'target': 'current'}
+
+
+class EazynovaFactureOcrLine(models.Model):
+    _name = 'eazynova.facture.ocr.line'
+    _description = 'Ligne Facture OCR'
+    _order = 'sequence, id'
+
+    sequence = fields.Integer(string="Séquence", default=10)
+    facture_ocr_id = fields.Many2one('eazynova.facture.ocr', string="Facture OCR", required=True, ondelete='cascade')
+    description = fields.Text(string="Description", required=True)
+    quantity = fields.Float(string="Quantité", default=1.0, digits='Product Unit of Measure')
+    price_unit = fields.Monetary(string="Prix unitaire", currency_field='currency_id')
+    amount = fields.Monetary(string="Montant", currency_field='currency_id', compute='_compute_amount', store=True)
+    currency_id = fields.Many2one(related='facture_ocr_id.currency_id', store=True)
+
+    @api.depends('quantity', 'price_unit')
+    def _compute_amount(self):
+        for line in self:
+            line.amount = line.quantity * line.price_unit

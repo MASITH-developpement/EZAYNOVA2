@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Groupe Technicien (lecture/écriture des interventions) -->
+    <record id="group_plomberie_technicien" model="res.groups">
+        <field name="name">Technicien Plomberie</field>
+        <field name="comment">Peut voir et modifier ses propres interventions</field>
+        <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <!-- Groupe Gestionnaire (toutes les interventions + création) -->
+    <record id="group_plomberie_gestionnaire" model="res.groups">
+        <field name="name">Gestionnaire Plomberie</field>
+        <field name="comment">Peut créer, modifier et gérer toutes les interventions</field>
+        <field name="implied_ids" eval="[(6, 0, [
+            ref('group_plomberie_technicien'),
+            ref('sales_team.group_sale_salesman'),
+            ref('sales_team.group_sale_manager'),
+            ref('account.group_account_invoice'),
+            ref('base.group_partner_manager'),
+            ref('base.group_user')
+        ])]"/>
+    </record>
+
+    <!-- Groupe Comptable (lecture seule + rapports financiers) -->
+    <record id="group_plomberie_comptable" model="res.groups">
+        <field name="name">Comptable Plomberie</field>
+        <field name="comment">Peut voir toutes les interventions et les coûts pour la facturation</field>
+        <field name="implied_ids" eval="[(6, 0, [
+            ref('base.group_user'),
+            ref('account.group_account_invoice')
+        ])]"/>
+    </record>
+
+    <!-- Groupe Administrateur (accès complet + configuration) -->
+    <record id="group_plomberie_admin" model="res.groups">
+        <field name="name">Administrateur Plomberie</field>
+        <field name="comment">Accès complet au module plomberie et configuration</field>
+        <field name="implied_ids" eval="[(6, 0, [
+            ref('group_plomberie_gestionnaire'),
+            ref('sales_team.group_sale_manager'),
+            ref('account.group_account_manager'),
+            ref('base.group_partner_manager'),
+            ref('base.group_system')
+        ])]"/>
+    </record>
+
+</odoo>

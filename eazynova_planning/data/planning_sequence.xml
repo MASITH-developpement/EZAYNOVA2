@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Séquences pour les tâches de planning -->
+    <record id="seq_planning_task" model="ir.sequence">
+        <field name="name">Tâche de planning</field>
+        <field name="code">eazynova.planning.task</field>
+        <field name="prefix">PLAN-</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Séquences pour les assignations -->
+    <record id="seq_planning_assignment" model="ir.sequence">
+        <field name="name">Assignation de ressource</field>
+        <field name="code">eazynova.planning.assignment</field>
+        <field name="prefix">ASS-</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Séquences pour les absences -->
+    <record id="seq_planning_absence" model="ir.sequence">
+        <field name="name">Absence de ressource</field>
+        <field name="code">eazynova.planning.absence</field>
+        <field name="prefix">ABS-</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+        <field name="implementation">standard</field>
+    </record>
+
+</odoo>

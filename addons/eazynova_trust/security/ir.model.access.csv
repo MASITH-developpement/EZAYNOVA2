@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_review_request_user,eazynova.review.request user,model_eazynova_review_request,group_trust_user,1,1,1,0
+access_review_request_manager,eazynova.review.request manager,model_eazynova_review_request,group_trust_manager,1,1,1,1
+access_customer_review_user,eazynova.customer.review user,model_eazynova_customer_review,group_trust_user,1,1,1,0
+access_customer_review_manager,eazynova.customer.review manager,model_eazynova_customer_review,group_trust_manager,1,1,1,1
+access_trust_config_user,eazynova.trust.config user,model_eazynova_trust_config,group_trust_user,1,0,0,0
+access_trust_config_manager,eazynova.trust.config manager,model_eazynova_trust_config,group_trust_manager,1,1,1,1
+access_review_request_wizard,eazynova.review.request.wizard,model_eazynova_review_request_wizard,group_trust_user,1,1,1,1
+access_customer_review_portal,eazynova.customer.review portal,model_eazynova_customer_review,base.group_portal,1,0,0,0

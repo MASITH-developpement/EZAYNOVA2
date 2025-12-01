@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_document_ocr_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.document.ocr.wizard.form</field>
+        <field name="model">eazynova.document.ocr.wizard</field>
+        <field name="arch" type="xml">
+            <form string="OCR de Document">
+                <group>
+                    <field name="document" filename="document_filename"/>
+                    <field name="extracted_text" widget="text" invisible="not extracted_text"/>
+                </group>
+                <footer>
+                    <button string="Extraire" name="action_process_ocr" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

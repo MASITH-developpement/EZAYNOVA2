@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_chantier_chantier_user,chantier.chantier.user,model_chantier_chantier,group_chantier_user,1,1,1,0
+access_chantier_chantier_manager,chantier.chantier.manager,model_chantier_chantier,group_chantier_manager,1,1,1,1
+access_chantier_phase_user,chantier.phase.user,model_chantier_phase,group_chantier_user,1,1,1,0
+access_chantier_phase_manager,chantier.phase.manager,model_chantier_phase,group_chantier_manager,1,1,1,1
+access_chantier_tache_user,chantier.tache.user,model_chantier_tache,group_chantier_user,1,1,1,0
+access_chantier_tache_manager,chantier.tache.manager,model_chantier_tache,group_chantier_manager,1,1,1,1
+access_chantier_equipe_user,chantier.equipe.user,model_chantier_equipe,group_chantier_user,1,0,0,0
+access_chantier_equipe_manager,chantier.equipe.manager,model_chantier_equipe,group_chantier_manager,1,1,1,1
+access_chantier_materiel_user,chantier.materiel.user,model_chantier_materiel,group_chantier_user,1,1,1,0
+access_chantier_materiel_manager,chantier.materiel.manager,model_chantier_materiel,group_chantier_manager,1,1,1,1
+access_chantier_depense_user,chantier.depense.user,model_chantier_depense,group_chantier_user,1,1,1,0
+access_chantier_depense_manager,chantier.depense.manager,model_chantier_depense,group_chantier_manager,1,1,1,1

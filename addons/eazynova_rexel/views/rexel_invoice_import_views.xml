@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rexel_invoice_import_tree" model="ir.ui.view">
+        <field name="name">eazynova.rexel.invoice.import.tree</field>
+        <field name="model">eazynova.rexel.invoice.import</field>
+        <field name="arch" type="xml">
+            <tree string="Imports Rexel" decoration-success="state == 'created'" decoration-danger="state == 'error'">
+                <field name="name"/>
+                <field name="import_date"/>
+                <field name="invoice_number"/>
+                <field name="partner_id"/>
+                <field name="invoice_amount" widget="monetary"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rexel_invoice_import_form" model="ir.ui.view">
+        <field name="name">eazynova.rexel.invoice.import.form</field>
+        <field name="model">eazynova.rexel.invoice.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Facture Rexel">
+                <header>
+                    <button name="action_extract_data" string="Extraire" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_create_invoice" string="Créer Facture" type="object" class="oe_highlight" invisible="state not in ['extracted', 'matched']"/>
+                    <button name="action_view_invoice" string="Voir Facture" type="object" invisible="not invoice_id"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="import_date"/>
+                            <field name="source_type"/>
+                            <field name="file_name"/>
+                            <field name="file_type"/>
+                        </group>
+                        <group>
+                            <field name="invoice_number"/>
+                            <field name="invoice_date"/>
+                            <field name="invoice_amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="purchase_order_id"/>
+                        <field name="invoice_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rexel_invoice_import" model="ir.actions.act_window">
+        <field name="name">Imports Factures Rexel</field>
+        <field name="res_model">eazynova.rexel.invoice.import</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

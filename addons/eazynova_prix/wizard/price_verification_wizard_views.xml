@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire du wizard -->
+    <record id="view_price_verification_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.price.verification.wizard.form</field>
+        <field name="model">eazynova.price.verification.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Vérification des Prix">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <span>Assistant de Vérification des Prix</span>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="source_id" options="{'no_create': True}"/>
+                            <field name="check_sale_price"/>
+                            <field name="check_cost_price"/>
+                        </group>
+                        <group>
+                            <field name="auto_update"/>
+                            <field name="max_diff_auto_update" invisible="not auto_update"/>
+                        </group>
+                    </group>
+
+                    <group string="Articles à Vérifier">
+                        <field name="product_ids" nolabel="1" widget="many2many_tags"/>
+                    </group>
+
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Information:</strong></p>
+                        <ul>
+                            <li>La vérification compare vos prix avec la source sélectionnée</li>
+                            <li>Les écarts importants seront signalés</li>
+                            <li>Vous pourrez appliquer les prix recommandés si nécessaire</li>
+                        </ul>
+                    </div>
+                </sheet>
+
+                <footer>
+                    <button name="action_verify_prices"
+                            string="Vérifier"
+                            type="object"
+                            class="btn-primary"
+                            data-hotkey="v"/>
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"
+                            data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action du wizard -->
+    <record id="action_price_verification_wizard" model="ir.actions.act_window">
+        <field name="name">Vérifier les Prix</field>
+        <field name="res_model">eazynova.price.verification.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+</odoo>

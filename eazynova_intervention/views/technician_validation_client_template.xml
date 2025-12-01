@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="technician_validation_client_template" name="Validation Client Intervention">
+      <t t-call="website.layout">
+        <div class="container" style="max-width:600px; margin:auto;">
+          <h2 class="text-center mt-4 mb-4">Validation client</h2>
+          <form t-attf-action="/intervention/technicien/validation_client/{{ intervention_id }}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="nom_signataire" class="form-label">Nom du signataire</label>
+              <input type="text" class="form-control" id="nom_signataire" name="nom_signataire" required="required" placeholder="Nom et prénom du client"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Satisfaction client</label><br/>
+              <div class="form-check form-check-inline text-center" style="width:90px;">
+                <input class="form-check-input" type="radio" name="satisfaction_client" id="sat1" value="1"/>
+                <label class="form-check-label" for="sat1">⭐</label>
+                <div style="font-size:0.85em;">Très insatisfait</div>
+              </div>
+              <div class="form-check form-check-inline text-center" style="width:90px;">
+                <input class="form-check-input" type="radio" name="satisfaction_client" id="sat2" value="2"/>
+                <label class="form-check-label" for="sat2">⭐⭐</label>
+                <div style="font-size:0.85em;">Insatisfait</div>
+              </div>
+              <div class="form-check form-check-inline text-center" style="width:90px;">
+                <input class="form-check-input" type="radio" name="satisfaction_client" id="sat3" value="3"/>
+                <label class="form-check-label" for="sat3">⭐⭐⭐</label>
+                <div style="font-size:0.85em;">Correct</div>
+              </div>
+              <div class="form-check form-check-inline text-center" style="width:90px;">
+                <input class="form-check-input" type="radio" name="satisfaction_client" id="sat4" value="4" checked="checked"/>
+                <label class="form-check-label" for="sat4">⭐⭐⭐⭐</label>
+                <div style="font-size:0.85em;">Satisfait</div>
+              </div>
+              <div class="form-check form-check-inline text-center" style="width:90px;">
+                <input class="form-check-input" type="radio" name="satisfaction_client" id="sat5" value="5"/>
+                <label class="form-check-label" for="sat5">⭐⭐⭐⭐⭐</label>
+                <div style="font-size:0.85em;">Très satisfait</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="travaux_realises" class="form-label">Résumé des travaux</label>
+              <textarea class="form-control" id="travaux_realises" name="travaux_realises" rows="2" placeholder="Résumé des travaux effectués"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="observations_client" class="form-label">Observations du client</label>
+              <textarea class="form-control" id="observations_client" name="observations_client" rows="2" placeholder="Commentaires ou remarques..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Signature du client</label>
+              <canvas id="signature-pad" width="400" height="120" style="border:1px solid #ccc;"></canvas>
+              <input type="hidden" id="signature_client" name="signature_client"/>
+              <button type="button" class="btn btn-secondary btn-sm mt-1" onclick="clearSignature()">Effacer</button>
+            </div>
+            <t t-if="error">
+              <div class="alert alert-danger text-center">Veuillez remplir tous les champs obligatoires et fournir la signature.</div>
+            </t>
+            <button type="submit" class="btn btn-primary w-100">Valider l'intervention</button>
+          </form>
+        </div>
+        <script>
+        // Signature pad JS
+        var canvas = document.getElementById('signature-pad');
+        if (canvas) {
+          var ctx = canvas.getContext('2d');
+          var drawing = false;
+          canvas.addEventListener('mousedown', function(e) {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+          });
+          canvas.addEventListener('mousemove', function(e) {
+            if (drawing) {
+              ctx.lineTo(e.offsetX, e.offsetY);
+              ctx.stroke();
+            }
+          });
+          canvas.addEventListener('mouseup', function(e) {
+            drawing = false;
+            document.getElementById('signature_client').value = canvas.toDataURL();
+          });
+          canvas.addEventListener('mouseleave', function(e) {
+            drawing = false;
+          });
+        }
+        function clearSignature() {
+          if (canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('signature_client').value = '';
+          }
+        }
+        </script>
+      </t>
+    </template>
+  </data>
+</odoo>

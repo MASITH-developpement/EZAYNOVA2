@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Règle : Technicien ne voit que ses propres interventions -->
+    <record id="intervention_intervention_technicien_rule" model="ir.rule">
+        <field name="name">Technicien : Ses propres interventions</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="domain_force">[('technicien_principal_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(6, 0, [ref('group_intervention_technicien')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Règle : Gestionnaire voit toutes les interventions -->
+    <record id="intervention_intervention_gestionnaire_rule" model="ir.rule">
+        <field name="name">Gestionnaire : Toutes les interventions</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(6, 0, [ref('group_intervention_gestionnaire')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Règle : Comptable voit toutes les interventions (lecture seule) -->
+    <record id="intervention_intervention_comptable_rule" model="ir.rule">
+        <field name="name">Comptable : Toutes les interventions (lecture seule)</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(6, 0, [ref('group_intervention_comptable')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Règle : Administrateur accès complet -->
+    <record id="intervention_intervention_admin_rule" model="ir.rule">
+        <field name="name">Administrateur : Accès complet</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(6, 0, [ref('group_intervention_admin')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

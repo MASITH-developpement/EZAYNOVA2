@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Principal -->
+    <menuitem id="menu_businessplan_root"
+              name="Business Plans"
+              sequence="10"/>
+
+    <!-- Sous-menus -->
+    <menuitem id="menu_businessplan_plans"
+              name="Mes Business Plans"
+              parent="menu_businessplan_root"
+              action="action_business_plan"
+              sequence="10"/>
+
+    <menuitem id="menu_businessplan_indicators"
+              name="Tous les indicateurs"
+              parent="menu_businessplan_root"
+              action="action_business_plan_indicator"
+              sequence="20"/>
+
+    <menuitem id="menu_businessplan_monthly_dashboard"
+              name="Tableau de Bord Mensuel"
+              parent="menu_businessplan_root"
+              action="action_business_plan_monthly_indicator"
+              sequence="30"/>
+
+</odoo>

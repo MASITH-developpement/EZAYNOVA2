@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <!-- Vue arbre -->
+    <record id="view_review_request_tree" model="ir.ui.view">
+        <field name="name">eazynova.review.request.tree</field>
+        <field name="model">eazynova.review.request</field>
+        <field name="arch" type="xml">
+            <list string="Demandes d'Avis" decoration-info="state == 'draft'" decoration-success="state == 'completed'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="partner_id"/>
+                <field name="partner_email"/>
+                <field name="platform"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire -->
+    <record id="view_review_request_form" model="ir.ui.view">
+        <field name="name">eazynova.review.request.form</field>
+        <field name="model">eazynova.review.request</field>
+        <field name="arch" type="xml">
+            <form string="Demande d'Avis">
+                <header>
+                    <button name="action_send_request" string="Envoyer" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_send_reminder" string="Relancer" type="object" invisible="state not in ['sent']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="partner_email"/>
+                            <field name="invoice_id"/>
+                        </group>
+                        <group>
+                            <field name="platform"/>
+                            <field name="request_date"/>
+                            <field name="send_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <!-- action_review_request définie dans trust_menu.xml pour garantir l'ordre -->
+    </data>
+</odoo>

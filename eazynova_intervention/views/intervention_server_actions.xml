@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action serveur pour ouvrir Waze -->
+    <record id="open_waze_action" model="ir.actions.server">
+        <field name="name">Ouvrir Waze</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="binding_model_id" ref="model_intervention_intervention"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'type': 'ir.actions.act_url',
+                'url': record.lien_waze or '',
+                'target': 'new',
+            }
+        </field>
+    </record>
+
+    <!-- Action serveur pour ouvrir Google Maps -->
+    <record id="open_google_maps_action" model="ir.actions.server">
+        <field name="name">Ouvrir Google Maps</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="binding_model_id" ref="model_intervention_intervention"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'type': 'ir.actions.act_url',
+                'url': record.lien_google_maps or '',
+                'target': 'new',
+            }
+        </field>
+    </record>
+</odoo>

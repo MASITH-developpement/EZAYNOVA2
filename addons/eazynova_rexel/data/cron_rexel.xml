@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tâche planifiée: Traitement automatique des imports -->
+    <record id="cron_process_imports" model="ir.cron">
+        <field name="name">EAZYNOVA: Traiter les imports Rexel</field>
+        <field name="model_id" ref="model_eazynova_rexel_invoice_import"/>
+        <field name="state">code</field>
+        <field name="code">
+imports = model.search([('state', '=', 'draft')])
+for imp in imports:
+    try:
+        imp.action_extract_data()
+        if imp.state == 'extracted':
+            imp.action_create_invoice()
+    except:
+        pass
+        </field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

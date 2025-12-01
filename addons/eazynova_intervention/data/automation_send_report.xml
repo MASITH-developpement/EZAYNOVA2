@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action serveur: envoie le template de rapport pour une intervention donnée -->
+    <record id="action_server_send_report_intervention" model="ir.actions.server">
+        <field name="name">Envoyer rapport d'intervention</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="state">code</field>
+        <field name="code">
+# Désactivée temporairement - À corriger
+pass
+        </field>
+    </record>
+
+    <!-- Règle d'automatisation : déclencher à la mise à jour et exécuter l'action serveur -->
+    <record id="automation_send_report_on_termine" model="base.automation">
+        <field name="name">Envoyer rapport lorsque l\'intervention est terminée</field>
+        <field name="model_id" ref="model_intervention_intervention"/>
+        <field name="trigger">on_write</field>
+        <!-- Ne pas exécuter sur tous les write : on filtrera via la condition post-update -->
+        <field name="filter_domain">[('statut', '=', 'termine')]</field>
+        <field name="action_server_ids" eval="[(4, ref('action_server_send_report_intervention'))]"/>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

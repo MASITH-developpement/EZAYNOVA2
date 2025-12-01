@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Séquence pour les imports bancaires -->
+    <record id="seq_bank_statement_import" model="ir.sequence">
+        <field name="name">Import Relevé Bancaire</field>
+        <field name="code">eazynova.bank.statement.import</field>
+        <field name="prefix">BSI/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Actions planifiées -->
+    <record id="ir_cron_auto_reconcile_bank_statements" model="ir.cron">
+        <field name="name">EAZYNOVA: Rapprochement Bancaire Automatique</field>
+        <field name="model_id" ref="model_eazynova_bank_statement_import"/>
+        <field name="state">code</field>
+        <field name="code">
+model.search([
+    ('state', '=', 'parsed'),
+    ('auto_reconcile', '=', True),
+]).action_auto_reconcile()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Action planifiée pour nettoyer les vieux imports -->
+    <record id="ir_cron_cleanup_old_imports" model="ir.cron">
+        <field name="name">EAZYNOVA: Nettoyage Imports Bancaires Anciens</field>
+        <field name="model_id" ref="model_eazynova_bank_statement_import"/>
+        <field name="state">code</field>
+        <field name="code">
+from datetime import datetime, timedelta
+
+# Supprimer les imports en erreur de plus de 30 jours
+old_date = datetime.now() - timedelta(days=30)
+model.search([
+    ('state', '=', 'error'),
+    ('create_date', '&lt;', old_date.strftime('%Y-%m-%d')),
+]).unlink()
+        </field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False"/>
+    </record>
+</odoo>

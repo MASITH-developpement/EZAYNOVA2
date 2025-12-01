@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Catégorie d'employé pour les techniciens -->
+    <record id="hr_employee_category_technicien" model="hr.employee.category">
+        <field name="name">Technicien</field>
+        <field name="color">3</field>
+    </record>
+
+    <!-- Catégorie pour les plombiers -->
+    <record id="hr_employee_category_plombier" model="hr.employee.category">
+        <field name="name">Plombier</field>
+        <field name="color">2</field>
+    </record>
+
+    <!-- Catégorie pour les électriciens -->
+    <record id="hr_employee_category_electricien" model="hr.employee.category">
+        <field name="name">Électricien</field>
+        <field name="color">4</field>
+    </record>
+
+</odoo>

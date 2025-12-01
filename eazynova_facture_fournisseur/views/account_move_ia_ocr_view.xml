@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ajout d'un bouton IA+OCR sur la vue standard de facture fournisseur (account.move) -->
+    <record id="view_move_form_ia_ocr" model="ir.ui.view">
+        <field name="name">account.move.form.ia.ocr</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_ia_extract_invoice_lines" type="object" string="Remplir lignes (IA+OCR)" class="oe_highlight"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

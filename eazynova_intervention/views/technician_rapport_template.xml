@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="technician_rapport_template" name="Saisie Rapport Intervention">
+      <t t-call="website.layout">
+        <div class="container" style="max-width:600px; margin:auto;">
+          <h2 class="text-center mt-4 mb-4">Rapport d'intervention</h2>
+          <form t-attf-action="/intervention/technicien/rapport/{{ intervention_id }}" method="post">
+            <div class="mb-3">
+              <label for="rapport" class="form-label">Travaux réalisés (obligatoire)</label>
+              <textarea class="form-control" id="rapport" name="rapport" rows="4" required="required" placeholder="Décrivez les actions réalisées, observations, etc."></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="materiel" class="form-label">Matériel utilisé (sélection multiple)</label>
+              <select class="form-control" id="materiel" name="materiel" multiple="multiple" required="required">
+                <option value="none">Pas de matériel utilisé</option>
+                <t t-foreach="products" t-as="product">
+                  <option t-att-value="product['id']"><t t-esc="product['display_name']"/></option>
+                </t>
+              </select>
+              <small class="form-text text-muted">Sélectionnez tout le matériel utilisé pour cette intervention.</small>
+            </div>
+            <t t-if="error">
+              <div class="alert alert-danger text-center">Veuillez remplir tous les champs obligatoires.</div>
+            </t>
+            <button type="submit" class="btn btn-success w-100">Enregistrer le rapport</button>
+          </form>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_business_plan_user,business.plan.user,model_business_plan,group_businessplan_user,1,1,1,1
+access_business_plan_indicator_user,business.plan.indicator.user,model_business_plan_indicator,group_businessplan_user,1,1,1,1
+access_business_plan_ai_assistant_user,business.plan.ai.assistant.user,model_business_plan_ai_assistant,group_businessplan_user,1,1,1,1
+access_business_plan_monthly_indicator_user,business.plan.monthly.indicator.user,model_business_plan_monthly_indicator,group_businessplan_user,1,1,1,1
+access_business_plan_cash_flow_user,business.plan.cash.flow.user,model_business_plan_cash_flow,group_businessplan_user,1,1,1,1
+access_business_plan_financing_user,business.plan.financing.user,model_business_plan_financing,group_businessplan_user,1,1,1,1
+access_business_plan_financing_wizard_user,business.plan.financing.wizard.user,model_business_plan_financing_wizard,group_businessplan_user,1,1,1,1
+access_business_plan_balance_sheet_user,business.plan.balance.sheet.user,model_business_plan_balance_sheet,group_businessplan_user,1,1,1,1
+access_business_plan_income_statement_user,business.plan.income.statement.user,model_business_plan_income_statement,group_businessplan_user,1,1,1,1

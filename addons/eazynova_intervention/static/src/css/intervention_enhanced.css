@@ -1,0 +1,1226 @@
+/* CSS amélioré pour le module Interventions */
+/* ========== VARIABLES PERSONNALISABLES ========== */
+/* Les couleurs sont définies dynamiquement par intervention_colors_template.xml */
+:root {
+    /* Couleurs de fond - fixes */
+    --intervention-bg-light: #f8fcff;
+    --intervention-bg-medium: #e3f2fd;
+    --intervention-bg-dark: #bbdefb;
+
+    /* Couleurs de statut - fixes */
+    --intervention-warning: #ff9800;
+    --intervention-danger: #f44336;
+
+    /* Autres - fixes */
+    --intervention-border: #e0e0e0;
+    --intervention-radius: 8px;
+}
+.o_form_plomberie {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.o_form_plomberie .o_group {
+    margin-bottom: 25px !important;
+}
+
+/* Style spécifique pour les titres de groupes */
+.o_form_plomberie .o_horizontal_separator {
+    color: var(--plomberie-primary-dark) !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    background: linear-gradient(
+        135deg,
+        var(--plomberie-bg-medium),
+        var(--plomberie-bg-dark)
+    ) !important;
+    padding: 10px 15px !important;
+    border-radius: 8px !important;
+    margin: 20px 0 !important;
+}
+
+/* Amélioration des onglets spécifiquement pour notre module */
+.o_form_plomberie .o_notebook .nav-tabs .nav-link {
+    background: linear-gradient(135deg, #f5f5f5, #eeeeee) !important;
+    color: var(--plomberie-primary) !important;
+    border: 2px solid var(--plomberie-border) !important;
+    font-size: 14px !important;
+}
+
+.o_form_plomberie .o_notebook .nav-tabs .nav-link.active {
+    background: linear-gradient(
+        135deg,
+        var(--plomberie-primary),
+        var(--plomberie-primary-light)
+    ) !important;
+    color: white !important;
+    border: 2px solid var(--plomberie-primary) !important;
+    box-shadow: 0 4px 15px var(--plomberie-shadow) !important;
+}
+
+/* Style pour les champs dans notre formulaire */
+.o_form_plomberie .o_field_widget {
+    margin-bottom: 15px !important;
+}
+
+.o_form_plomberie .o_field_text {
+    border-radius: 10px !important;
+    border: 2px solid var(--plomberie-border) !important;
+    transition: all 0.3s ease !important;
+}
+
+.o_form_plomberie .o_field_text:focus {
+    border-color: var(--intervention-primary) !important;
+    box-shadow: 0 0 15px var(--intervention-shadow) !important;
+}
+
+/* Amélioration des listes dans notre module */
+.o_form_plomberie .o_field_one2many .o_list_view {
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.o_form_plomberie .o_field_one2many .o_list_view thead {
+    background: linear-gradient(135deg, var(--intervention-primary-dark), var(--intervention-primary)) !important;
+    color: white !important;
+}
+
+.o_form_plomberie .o_field_one2many .o_list_view tbody tr:nth-child(even) {
+    background: linear-gradient(135deg, #f8f9fa, #f5f5f5) !important;
+}
+
+.o_form_plomberie .o_field_one2many .o_list_view tbody tr:hover {
+    background: linear-gradient(135deg, var(--intervention-bg-light), var(--intervention-bg-medium)) !important;
+    transform: none !important;
+}
+
+/* Menu latéral plus large */
+.o_navbar_apps_menu {
+    min-width: 320px !important;
+    max-width: 400px !important;
+}
+
+.o_main_navbar .o_navbar_apps_menu .dropdown-menu {
+    min-width: 320px !important;
+    max-width: 400px !important;
+}
+
+/* Menu principal avec items plus spacieux */
+.o_navbar_apps_menu .dropdown-menu .o_app {
+    padding: 15px 20px !important;
+    margin: 5px 10px !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.o_navbar_apps_menu .dropdown-menu .o_app:hover {
+    background: linear-gradient(135deg, var(--intervention-bg-light), var(--intervention-bg-medium)) !important;
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 15px var(--intervention-shadow) !important;
+}
+
+/* Sidebar de navigation élargi */
+.o_main_content .o_content {
+    padding-left: 20px !important;
+}
+
+/* Breadcrumb plus visible */
+.o_control_panel .breadcrumb {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+/* Menu principal Odoo plus spacieux */
+.o_navbar {
+    padding: 0 15px !important;
+}
+
+/* Amélioration du sidebar */
+.o_cp_sidebar {
+    min-width: 250px !important;
+}
+
+/* Menu app drawer plus large */
+.o_app_drawer {
+    width: 320px !important;
+}
+
+/* Responsive - Sur mobile, garder la taille standard */
+@media (max-width: 768px) {
+    .o_navbar_apps_menu,
+    .o_main_navbar .o_navbar_apps_menu .dropdown-menu {
+        min-width: auto !important;
+        max-width: 100% !important;
+    }
+
+    .o_app_drawer {
+        width: 100% !important;
+    }
+}
+
+/* Amélioration des formulaires */
+.o_form_view .o_form_sheet {
+    max-width: 95% !important;
+    margin: 20px auto !important;
+    padding: 30px !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Amélioration des boutons d'action */
+.o_form_view .o_form_statusbar {
+    background: linear-gradient(135deg, var(--intervention-bg-light), var(--intervention-bg-medium)) !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Style pour les onglets */
+.o_notebook .nav-tabs {
+    border-bottom: 3px solid var(--intervention-bg-medium) !important;
+    margin-bottom: 20px !important;
+}
+
+.o_notebook .nav-tabs .nav-link {
+    border-radius: 15px 15px 0 0 !important;
+    margin-right: 5px !important;
+    padding: 12px 20px !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+}
+
+.o_notebook .nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, var(--intervention-primary), var(--intervention-primary-light)) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Amélioration des champs de saisie */
+.o_form_view .o_field_widget input,
+.o_form_view .o_field_widget select,
+.o_form_view .o_field_widget textarea {
+    border-radius: 8px !important;
+    border: 2px solid #e0e0e0 !important;
+    padding: 12px !important;
+    transition: border-color 0.3s ease !important;
+}
+
+.o_form_view .o_field_widget input:focus,
+.o_form_view .o_field_widget select:focus,
+.o_form_view .o_field_widget textarea:focus {
+    border-color: var(--intervention-primary) !important;
+    box-shadow: 0 0 10px var(--intervention-shadow) !important;
+}
+
+/* Style pour les listes */
+.o_list_view table {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.o_list_view thead th {
+    background: linear-gradient(135deg, var(--intervention-primary), var(--intervention-primary-light)) !important;
+    color: white !important;
+    font-weight: bold !important;
+    padding: 15px !important;
+}
+
+.o_list_view tbody tr:hover {
+    background: linear-gradient(135deg, var(--intervention-bg-light), var(--intervention-bg-medium)) !important;
+    transform: translateY(-2px) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Amélioration des alertes et notifications */
+.alert {
+    border-radius: 10px !important;
+    border: none !important;
+    padding: 15px 20px !important;
+    margin: 15px 0 !important;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--intervention-bg-light), var(--intervention-bg-medium)) !important;
+    color: var(--intervention-primary-dark) !important;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb) !important;
+    color: #1565c0 !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3e0, #ffcc80) !important;
+    color: #e65100 !important;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2) !important;
+    color: #c62828 !important;
+}
+
+/* Amélioration de la navigation breadcrumb */
+.o_control_panel .breadcrumb {
+    background: linear-gradient(135deg, #f5f5f5, #eeeeee) !important;
+    border-radius: 25px !important;
+    padding: 10px 20px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Style pour les badges de statut */
+.badge {
+    border-radius: 15px !important;
+    padding: 8px 15px !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+}
+
+/* Amélioration des modales */
+.modal-content {
+    border-radius: 15px !important;
+    border: none !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--intervention-primary), var(--intervention-primary-light)) !important;
+    color: white !important;
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: none !important;
+}
+
+/* Animation pour les éléments interactifs */
+.o_form_view .o_group,
+.o_form_view .o_inner_group {
+    transition: all 0.3s ease !important;
+}
+
+.o_form_view .o_group:hover {
+    transform: translateY(-1px) !important;
+}
+
+/* Scroll bars personnalisées */
+::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5 !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--intervention-primary), var(--intervention-primary-light)) !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--intervention-primary-dark), var(--intervention-primary)) !important;
+}
+
+/* =====================================
+   STYLES RESPONSIVE POUR MOBILE
+   ===================================== */
+
+/* Tablettes et petits écrans (768px et moins) */
+@media (max-width: 768px) {
+    /* Adaptation du formulaire principal */
+    .o_form_plomberie {
+        padding: 15px !important;
+        margin: 10px !important;
+    }
+
+    /* Groupes en colonne unique sur mobile */
+    .o_form_plomberie .o_group {
+        display: block !important;
+        margin-bottom: 20px !important;
+    }
+
+    .o_form_plomberie .o_group > .o_group {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Adaptation des onglets pour mobile */
+    .o_form_plomberie .o_notebook .nav-tabs {
+        flex-wrap: wrap !important;
+        border-bottom: none !important;
+    }
+
+    .o_form_plomberie .o_notebook .nav-tabs .nav-link {
+        padding: 12px 15px !important;
+        font-size: 13px !important;
+        margin: 2px !important;
+        border-radius: 20px !important;
+        min-width: auto !important;
+        flex: 1 1 45% !important;
+        text-align: center !important;
+    }
+
+    /* Champs de saisie adaptés au mobile */
+    .o_form_plomberie .o_field_widget {
+        margin-bottom: 12px !important;
+    }
+
+    .o_form_plomberie .o_field_text,
+    .o_form_plomberie .o_field_char,
+    .o_form_plomberie .o_field_many2one {
+        font-size: 16px !important; /* Évite le zoom sur iOS */
+        padding: 12px !important;
+        border-radius: 8px !important;
+    }
+
+    /* Adaptation des titres */
+    .o_form_plomberie .oe_title h1 {
+        font-size: 22px !important;
+        text-align: center !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Boutons adaptés au mobile */
+    .o_form_plomberie .oe_button_box {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+
+    .o_form_plomberie .oe_stat_button {
+        margin: 5px !important;
+        padding: 15px !important;
+        min-height: 60px !important;
+        border-radius: 10px !important;
+    }
+}
+
+/* Smartphones (576px et moins) */
+@media (max-width: 576px) {
+    /* Header plus compact */
+    .o_form_plomberie header {
+        padding: 10px !important;
+    }
+
+    .o_form_plomberie header .btn {
+        padding: 10px 15px !important;
+        font-size: 14px !important;
+        margin: 5px !important;
+        border-radius: 20px !important;
+    }
+
+    /* Statusbar responsive */
+    .o_form_plomberie .o_statusbar_status {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+
+    .o_form_plomberie .o_statusbar_status > .btn {
+        margin: 2px !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+
+    /* Onglets en pile verticale pour très petits écrans */
+    .o_form_plomberie .o_notebook .nav-tabs .nav-link {
+        flex: 1 1 100% !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* Labels plus visibles */
+    .o_form_plomberie .o_form_label {
+        font-weight: bold !important;
+        color: var(--intervention-primary-dark) !important;
+        margin-bottom: 5px !important;
+        display: block !important;
+    }
+
+    /* Séparateurs plus fins */
+    .o_form_plomberie .o_horizontal_separator {
+        padding: 8px 10px !important;
+        font-size: 14px !important;
+        margin: 15px 0 !important;
+    }
+}
+
+/* Adaptations spécifiques pour la vue liste sur mobile */
+@media (max-width: 768px) {
+    /* Table responsive */
+    .o_list_view table {
+        font-size: 13px !important;
+    }
+
+    .o_list_view th,
+    .o_list_view td {
+        padding: 8px 4px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* Cacher certaines colonnes moins importantes sur mobile */
+    .o_list_view .o_list_table_ungrouped th:nth-child(n + 6),
+    .o_list_view .o_list_table_ungrouped td:nth-child(n + 6) {
+        display: none !important;
+    }
+}
+
+/* Style pour les notifications mobiles */
+@media (max-width: 768px) {
+    .alert {
+        padding: 12px 15px !important;
+        margin: 10px 5px !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+    }
+
+    /* Modales adaptées au mobile */
+    .modal-dialog {
+        margin: 10px !important;
+        max-width: calc(100% - 20px) !important;
+    }
+
+    .modal-content {
+        border-radius: 10px !important;
+    }
+
+    .modal-header,
+    .modal-footer {
+        padding: 15px !important;
+    }
+
+    .modal-body {
+        padding: 20px 15px !important;
+    }
+}
+
+/* Touch-friendly: augmentation des zones de clic */
+@media (max-width: 768px) {
+    .o_form_plomberie .o_field_widget.o_field_many2one .o_external_button,
+    .o_form_plomberie .o_field_widget button,
+    .o_form_plomberie .btn {
+        min-height: 44px !important; /* Taille recommandée pour le touch */
+        min-width: 44px !important;
+        padding: 12px !important;
+    }
+
+    /* Liens et éléments cliquables plus grands */
+    .o_form_plomberie a,
+    .o_form_plomberie .o_field_widget.o_field_many2one {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+}
+
+/* Mode paysage sur mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .o_form_plomberie .o_notebook .nav-tabs .nav-link {
+        flex: 1 1 30% !important;
+    }
+
+    .o_form_plomberie .o_group > .o_group {
+        width: 48% !important;
+        display: inline-block !important;
+        vertical-align: top !important;
+        margin-right: 2% !important;
+    }
+}
+
+/* Amélioration de la lisibilité sur petits écrans */
+@media (max-width: 768px) {
+    .o_form_plomberie {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+    }
+
+    .o_form_plomberie .o_field_widget input,
+    .o_form_plomberie .o_field_widget select,
+    .o_form_plomberie .o_field_widget textarea {
+        font-size: 16px !important; /* Évite le zoom automatique sur iOS */
+        padding: 12px !important;
+        border-radius: 8px !important;
+        border: 2px solid #e0e0e0 !important;
+    }
+
+    .o_form_plomberie .o_field_widget textarea {
+        min-height: 100px !important;
+        resize: vertical !important;
+    }
+}
+
+/* =====================================
+   STYLES KANBAN MOBILE
+   ===================================== */
+
+/* Vue Kanban optimisée pour mobile */
+@media (max-width: 768px) {
+    .o_kanban_mobile .o_kanban_view {
+        padding: 10px 5px !important;
+    }
+
+    .o_kanban_mobile .o_kanban_group {
+        margin: 0 5px 20px 5px !important;
+        min-width: 280px !important;
+    }
+
+    .o_kanban_mobile .o_kanban_group_title {
+        padding: 12px 15px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        background: linear-gradient(135deg, var(--intervention-primary), var(--intervention-primary-light)) !important;
+        color: white !important;
+        border-radius: 10px 10px 0 0 !important;
+        text-align: center !important;
+    }
+
+    .o_kanban_mobile .oe_kanban_card {
+        margin-bottom: 10px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+        border: none !important;
+        background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+    }
+
+    .o_kanban_mobile .oe_kanban_content {
+        padding: 15px !important;
+    }
+
+    .o_kanban_mobile .o_kanban_record_title {
+        font-size: 16px !important;
+        color: var(--intervention-primary-dark) !important;
+        font-weight: bold !important;
+        margin-bottom: 5px !important;
+    }
+
+    .o_kanban_mobile .o_kanban_record_subtitle {
+        font-size: 13px !important;
+        color: #666 !important;
+    }
+
+    .o_kanban_mobile .badge {
+        padding: 6px 12px !important;
+        border-radius: 15px !important;
+        font-size: 11px !important;
+        font-weight: bold !important;
+    }
+
+    .o_kanban_mobile .o_kanban_record_body {
+        margin: 10px 0 !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+    }
+
+    .o_kanban_mobile .o_kanban_record_bottom {
+        border-top: 1px solid #e0e0e0 !important;
+        padding-top: 10px !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* Adaptation des colonnes Kanban en mode portrait/paysage */
+@media (max-width: 576px) {
+    .o_kanban_mobile .o_kanban_view {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+    }
+
+    .o_kanban_mobile .o_kanban_group {
+        display: inline-block !important;
+        white-space: normal !important;
+        vertical-align: top !important;
+        width: 90vw !important;
+        min-width: 280px !important;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .o_kanban_mobile .o_kanban_group {
+        width: 45vw !important;
+        min-width: 300px !important;
+    }
+}
+
+/* Amélioration des gestes tactiles */
+@media (max-width: 768px) {
+    .o_kanban_mobile .oe_kanban_card {
+        cursor: pointer !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .o_kanban_mobile .oe_kanban_card:active {
+        transform: scale(0.98) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .o_kanban_mobile .oe_kanban_card:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-2px) !important;
+    }
+}
+
+/* Navigation mobile optimisée */
+@media (max-width: 768px) {
+    .o_control_panel {
+        padding: 10px !important;
+    }
+
+    .o_control_panel .o_cp_searchview {
+        flex-grow: 1 !important;
+        margin: 5px 0 !important;
+    }
+
+    .o_control_panel .o_cp_buttons {
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+    }
+
+    .o_control_panel .btn {
+        padding: 10px 15px !important;
+        border-radius: 20px !important;
+        font-size: 14px !important;
+        min-height: 44px !important;
+    }
+
+    .o_control_panel .o_cp_switch_buttons {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+
+    .o_control_panel .o_cp_switch_buttons .btn {
+        margin: 2px !important;
+        min-width: 60px !important;
+    }
+}
+
+/* Styles généraux du module */
+.o_form_intervention {
+    background: var(--intervention-bg-light);
+}
+
+.o_form_intervention .o_form_sheet {
+    box-shadow: 0 4px 20px var(--intervention-shadow);
+    border-radius: var(--intervention-radius);
+    border: 1px solid var(--intervention-border);
+}
+
+/* ========== AMÉLIORATION DES BOUTONS ========== */
+
+/* Boutons principaux */
+.o_form_intervention .oe_highlight {
+    background: linear-gradient(
+        135deg,
+        var(--intervention-primary),
+        var(--intervention-primary-light)
+    );
+    border: none;
+    border-radius: var(--intervention-radius);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px var(--intervention-shadow);
+}
+
+.o_form_intervention .oe_highlight:hover {
+    background: linear-gradient(
+        135deg,
+        var(--intervention-primary-dark),
+        var(--intervention-primary)
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--intervention-shadow);
+}
+
+/* Smart buttons améliorés */
+.o_form_intervention .oe_stat_button {
+    border-radius: var(--intervention-radius);
+    border: 1px solid var(--intervention-border);
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.o_form_intervention .oe_stat_button:hover {
+    background: var(--intervention-bg-medium);
+    border-color: var(--intervention-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--intervention-shadow);
+}
+
+/* ========== AMÉLIORATION DES CHAMPS ========== */
+
+/* Champs de saisie */
+.o_form_intervention .o_field_widget input,
+.o_form_intervention .o_field_widget textarea,
+.o_form_intervention .o_field_widget select {
+    border-radius: var(--intervention-radius);
+    border: 1px solid var(--intervention-border);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.o_form_intervention .o_field_widget input:focus,
+.o_form_intervention .o_field_widget textarea:focus {
+    border-color: var(--intervention-primary);
+    box-shadow: 0 0 0 3px rgba(2, 119, 189, 0.1);
+    outline: none;
+}
+
+/* ========== STATUSBAR AMÉLIORÉE ========== */
+
+.o_form_intervention .o_statusbar_status > .btn {
+    border-radius: var(--intervention-radius) var(--intervention-radius) 0 0;
+    border: none;
+    margin-right: 2px;
+    transition: all 0.2s ease;
+}
+
+.o_form_intervention .o_statusbar_status > .btn.btn-primary {
+    background: var(--intervention-primary);
+    color: white;
+}
+
+.o_form_intervention .o_statusbar_status > .btn:not(.btn-primary) {
+    background: #f5f5f5;
+    color: #666;
+}
+
+/* ========== CARDS ET GROUPES ========== */
+
+.o_form_intervention .o_group {
+    background: white;
+    padding: 20px;
+    border-radius: var(--intervention-radius);
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--intervention-border);
+}
+
+.o_form_intervention .o_group .o_horizontal_separator {
+    color: var(--intervention-primary);
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--intervention-primary-light);
+    padding-bottom: 5px;
+}
+
+/* ========== AMÉLIORATION DES LISTES ========== */
+
+.o_list_view.o_list_intervention {
+    border-radius: var(--intervention-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.o_list_view.o_list_intervention thead th {
+    background: linear-gradient(
+        135deg,
+        var(--intervention-primary),
+        var(--intervention-primary-light)
+    );
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 15px 10px;
+}
+
+.o_list_view.o_list_intervention tbody tr:hover {
+    background: var(--intervention-bg-light);
+    transition: background 0.2s ease;
+}
+
+/* ========== INDICATEURS DE STATUT ========== */
+
+/* Statut planifié */
+.o_list_view tr.text-info td {
+    border-left: 4px solid var(--intervention-info);
+}
+
+/* Statut en cours */
+.o_list_view tr.text-warning td {
+    border-left: 4px solid var(--intervention-warning);
+}
+
+/* Statut terminé */
+.o_list_view tr.text-success td {
+    border-left: 4px solid var(--intervention-success);
+}
+
+/* Statut annulé */
+.o_list_view tr.text-muted td {
+    border-left: 4px solid #ccc;
+    opacity: 0.7;
+}
+
+/* ========== FORMULAIRE RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+    .o_form_intervention .oe_button_box {
+        text-align: center;
+    }
+
+    .o_form_intervention .oe_stat_button {
+        margin: 5px;
+        min-width: 120px;
+    }
+
+    .o_form_intervention .o_group {
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+}
+
+/* ========== ANIMATIONS SUBTILES ========== */
+
+.o_form_intervention .o_field_widget {
+    transition: all 0.2s ease;
+}
+
+.o_form_intervention .o_notebook_headers .nav-link {
+    border-radius: var(--intervention-radius) var(--intervention-radius) 0 0;
+    border: 1px solid var(--intervention-border);
+    transition: all 0.2s ease;
+}
+
+.o_form_intervention .o_notebook_headers .nav-link.active {
+    background: var(--intervention-primary);
+    color: white;
+    border-color: var(--intervention-primary);
+}
+
+/* ========== AMÉLIORATION DES TAGS ========== */
+
+.o_form_intervention .o_field_many2many_tags .badge {
+    background: var(--intervention-secondary);
+    color: white;
+    border-radius: 15px;
+    padding: 5px 12px;
+    margin: 2px;
+    border: none;
+}
+
+/* ========== AMÉLIORATION DU CHATTER ========== */
+
+.o_form_intervention .oe_chatter {
+    background: white;
+    border-radius: var(--intervention-radius);
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ========== UTILITÉS ========== */
+
+.intervention-highlight {
+    background: var(--intervention-bg-medium);
+    padding: 10px;
+    border-radius: var(--intervention-radius);
+    border-left: 4px solid var(--intervention-primary);
+    margin: 10px 0;
+}
+
+.intervention-success {
+    color: var(--intervention-success);
+}
+
+.intervention-warning {
+    color: var(--intervention-warning);
+}
+
+.intervention-danger {
+    color: var(--intervention-danger);
+}
+
+.intervention-info {
+    color: var(--intervention-info);
+}
+
+/* ========== STYLES POUR LES NOUVEAUX CHAMPS MÉTIER ========== */
+
+/* Champ Numéro donneur d'ordre */
+.o_form_plomberie .o_field_char[name="numero_donneur_ordre"] {
+    background: linear-gradient(
+        135deg,
+        var(--plomberie-bg-light),
+        #fff3e0
+    ) !important;
+    border: 2px solid var(--plomberie-secondary) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-weight: 600 !important;
+    color: var(--plomberie-primary-dark) !important;
+}
+
+/* Champ Facturer à */
+.o_form_plomberie .o_field_radio[name="facturer_a"] {
+    background: var(--plomberie-bg-light) !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--plomberie-border) !important;
+}
+
+.o_form_plomberie
+    .o_field_radio[name="facturer_a"]
+    input[type="radio"]:checked
+    + label {
+    color: var(--plomberie-primary) !important;
+    font-weight: bold !important;
+}
+
+/* Partenaire à facturer (calculé automatiquement) */
+.o_form_plomberie .o_field_many2one[name="partner_to_invoice_id"] {
+    background: linear-gradient(
+        135deg,
+        var(--intervention-success),
+        var(--intervention-bg-medium)
+    ) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 5px 10px !important;
+    font-weight: bold !important;
+}
+
+/* Champs de distance et temps de trajet */
+.o_form_plomberie .o_field_float[name="distance_km"],
+.o_form_plomberie .o_field_integer[name="duree_trajet_min"] {
+    background: linear-gradient(
+        135deg,
+        var(--plomberie-info),
+        #e3f2fd
+    ) !important;
+    border: 2px solid var(--plomberie-info) !important;
+    border-radius: 6px !important;
+    padding: 5px 8px !important;
+    font-weight: 600 !important;
+    color: var(--plomberie-primary-dark) !important;
+    text-align: center !important;
+}
+
+/* ========== NOTIFICATION DE CALCUL DE DISTANCE ========== */
+.o_notification.o_notification_distance {
+    background: linear-gradient(
+        135deg,
+        var(--plomberie-info),
+        var(--plomberie-accent)
+    ) !important;
+    color: white !important;
+    border-left: 4px solid var(--plomberie-primary) !important;
+}
+
+/* ========== RESPONSIVE POUR MOBILE ========== */
+@media (max-width: 768px) {
+    .o_form_plomberie .o_field_char[name="numero_donneur_ordre"] {
+        font-size: 16px !important;
+        padding: 12px !important;
+    }
+
+    .o_form_plomberie .o_field_radio[name="facturer_a"] {
+        display: block !important;
+        margin-bottom: 10px !important;
+    }
+
+    .o_form_plomberie .o_field_radio[name="facturer_a"] label {
+        display: block !important;
+        padding: 10px !important;
+        margin: 5px 0 !important;
+    }
+}
+
+/* ========== AIDE POUR PERSONNALISATION DES COULEURS ========== */
+/*
+
+INSTRUCTIONS DE PERSONNALISATION DES COULEURS :
+
+1. Modifiez les variables CSS au début du fichier (lignes 3-25) :
+   - --plomberie-primary : Couleur principale du module
+   - --plomberie-secondary : Couleur secondaire (pour les accents)
+   - --plomberie-success : Couleur de validation/succès
+   - --plomberie-info : Couleur d'information
+   
+2. Exemples de palettes prêtes à utiliser :
+
+   BLEU PROFESSIONNEL :
+   --plomberie-primary: #1976d2;
+   --plomberie-secondary: #ff9800;
+   --plomberie-success: #4caf50;
+   --plomberie-info: #03a9f4;
+   
+   ROUGE ÉNERGIQUE :
+   --plomberie-primary: #d32f2f;
+   --plomberie-secondary: #ff9800;
+   --plomberie-success: #4caf50;
+   --plomberie-info: #2196f3;
+   
+   VIOLET MODERNE :
+   --plomberie-primary: #7b1fa2;
+   --plomberie-secondary: #ff5722;
+   --plomberie-success: #4caf50;
+   --plomberie-info: #00bcd4;
+   
+   ORANGE DYNAMIQUE :
+   --plomberie-primary: #f57c00;
+   --plomberie-secondary: #795548;
+   --plomberie-success: #4caf50;
+   --plomberie-info: #2196f3;
+
+3. Après modification, mettez à jour le module dans Odoo pour voir les changements.
+
+*/
+
+/* ========== AMÉLIORATIONS RESPONSIVE SUPPLÉMENTAIRES ========== */
+
+/* Tablettes et petits écrans */
+@media (max-width: 991px) {
+    /* Réduire les paddings */
+    .o_form_plomberie .o_group {
+        padding: 15px !important;
+    }
+    
+    /* Statbox plus compacts */
+    .oe_stat_button {
+        padding: 8px !important;
+    }
+    
+    /* Boutons plus petits */
+    .o_form_plomberie button {
+        padding: 8px 16px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Mobile - Portrait */
+@media (max-width: 768px) {
+    /* Force les groupes en colonne unique */
+    .o_form_plomberie .o_group > .o_group {
+        width: 100% !important;
+    }
+    
+    /* Titres plus petits */
+    .o_form_plomberie h1,
+    .o_form_plomberie .o_form_label {
+        font-size: 0.95rem !important;
+    }
+    
+    /* Champs pleine largeur */
+    .o_form_plomberie .o_field_widget {
+        width: 100% !important;
+    }
+    
+    /* Notebook tabs en mode scroll horizontal */
+    .o_form_plomberie .nav-tabs {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .o_form_plomberie .nav-link {
+        white-space: nowrap !important;
+        font-size: 0.85rem !important;
+        padding: 8px 12px !important;
+    }
+    
+    /* Images et photos adaptatives */
+    .o_form_plomberie img,
+    .o_form_plomberie .o_field_image {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Statusbar vertical sur mobile */
+    .o_form_plomberie .o_statusbar_buttons {
+        flex-direction: column !important;
+    }
+    
+    .o_form_plomberie .o_statusbar_buttons button {
+        width: 100% !important;
+        margin: 4px 0 !important;
+    }
+}
+
+/* Très petits écrans - Mobile étroit */
+@media (max-width: 480px) {
+    /* Réduire encore les marges */
+    .o_form_plomberie {
+        padding: 8px !important;
+    }
+    
+    /* Cacher les labels longs et forcer les placeholders */
+    .o_form_plomberie .o_form_label {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Statbox en liste verticale */
+    .o_form_statusbar {
+        flex-direction: column !important;
+    }
+    
+    .oe_stat_button {
+        width: 100% !important;
+        margin: 4px 0 !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Boutons pleine largeur */
+    .o_form_plomberie .btn,
+    .o_form_plomberie button {
+        width: 100% !important;
+        margin: 4px 0 !important;
+    }
+}
+
+/* Mode paysage mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    /* Réduire les hauteurs pour optimiser l'espace vertical */
+    .o_form_plomberie .o_group {
+        padding: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .o_form_plomberie h1 {
+        font-size: 1.1rem !important;
+        margin: 8px 0 !important;
+    }
+}
+
+/* Support pour le mode sombre (si activé dans Odoo) */
+@media (prefers-color-scheme: dark) {
+    .o_form_plomberie {
+        background: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+    
+    .o_form_plomberie .o_group {
+        background: #2d2d2d !important;
+        border-color: #404040 !important;
+    }
+    
+    .o_form_plomberie input,
+    .o_form_plomberie textarea,
+    .o_form_plomberie select {
+        background: #3d3d3d !important;
+        color: #e0e0e0 !important;
+        border-color: #505050 !important;
+    }
+}
+
+/* Impression - Optimisation pour PDF */
+@media print {
+    /* Masquer les éléments non nécessaires */
+    .o_form_statusbar,
+    .o_form_plomberie button,
+    .oe_stat_button,
+    .o_form_plomberie .nav-tabs {
+        display: none !important;
+    }
+    
+    /* Afficher tout le contenu des onglets */
+    .o_form_plomberie .tab-content .tab-pane {
+        display: block !important;
+        opacity: 1 !important;
+    }
+    
+    /* Optimiser les marges pour l'impression */
+    .o_form_plomberie {
+        padding: 0 !important;
+    }
+    
+    /* Forcer les couleurs noir et blanc */
+    .o_form_plomberie * {
+        color: black !important;
+        background: white !important;
+    }
+}

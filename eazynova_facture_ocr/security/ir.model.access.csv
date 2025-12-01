@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_facture_ocr_user,facture.ocr.user,model_eazynova_facture_ocr,group_facture_ocr_user,1,1,1,1
+access_facture_ocr_manager,facture.ocr.manager,model_eazynova_facture_ocr,group_facture_ocr_manager,1,1,1,1
+access_facture_ocr_line_user,facture.ocr.line.user,model_eazynova_facture_ocr_line,group_facture_ocr_user,1,1,1,1
+access_facture_ocr_line_manager,facture.ocr.line.manager,model_eazynova_facture_ocr_line,group_facture_ocr_manager,1,1,1,1

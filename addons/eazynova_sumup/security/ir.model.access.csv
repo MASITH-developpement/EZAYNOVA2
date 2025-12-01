@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sumup_config_user,eazynova.sumup.config user,model_eazynova_sumup_config,group_sumup_user,1,0,0,0
+access_sumup_config_manager,eazynova.sumup.config manager,model_eazynova_sumup_config,group_sumup_manager,1,1,1,1
+access_sumup_transaction_user,eazynova.sumup.transaction user,model_eazynova_sumup_transaction,group_sumup_user,1,1,1,0
+access_sumup_transaction_manager,eazynova.sumup.transaction manager,model_eazynova_sumup_transaction,group_sumup_manager,1,1,1,1
+access_sumup_payment_wizard,eazynova.sumup.payment.wizard,model_eazynova_sumup_payment_wizard,group_sumup_user,1,1,1,1

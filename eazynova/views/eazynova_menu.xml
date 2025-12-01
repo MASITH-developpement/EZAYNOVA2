@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+        <!-- Menus via records pour compatibilité RelaxNG -->
+        <record id="menu_eazynova_root" model="ir.ui.menu">
+            <field name="name">EAZYNOVA</field>
+            <field name="sequence" eval="1"/>
+            <field name="web_icon">eazynova,static/description/icon.png</field>
+        </record>
+
+        <record id="menu_eazynova_dashboard" model="ir.ui.menu">
+            <field name="name">Tableau de Bord</field>
+            <field name="sequence" eval="1"/>
+            <field name="parent_id" ref="menu_eazynova_root"/>
+        </record>
+
+        <record id="menu_eazynova_config" model="ir.ui.menu">
+            <field name="name">Configuration</field>
+            <field name="sequence" eval="100"/>
+            <field name="parent_id" ref="menu_eazynova_root"/>
+        </record>
+
+        <record id="menu_eazynova_planning_root_core" model="ir.ui.menu">
+            <field name="name">Planning</field>
+            <field name="sequence" eval="50"/>
+            <field name="parent_id" ref="menu_eazynova_root"/>
+            <field name="web_icon">eazynova,static/description/planning_icon.png</field>
+        </record>
+
+        <!-- Menu de planning détaillé désactivé (action non disponible) -->
+</odoo>

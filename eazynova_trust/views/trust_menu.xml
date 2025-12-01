@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Actions nécessaires avant menus -->
+    <record id="action_review_request" model="ir.actions.act_window">
+      <field name="name">Demandes d'Avis</field>
+      <field name="res_model">eazynova.review.request</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_customer_review" model="ir.actions.act_window">
+      <field name="name">Avis Clients</field>
+      <field name="res_model">eazynova.customer.review</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_trust_config" model="ir.actions.act_window">
+      <field name="name">Configuration Avis Clients</field>
+      <field name="res_model">eazynova.trust.config</field>
+      <field name="view_mode">form</field>
+    </record>
+    <!-- Menu Principal -->
+    <menuitem id="menu_trust_root"
+              name="Avis Clients"
+              parent="eazynova.menu_eazynova_root"
+              sequence="70"/>
+
+    <!-- Sous-menus -->
+    <menuitem id="menu_review_requests"
+              name="Demandes d'Avis"
+              parent="menu_trust_root"
+              action="eazynova_trust.action_review_request"
+              sequence="10"/>
+
+    <menuitem id="menu_customer_reviews"
+              name="Avis Clients"
+              parent="menu_trust_root"
+              action="eazynova_trust.action_customer_review"
+              sequence="20"/>
+
+    <menuitem id="menu_trust_config"
+              name="Configuration"
+              parent="menu_trust_root"
+              action="eazynova_trust.action_trust_config"
+              sequence="100"
+              groups="eazynova_trust.group_trust_manager"/>
+  </data>
+</odoo>

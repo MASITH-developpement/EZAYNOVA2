@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Principal -->
+    <menuitem id="menu_chantier_root"
+              name="Chantiers"
+              sequence="10"
+              web_icon="eazynova_gestion_chantier,static/description/icon.png"/>
+
+    <!-- Menu Chantiers -->
+    <menuitem id="menu_chantier_chantier"
+              name="Chantiers"
+              parent="menu_chantier_root"
+              sequence="10"/>
+
+    <menuitem id="menu_chantier_chantier_all"
+              name="Tous les chantiers"
+              parent="menu_chantier_chantier"
+              action="action_chantier"
+              sequence="10"/>
+
+    <menuitem id="menu_chantier_phase"
+              name="Phases"
+              parent="menu_chantier_chantier"
+              action="action_chantier_phase"
+              sequence="20"/>
+
+    <menuitem id="menu_chantier_tache"
+              name="Tâches"
+              parent="menu_chantier_chantier"
+              action="action_chantier_tache"
+              sequence="30"/>
+
+    <!-- Menu Ressources -->
+    <menuitem id="menu_chantier_ressources"
+              name="Ressources"
+              parent="menu_chantier_root"
+              sequence="20"/>
+
+    <menuitem id="menu_chantier_equipe"
+              name="Équipes"
+              parent="menu_chantier_ressources"
+              action="action_chantier_equipe"
+              sequence="10"/>
+
+    <menuitem id="menu_chantier_materiel"
+              name="Matériel"
+              parent="menu_chantier_ressources"
+              action="action_chantier_materiel"
+              sequence="20"/>
+
+    <!-- Menu Finances -->
+    <menuitem id="menu_chantier_finances"
+              name="Finances"
+              parent="menu_chantier_root"
+              sequence="30"/>
+
+    <menuitem id="menu_chantier_depense"
+              name="Dépenses"
+              parent="menu_chantier_finances"
+              action="action_chantier_depense"
+              sequence="10"/>
+
+    <!-- Menu Rapports -->
+    <menuitem id="menu_chantier_reporting"
+              name="Rapports"
+              parent="menu_chantier_root"
+              sequence="40"/>
+
+    <menuitem id="menu_chantier_report_main"
+              name="Fiche de chantier"
+              parent="menu_chantier_reporting"
+              action="action_report_chantier"
+              sequence="10"/>
+
+    <!-- Menu Configuration -->
+    <menuitem id="menu_chantier_config"
+              name="Configuration"
+              parent="menu_chantier_root"
+              sequence="100"
+              groups="group_chantier_manager"/>
+</odoo>

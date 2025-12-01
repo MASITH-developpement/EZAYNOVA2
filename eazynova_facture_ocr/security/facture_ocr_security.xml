@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Groupe OCR User -->
+        <record id="group_facture_ocr_user" model="res.groups">
+            <field name="name">Utilisateur OCR Factures</field>
+            <field name="implied_ids" eval="[(4, ref('eazynova.group_eazynova_user'))]"/>
+            <field name="comment">Peut uploader et consulter les factures OCR</field>
+        </record>
+        
+        <!-- Groupe OCR Manager -->
+        <record id="group_facture_ocr_manager" model="res.groups">
+            <field name="name">Manager OCR Factures</field>
+            <field name="implied_ids" eval="[(4, ref('group_facture_ocr_user'))]"/>
+            <field name="comment">Peut valider et créer les factures depuis l'OCR</field>
+        </record>
+        
+        <!-- Règles d'enregistrement -->
+        <record id="facture_ocr_rule_user" model="ir.rule">
+            <field name="name">Facture OCR: Utilisateur - Propres factures</field>
+            <field name="model_id" ref="model_eazynova_facture_ocr"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_facture_ocr_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+        <record id="facture_ocr_rule_manager" model="ir.rule">
+            <field name="name">Facture OCR: Manager - Toutes les factures</field>
+            <field name="model_id" ref="model_eazynova_facture_ocr"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_facture_ocr_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+    </data>
+</odoo>

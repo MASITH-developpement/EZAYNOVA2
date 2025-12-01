@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_chantier_root"
+              name="Chantiers"
+              parent="eazynova.menu_eazynova_root"
+              sequence="10"/>
+
+    <menuitem id="menu_chantier_list"
+              name="Tous les Chantiers"
+              parent="menu_chantier_root"
+              action="action_chantier"
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Configuration des emails autorisés -->
+    <record id="action_intervention_mail_config" model="ir.actions.act_window">
+        <field name="name">Configuration des emails</field>
+        <field name="res_model">intervention.mail.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun email configuré
+            </p>
+            <p>
+                Configurez les adresses email autorisées à créer des interventions.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu dans le menu de droite (comme Calendar) -->
+    <menuitem id="menu_intervention_configuration_right"
+        parent="base.menu_custom"
+        name="Intervention"
+        sequence="30"
+        action="action_intervention_mail_config"
+        groups="base.group_no_one"/>
+</odoo>

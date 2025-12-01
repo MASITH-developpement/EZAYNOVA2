@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Tree -->
+    <record id="view_chantier_materiel_tree" model="ir.ui.view">
+        <field name="name">chantier.materiel.tree</field>
+        <field name="model">chantier.materiel</field>
+        <field name="arch" type="xml">
+            <tree string="Matériel" editable="bottom">
+                <field name="chantier_id"/>
+                <field name="product_id"/>
+                <field name="quantite"/>
+                <field name="date_debut"/>
+                <field name="date_fin"/>
+                <field name="duree"/>
+                <field name="cout_location" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue Form -->
+    <record id="view_chantier_materiel_form" model="ir.ui.view">
+        <field name="name">chantier.materiel.form</field>
+        <field name="model">chantier.materiel</field>
+        <field name="arch" type="xml">
+            <form string="Matériel">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="chantier_id"/>
+                            <field name="product_id"/>
+                            <field name="quantite"/>
+                        </group>
+                        <group>
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
+                            <field name="duree"/>
+                            <field name="cout_location"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_chantier_materiel" model="ir.actions.act_window">
+        <field name="name">Matériel</field>
+        <field name="res_model">chantier.materiel</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ajouter du matériel
+            </p>
+        </field>
+    </record>
+</odoo>

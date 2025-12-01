@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_rexel_root"
+              name="Factures Rexel"
+              parent="eazynova.menu_eazynova_root"
+              sequence="90"/>
+
+    <menuitem id="menu_rexel_imports"
+              name="Imports"
+              parent="menu_rexel_root"
+              action="action_rexel_invoice_import"
+              sequence="10"/>
+
+    <menuitem id="menu_rexel_config"
+              name="Configuration"
+              parent="menu_rexel_root"
+              action="action_rexel_config"
+              sequence="100"
+              groups="eazynova_rexel.group_rexel_manager"/>
+</odoo>

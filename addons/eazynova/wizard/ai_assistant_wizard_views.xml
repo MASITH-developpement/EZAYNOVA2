@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_assistant_wizard_form" model="ir.ui.view">
+        <field name="name">eazynova.ai.assistant.wizard.form</field>
+        <field name="model">eazynova.ai.assistant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assistant IA">
+                <group>
+                    <field name="prompt" widget="text"/>
+                    <field name="context_data" widget="text"/>
+                    <field name="response" widget="text" invisible="not response"/>
+                </group>
+                <footer>
+                    <button string="Demander à l'IA" name="action_process" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

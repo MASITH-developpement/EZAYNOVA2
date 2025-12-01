@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rexel_config_user,eazynova.rexel.config user,model_eazynova_rexel_config,group_rexel_user,1,0,0,0
+access_rexel_config_manager,eazynova.rexel.config manager,model_eazynova_rexel_config,group_rexel_manager,1,1,1,1
+access_rexel_invoice_import_user,eazynova.rexel.invoice.import user,model_eazynova_rexel_invoice_import,group_rexel_user,1,1,1,0
+access_rexel_invoice_import_manager,eazynova.rexel.invoice.import manager,model_eazynova_rexel_invoice_import,group_rexel_manager,1,1,1,1
+access_rexel_invoice_wizard,eazynova.rexel.invoice.wizard,model_eazynova_rexel_invoice_wizard,group_rexel_user,1,1,1,1
