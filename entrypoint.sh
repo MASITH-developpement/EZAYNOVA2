@@ -126,5 +126,5 @@ chown -R odoo:odoo /etc/odoo /var/lib/odoo /mnt/extra-addons 2>/dev/null || true
 
 echo -e "${GREEN}Démarrage d'Odoo 19 CE en français...${NC}"
 
-# Démarrer Odoo directement
-exec odoo -c /etc/odoo/odoo.conf "$@"
+# Démarrer Odoo avec option pour accepter l'utilisateur postgres (nécessaire pour Railway)
+exec odoo -c /etc/odoo/odoo.conf --no-database-list "$@"
