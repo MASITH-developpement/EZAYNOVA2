@@ -14,7 +14,7 @@ fi
 
 DB_NAME="${DB_NAME:-postgres}"
 
-# Créer la configuration Odoo
+# Créer la configuration Odoo initiale
 cat > /etc/odoo/odoo.conf << EOF
 [options]
 addons_path = /usr/lib/python3/dist-packages/odoo/addons
@@ -23,10 +23,8 @@ db_host = ${DB_HOST}
 db_port = ${DB_PORT}
 db_user = ${DB_USER}
 db_password = ${DB_PASSWORD}
-db_name = ${DB_NAME}
 admin_passwd = ${ADMIN_PASSWORD}
-list_db = False
-proxy_mode = True
+list_db = True
 workers = 2
 EOF
 
@@ -64,10 +62,8 @@ db_host = ${DB_HOST}
 db_port = ${DB_PORT}
 db_user = odoo
 db_password = ${DB_PASSWORD}
-db_name = ${DB_NAME}
 admin_passwd = ${ADMIN_PASSWORD}
-list_db = False
-proxy_mode = True
+list_db = True
 workers = 2
 EOF
 
