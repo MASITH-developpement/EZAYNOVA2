@@ -13,7 +13,7 @@ from create_demo import OdooDemo
 
 # Configuration
 ODOO_URL = "https://ezaynova2-production.up.railway.app"
-MASTER_PASSWORD = "VotreMotDePasseSecurise123!"  # Remplacez par votre ADMIN_PASSWORD
+MASTER_PASSWORD = "admin"  # Master password pour gérer les bases de données
 
 def main():
     print("\n" + "="*70)
