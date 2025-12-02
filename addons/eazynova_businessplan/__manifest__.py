@@ -25,7 +25,7 @@
     'website': 'https://eazynova-production.up.railway.app/',
     'license': 'Other proprietary',
     'maintainer': 'S. MOREAU',
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail', 'account', 'sale_management'],
     'data': [
         'security/businessplan_security.xml',
         'security/ir.model.access.csv',
