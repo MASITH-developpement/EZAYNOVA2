@@ -27,7 +27,7 @@ class PlanningAssignment(models.Model):
     @api.model
     def create_from_interventions(self):
         """Crée des assignments à partir des interventions en cours."""
-        interventions = self.env['eazynova_intervention.intervention'].search([('state', '=', 'in_progress')])
+        interventions = self.env['intervention.intervention'].search([('state', '=', 'in_progress')])
         for inter in interventions:
             self.create({
                 'name': inter.name,
@@ -43,7 +43,7 @@ class PlanningAssignment(models.Model):
     @api.model
     def create_from_chantiers(self):
         """Crée des assignments à partir des chantiers en cours."""
-        chantiers = self.env['eazynova_gestion_chantier.chantier'].search([('state', '=', 'in_progress')])
+        chantiers = self.env['chantier.chantier'].search([('state', '=', 'in_progress')])
         for ch in chantiers:
             self.create({
                 'name': ch.name,

@@ -24,6 +24,7 @@
         'eazynova',
         'purchase',
         'stock',
+        'project',
     ],
     'data': [
         'security/achat_security.xml',
