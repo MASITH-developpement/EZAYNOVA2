@@ -10,13 +10,13 @@
                     <div class="col-12 col-lg-6 o_setting_box">
                         <div class="o_setting_left_pane"/>
                         <div class="o_setting_right_pane">
-                            <label string="Planning global"/>
+                            <label string="Planning global" class="o_form_label"/>
                             <div class="text-muted">
                                 Intervalle de synchronisation du planning
                             </div>
                             <div class="content-group">
                                 <div class="row mt16">
-                                    <label for="eazynova_planning_sync_interval" class="col-lg-3 o_light_label"/>
+                                    <label for="eazynova_planning_sync_interval" class="col-lg-3 o_light_label" string="Intervalle de sync"/>
                                     <field name="eazynova_planning_sync_interval"/>
                                 </div>
                             </div>
