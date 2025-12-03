@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="funnel_page" name="Page du tunnel">
+            <t t-call="sales_funnel.funnel_layout">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="text-center mb-4">
+                            <h1 t-field="funnel.landing_title"/>
+                            <t t-if="funnel.landing_subtitle">
+                                <p class="lead" t-field="funnel.landing_subtitle"/>
+                            </t>
+                        </div>
+
+                        <t t-if="funnel.landing_content">
+                            <div class="mb-4" t-field="funnel.landing_content"/>
+                        </t>
+
+                        <!-- Barre de progression -->
+                        <t t-if="funnel.show_progress_bar">
+                            <div class="progress mb-4" style="height: 30px;">
+                                <div id="funnel-progress" class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                            </div>
+                        </t>
+
+                        <!-- Formulaire multi-étapes -->
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="funnel_form" class="needs-validation" novalidate="true">
+                                    <input type="hidden" name="submission_id" t-att-value="submission.id"/>
+
+                                    <t t-foreach="funnel.step_ids" t-as="step">
+                                        <div t-attf-class="funnel-step #{'' if step_index == 0 else 'd-none'}" t-att-data-step="step_index">
+                                            <h4 t-out="step.name"/>
+                                            <t t-if="step.description">
+                                                <div t-field="step.description" class="mb-3"/>
+                                            </t>
+
+                                            <t t-foreach="step.field_ids" t-as="field">
+                                                <div class="mb-3">
+                                                    <label t-att-for="'field_' + str(field.id)" class="form-label">
+                                                        <t t-out="field.name"/>
+                                                        <t t-if="field.required"> *</t>
+                                                    </label>
+
+                                                    <!-- Champ texte -->
+                                                    <t t-if="field.field_type == 'text'">
+                                                        <input type="text" class="form-control" t-att-id="'field_' + str(field.id)" t-att-name="'field_' + str(field.id)" t-att-placeholder="field.placeholder" t-att-required="field.required"/>
+                                                    </t>
+
+                                                    <!-- Champ textarea -->
+                                                    <t t-elif="field.field_type == 'textarea'">
+                                                        <textarea class="form-control" t-att-id="'field_' + str(field.id)" t-att-name="'field_' + str(field.id)" t-att-placeholder="field.placeholder" t-att-required="field.required" rows="4"></textarea>
+                                                    </t>
+
+                                                    <!-- Champ email -->
+                                                    <t t-elif="field.field_type == 'email'">
+                                                        <input type="email" class="form-control" t-att-id="'field_' + str(field.id)" t-att-name="'field_' + str(field.id)" t-att-placeholder="field.placeholder" t-att-required="field.required"/>
+                                                    </t>
+
+                                                    <!-- Champ téléphone -->
+                                                    <t t-elif="field.field_type == 'phone'">
+                                                        <input type="tel" class="form-control" t-att-id="'field_' + str(field.id)" t-att-name="'field_' + str(field.id)" t-att-placeholder="field.placeholder" t-att-required="field.required"/>
+                                                    </t>
+
+                                                    <!-- Select -->
+                                                    <t t-elif="field.field_type == 'select'">
+                                                        <select class="form-control" t-att-id="'field_' + str(field.id)" t-att-name="'field_' + str(field.id)" t-att-required="field.required">
+                                                            <option value="">Choisir...</option>
+                                                            <t t-foreach="field.option_values.split('\n')" t-as="option">
+                                                                <option t-att-value="option" t-out="option"/>
+                                                            </t>
+                                                        </select>
+                                                    </t>
+
+                                                    <t t-if="field.help_text">
+                                                        <small class="form-text text-muted" t-out="field.help_text"/>
+                                                    </t>
+                                                </div>
+                                            </t>
+
+                                            <!-- Navigation buttons -->
+                                            <div class="mt-4 d-flex justify-content-between">
+                                                <button type="button" class="btn btn-secondary btn-previous" t-att-style="'visibility: hidden;' if step_index == 0 else ''">
+                                                    <t t-out="step.previous_button_text"/>
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-next" t-att-data-last="'1' if step_index == len(funnel.step_ids) - 1 else '0'">
+                                                    <t t-out="step.next_button_text if step_index &lt; len(funnel.step_ids) - 1 else 'Soumettre'"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('funnel_form');
+                        const steps = document.querySelectorAll('.funnel-step');
+                        const progressBar = document.getElementById('funnel-progress');
+                        let currentStep = 0;
+
+                        function updateProgress() {
+                            const progress = ((currentStep + 1) / steps.length) * 100;
+                            if (progressBar) {
+                                progressBar.style.width = progress + '%';
+                                progressBar.textContent = Math.round(progress) + '%';
+                            }
+                        }
+
+                        function showStep(index) {
+                            steps.forEach((step, i) => {
+                                step.classList.toggle('d-none', i !== index);
+                            });
+                            currentStep = index;
+                            updateProgress();
+                        }
+
+                        // Navigation
+                        document.querySelectorAll('.btn-next').forEach((btn, index) => {
+                            btn.addEventListener('click', function() {
+                                const isLast = this.dataset.last === '1';
+                                if (isLast) {
+                                    submitForm();
+                                } else {
+                                    showStep(currentStep + 1);
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll('.btn-previous').forEach(btn => {
+                            btn.addEventListener('click', () => showStep(currentStep - 1));
+                        });
+
+                        function submitForm() {
+                            const formData = new FormData(form);
+                            const values = {};
+                            for (let [key, value] of formData.entries()) {
+                                if (key.startsWith('field_')) {
+                                    const fieldId = key.replace('field_', '');
+                                    values[fieldId] = value;
+                                }
+                            }
+
+                            fetch('/funnel/<t t-out="funnel.id"/>/submit', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: {values: values}
+                                })
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.result.success) {
+                                    window.location.href = data.result.redirect_url;
+                                }
+                            });
+                        }
+
+                        updateProgress();
+                    });
+                </script>
+            </t>
+        </template>
+    </data>
+</odoo>

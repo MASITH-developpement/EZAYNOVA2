@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Template de base pour les pages de réservation -->
+        <template id="booking_layout" name="Booking Layout">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container mt-5 mb-5">
+                        <t t-out="0"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Liste des types de rendez-vous -->
+        <template id="booking_list_page" name="Liste des types de rendez-vous">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-12 text-center mb-5">
+                        <h1>Réservez votre rendez-vous</h1>
+                        <p class="lead">Choisissez le type de rendez-vous qui vous convient</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <t t-foreach="booking_types" t-as="booking_type">
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <t t-out="booking_type.name"/>
+                                    </h5>
+                                    <p class="text-muted">
+                                        <i class="fa fa-clock-o"/>
+                                        <t t-out="booking_type.duration"/> heure<t t-if="booking_type.duration > 1">s</t>
+                                    </p>
+                                    <t t-if="booking_type.description">
+                                        <div class="card-text" t-field="booking_type.description"/>
+                                    </t>
+                                    <t t-if="booking_type.location">
+                                        <p class="text-muted">
+                                            <i class="fa fa-map-marker"/>
+                                            <t t-out="booking_type.location"/>
+                                        </p>
+                                    </t>
+                                </div>
+                                <div class="card-footer">
+                                    <a t-attf-href="/booking/#{booking_type.id}" class="btn btn-primary btn-block w-100">
+                                        Réserver
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

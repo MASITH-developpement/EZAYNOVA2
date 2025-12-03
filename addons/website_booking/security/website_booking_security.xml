@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Catégorie de module -->
+        <record id="module_category_booking" model="ir.module.category">
+            <field name="name">Prise de Rendez-vous</field>
+            <field name="description">Gestion des rendez-vous en ligne</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Groupe Utilisateur -->
+        <record id="group_booking_user" model="res.groups">
+            <field name="name">Utilisateur</field>
+            <field name="category_id" ref="module_category_booking"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Groupe Manager -->
+        <record id="group_booking_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_booking"/>
+            <field name="implied_ids" eval="[(4, ref('group_booking_user'))]"/>
+        </record>
+
+        <!-- Règles d'accès pour booking.appointment -->
+        <record id="booking_appointment_user_rule" model="ir.rule">
+            <field name="name">Booking Appointment: Utilisateur - voir ses propres rendez-vous</field>
+            <field name="model_id" ref="model_booking_appointment"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_booking_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="booking_appointment_manager_rule" model="ir.rule">
+            <field name="name">Booking Appointment: Manager - voir tous les rendez-vous</field>
+            <field name="model_id" ref="model_booking_appointment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_booking_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Règles d'accès pour booking.availability -->
+        <record id="booking_availability_user_rule" model="ir.rule">
+            <field name="name">Booking Availability: Utilisateur - gérer ses disponibilités</field>
+            <field name="model_id" ref="model_booking_availability"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_booking_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="booking_availability_manager_rule" model="ir.rule">
+            <field name="name">Booking Availability: Manager - gérer toutes les disponibilités</field>
+            <field name="model_id" ref="model_booking_availability"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_booking_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

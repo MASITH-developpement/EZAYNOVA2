@@ -1,0 +1,25 @@
+/* EAZYNOVA - Sales Funnel CSS */
+
+.funnel-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 50px 0;
+}
+
+.funnel-step {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.progress {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+    transition: width 0.5s ease;
+}

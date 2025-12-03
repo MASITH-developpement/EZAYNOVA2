@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Menu racine -->
+        <menuitem id="menu_booking_root"
+            name="Rendez-vous"
+            sequence="50"
+            web_icon="website_booking,static/description/icon.png"/>
+
+        <!-- Sous-menus -->
+        <menuitem id="menu_booking_appointments"
+            name="Rendez-vous"
+            parent="menu_booking_root"
+            action="action_booking_appointment"
+            sequence="10"/>
+
+        <menuitem id="menu_booking_types"
+            name="Types de Rendez-vous"
+            parent="menu_booking_root"
+            action="action_booking_type"
+            sequence="20"/>
+
+        <menuitem id="menu_booking_availability"
+            name="Disponibilités"
+            parent="menu_booking_root"
+            action="action_booking_availability"
+            sequence="30"/>
+
+        <!-- Menu Configuration -->
+        <menuitem id="menu_booking_config"
+            name="Configuration"
+            parent="menu_booking_root"
+            sequence="90"
+            groups="website_booking.group_booking_manager"/>
+
+    </data>
+</odoo>

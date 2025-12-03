@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_funnel_submission_tree" model="ir.ui.view">
+            <field name="name">sales.funnel.submission.tree</field>
+            <field name="model">sales.funnel.submission</field>
+            <field name="arch" type="xml">
+                <tree string="Soumissions">
+                    <field name="name"/>
+                    <field name="funnel_id"/>
+                    <field name="partner_name"/>
+                    <field name="partner_email"/>
+                    <field name="create_date"/>
+                    <field name="quality" widget="badge"/>
+                    <field name="state" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_funnel_submission_form" model="ir.ui.view">
+            <field name="name">sales.funnel.submission.form</field>
+            <field name="model">sales.funnel.submission</field>
+            <field name="arch" type="xml">
+                <form string="Soumission">
+                    <header>
+                        <button name="action_process" type="object" string="Traiter" class="oe_highlight" invisible="state != 'submitted'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="funnel_id"/>
+                                <field name="partner_id"/>
+                                <field name="partner_name"/>
+                                <field name="partner_email"/>
+                                <field name="partner_phone"/>
+                            </group>
+                            <group>
+                                <field name="score"/>
+                                <field name="quality"/>
+                                <field name="lead_id"/>
+                                <field name="create_date"/>
+                                <field name="completed_at"/>
+                                <field name="duration"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Réponses">
+                                <field name="value_ids">
+                                    <tree>
+                                        <field name="field_id"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Métadonnées">
+                                <group>
+                                    <field name="ip_address"/>
+                                    <field name="user_agent"/>
+                                    <field name="referrer"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_funnel_submission" model="ir.actions.act_window">
+            <field name="name">Soumissions</field>
+            <field name="res_model">sales.funnel.submission</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

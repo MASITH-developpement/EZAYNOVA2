@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Template email de confirmation -->
+        <record id="email_template_booking_confirmation" model="mail.template">
+            <field name="name">Booking: Confirmation de rendez-vous</field>
+            <field name="model_id" ref="model_booking_appointment"/>
+            <field name="subject">Confirmation de votre rendez-vous - {{ object.booking_type_id.name }}</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background-color: #f8f9fa; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="color: #007bff; margin-top: 0;">Rendez-vous confirmé !</h2>
+
+            <p>Bonjour {{ object.partner_name }},</p>
+
+            <p>Votre rendez-vous a été confirmé avec succès.</p>
+
+            <div style="background-color: #e7f3ff; padding: 20px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="margin-top: 0; color: #007bff;">Détails du rendez-vous</h3>
+                <p style="margin: 10px 0;">
+                    <strong>Type :</strong> {{ object.booking_type_id.name }}<br/>
+                    <strong>Date et heure :</strong> {{ format_datetime(object.start_datetime, dt_format='dd/MM/yyyy HH:mm', tz=object.user_id.tz or 'Europe/Paris') }}<br/>
+                    <strong>Durée :</strong> {{ object.duration }} heure(s)<br/>
+                    <strong>Avec :</strong> {{ object.user_id.name }}<br/>
+                    % if object.booking_type_id.location:
+                    <strong>Lieu :</strong> {{ object.booking_type_id.location }}<br/>
+                    % endif
+                </p>
+            </div>
+
+            % if object.message:
+            <p><strong>Votre message :</strong><br/>{{ object.message }}</p>
+            % endif
+
+            <p style="margin-top: 30px;">
+                <a href="{{ object.cancel_url }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">Annuler le rendez-vous</a>
+                % if object.booking_type_id.allow_reschedule:
+                <a href="{{ object.reschedule_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Reprogrammer</a>
+                % endif
+            </p>
+
+            <p style="color: #6c757d; font-size: 12px; margin-top: 30px; border-top: 1px solid #dee2e6; padding-top: 20px;">
+                Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.
+            </p>
+        </div>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Template email de rappel -->
+        <record id="email_template_booking_reminder" model="mail.template">
+            <field name="name">Booking: Rappel de rendez-vous</field>
+            <field name="model_id" ref="model_booking_appointment"/>
+            <field name="subject">Rappel : Votre rendez-vous demain - {{ object.booking_type_id.name }}</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <div style="background-color: #f8f9fa; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="color: #ffc107; margin-top: 0;">Rappel de rendez-vous</h2>
+
+            <p>Bonjour {{ object.partner_name }},</p>
+
+            <p>Nous vous rappelons votre rendez-vous prévu :</p>
+
+            <div style="background-color: #fff3cd; padding: 20px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="margin-top: 0; color: #856404;">Détails du rendez-vous</h3>
+                <p style="margin: 10px 0;">
+                    <strong>Type :</strong> {{ object.booking_type_id.name }}<br/>
+                    <strong>Date et heure :</strong> {{ format_datetime(object.start_datetime, dt_format='dd/MM/yyyy HH:mm', tz=object.user_id.tz or 'Europe/Paris') }}<br/>
+                    <strong>Durée :</strong> {{ object.duration }} heure(s)<br/>
+                    <strong>Avec :</strong> {{ object.user_id.name }}<br/>
+                    % if object.booking_type_id.location:
+                    <strong>Lieu :</strong> {{ object.booking_type_id.location }}<br/>
+                    % endif
+                </p>
+            </div>
+
+            <p>Nous avons hâte de vous rencontrer !</p>
+
+            <p style="margin-top: 30px;">
+                <a href="{{ object.cancel_url }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px;">Annuler le rendez-vous</a>
+            </p>
+
+            <p style="color: #6c757d; font-size: 12px; margin-top: 30px; border-top: 1px solid #dee2e6; padding-top: 20px;">
+                Cet email a été envoyé automatiquement, merci de ne pas y répondre directement.
+            </p>
+        </div>
+    </div>
+</div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

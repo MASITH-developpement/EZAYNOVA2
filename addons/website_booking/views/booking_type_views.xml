@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue liste -->
+        <record id="view_booking_type_tree" model="ir.ui.view">
+            <field name="name">booking.type.tree</field>
+            <field name="model">booking.type</field>
+            <field name="arch" type="xml">
+                <tree string="Types de Rendez-vous">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="location_type"/>
+                    <field name="appointment_count"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue formulaire -->
+        <record id="view_booking_type_form" model="ir.ui.view">
+            <field name="name">booking.type.form</field>
+            <field name="model">booking.type</field>
+            <field name="arch" type="xml">
+                <form string="Type de Rendez-vous">
+                    <header>
+                        <button name="action_view_appointments" type="object" string="Voir les rendez-vous" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-calendar">
+                                <field name="appointment_count" widget="statinfo" string="RDV"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Archivé" bg_color="text-bg-danger" invisible="active"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="ex: Consultation, Démo..."/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="sequence"/>
+                                <field name="duration" widget="float_time"/>
+                                <field name="location_type"/>
+                                <field name="location" invisible="location_type == False"/>
+                                <field name="website_url" widget="url"/>
+                            </group>
+                            <group>
+                                <field name="user_ids" widget="many2many_tags"/>
+                                <field name="min_schedule_hours"/>
+                                <field name="max_schedule_days"/>
+                                <field name="buffer_time_before"/>
+                                <field name="buffer_time_after"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" widget="html"/>
+                            </page>
+                            <page string="Formulaire" name="form">
+                                <group>
+                                    <group>
+                                        <field name="ask_phone"/>
+                                        <field name="ask_email"/>
+                                        <field name="ask_company"/>
+                                        <field name="ask_message"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="custom_questions" placeholder="Questions personnalisées (une par ligne)..."/>
+                                </group>
+                            </page>
+                            <page string="Options" name="options">
+                                <group>
+                                    <group string="Gestion des rendez-vous">
+                                        <field name="allow_reschedule"/>
+                                        <field name="allow_cancel"/>
+                                        <field name="cancel_hours" invisible="not allow_cancel"/>
+                                    </group>
+                                    <group string="Notifications">
+                                        <field name="send_confirmation"/>
+                                        <field name="send_reminder"/>
+                                        <field name="reminder_hours" invisible="not send_reminder"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue kanban -->
+        <record id="view_booking_type_kanban" model="ir.ui.view">
+            <field name="name">booking.type.kanban</field>
+            <field name="model">booking.type</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="duration"/>
+                    <field name="appointment_count"/>
+                    <field name="website_url"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div>
+                                        <i class="fa fa-clock-o"/> <field name="duration" widget="float_time"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-calendar"/> <field name="appointment_count"/> RDV
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <a t-att-href="record.website_url.raw_value" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-external-link"/> Voir la page
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_booking_type" model="ir.actions.act_window">
+            <field name="name">Types de Rendez-vous</field>
+            <field name="res_model">booking.type</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créez votre premier type de rendez-vous
+                </p>
+                <p>
+                    Définissez les différents types de rendez-vous que vos clients peuvent réserver en ligne.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
