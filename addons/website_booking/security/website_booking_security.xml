@@ -2,24 +2,15 @@
 <odoo>
     <data noupdate="0">
 
-        <!-- Catégorie de module -->
-        <record id="module_category_booking" model="ir.module.category">
-            <field name="name">Prise de Rendez-vous</field>
-            <field name="description">Gestion des rendez-vous en ligne</field>
-            <field name="sequence">50</field>
-        </record>
-
         <!-- Groupe Utilisateur -->
         <record id="group_booking_user" model="res.groups">
-            <field name="name">Utilisateur</field>
-            <field name="category_id" ref="module_category_booking"/>
+            <field name="name">Booking: Utilisateur</field>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <!-- Groupe Manager -->
         <record id="group_booking_manager" model="res.groups">
-            <field name="name">Manager</field>
-            <field name="category_id" ref="module_category_booking"/>
+            <field name="name">Booking: Manager</field>
             <field name="implied_ids" eval="[(4, ref('group_booking_user'))]"/>
         </record>
 
