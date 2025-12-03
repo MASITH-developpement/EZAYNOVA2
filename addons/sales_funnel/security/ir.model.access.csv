@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_funnel_public,sales.funnel.public,model_sales_funnel,,1,0,0,0
+access_sales_funnel_user,sales.funnel.user,model_sales_funnel,group_funnel_user,1,1,1,0
+access_sales_funnel_manager,sales.funnel.manager,model_sales_funnel,group_funnel_manager,1,1,1,1
+access_sales_funnel_step_public,sales.funnel.step.public,model_sales_funnel_step,,1,0,0,0
+access_sales_funnel_step_user,sales.funnel.step.user,model_sales_funnel_step,group_funnel_user,1,1,1,0
+access_sales_funnel_step_manager,sales.funnel.step.manager,model_sales_funnel_step,group_funnel_manager,1,1,1,1
+access_sales_funnel_field_public,sales.funnel.field.public,model_sales_funnel_field,,1,0,0,0
+access_sales_funnel_field_user,sales.funnel.field.user,model_sales_funnel_field,group_funnel_user,1,1,1,0
+access_sales_funnel_field_manager,sales.funnel.field.manager,model_sales_funnel_field,group_funnel_manager,1,1,1,1
+access_sales_funnel_submission_public,sales.funnel.submission.public,model_sales_funnel_submission,,0,0,1,0
+access_sales_funnel_submission_user,sales.funnel.submission.user,model_sales_funnel_submission,group_funnel_user,1,1,0,0
+access_sales_funnel_submission_manager,sales.funnel.submission.manager,model_sales_funnel_submission,group_funnel_manager,1,1,1,1
+access_sales_funnel_submission_value_public,sales.funnel.submission.value.public,model_sales_funnel_submission_value,,0,0,1,0
+access_sales_funnel_submission_value_user,sales.funnel.submission.value.user,model_sales_funnel_submission_value,group_funnel_user,1,1,0,0
+access_sales_funnel_submission_value_manager,sales.funnel.submission.value.manager,model_sales_funnel_submission_value,group_funnel_manager,1,1,1,1

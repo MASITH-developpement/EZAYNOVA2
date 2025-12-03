@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Page de réservation -->
+        <template id="booking_page" name="Page de réservation">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="text-center mb-4">
+                            <h1 t-field="booking_type.name"/>
+                            <p class="lead">
+                                <i class="fa fa-clock-o"/>
+                                <t t-out="booking_type.duration"/> heure<t t-if="booking_type.duration > 1">s</t>
+                            </p>
+                            <t t-if="booking_type.description">
+                                <div t-field="booking_type.description" class="text-muted"/>
+                            </t>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="booking_form" class="needs-validation" novalidate="true">
+                                    <!-- Sélection de la date -->
+                                    <div class="mb-4">
+                                        <h5>1. Choisissez une date</h5>
+                                        <input type="date"
+                                               id="booking_date"
+                                               name="date"
+                                               class="form-control form-control-lg"
+                                               required="required"/>
+                                    </div>
+
+                                    <!-- Sélection du créneau -->
+                                    <div class="mb-4" id="slots_container" style="display:none;">
+                                        <h5>2. Choisissez un créneau</h5>
+                                        <div id="slots_list" class="row g-2">
+                                            <!-- Les créneaux seront insérés ici par JavaScript -->
+                                        </div>
+                                        <input type="hidden" id="selected_slot" name="datetime" required="required"/>
+                                        <input type="hidden" id="selected_user" name="user_id" required="required"/>
+                                    </div>
+
+                                    <!-- Informations personnelles -->
+                                    <div class="mb-4" id="form_container" style="display:none;">
+                                        <h5>3. Vos informations</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="name" class="form-label">Nom complet *</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="name"
+                                                       name="name"
+                                                       required="required"/>
+                                            </div>
+                                            <t t-if="booking_type.ask_email">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="email" class="form-label">Email *</label>
+                                                    <input type="email"
+                                                           class="form-control"
+                                                           id="email"
+                                                           name="email"
+                                                           required="required"/>
+                                                </div>
+                                            </t>
+                                            <t t-if="booking_type.ask_phone">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Téléphone</label>
+                                                    <input type="tel"
+                                                           class="form-control"
+                                                           id="phone"
+                                                           name="phone"/>
+                                                </div>
+                                            </t>
+                                            <t t-if="booking_type.ask_company">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="company" class="form-label">Entreprise</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           id="company"
+                                                           name="company"/>
+                                                </div>
+                                            </t>
+                                            <t t-if="booking_type.ask_message">
+                                                <div class="col-12 mb-3">
+                                                    <label for="message" class="form-label">Message</label>
+                                                    <textarea class="form-control"
+                                                              id="message"
+                                                              name="message"
+                                                              rows="3"></textarea>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <div class="text-center mt-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                Confirmer le rendez-vous
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const bookingTypeId = <t t-out="booking_type.id"/>;
+                        const dateInput = document.getElementById('booking_date');
+                        const slotsContainer = document.getElementById('slots_container');
+                        const slotsList = document.getElementById('slots_list');
+                        const formContainer = document.getElementById('form_container');
+                        const bookingForm = document.getElementById('booking_form');
+
+                        // Configurer la date minimum
+                        const today = new Date();
+                        const minDate = new Date(today.getTime() + (<t t-out="booking_type.min_schedule_hours"/> * 60 * 60 * 1000));
+                        dateInput.min = minDate.toISOString().split('T')[0];
+
+                        const maxDate = new Date(today.getTime() + (<t t-out="booking_type.max_schedule_days"/> * 24 * 60 * 60 * 1000));
+                        dateInput.max = maxDate.toISOString().split('T')[0];
+
+                        // Charger les créneaux lors de la sélection d'une date
+                        dateInput.addEventListener('change', function() {
+                            loadSlots(this.value);
+                        });
+
+                        function loadSlots(date) {
+                            fetch('/booking/' + bookingTypeId + '/slots', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: {
+                                        date: date
+                                    }
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                displaySlots(data.result.slots);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Erreur lors du chargement des créneaux');
+                            });
+                        }
+
+                        function displaySlots(slots) {
+                            slotsList.innerHTML = '';
+
+                            if (slots.length === 0) {
+                                slotsList.innerHTML = '<div class="col-12"><p class="text-muted">Aucun créneau disponible pour cette date.</p></div>';
+                                slotsContainer.style.display = 'block';
+                                formContainer.style.display = 'none';
+                                return;
+                            }
+
+                            slots.forEach(slot => {
+                                const button = document.createElement('button');
+                                button.type = 'button';
+                                button.className = 'btn btn-outline-primary col-3 col-md-2';
+                                button.textContent = slot.time;
+                                button.onclick = function() {
+                                    selectSlot(slot, button);
+                                };
+                                slotsList.appendChild(button);
+                            });
+
+                            slotsContainer.style.display = 'block';
+                        }
+
+                        function selectSlot(slot, button) {
+                            // Retirer la sélection des autres boutons
+                            document.querySelectorAll('#slots_list button').forEach(btn => {
+                                btn.classList.remove('active');
+                                btn.classList.add('btn-outline-primary');
+                                btn.classList.remove('btn-primary');
+                            });
+
+                            // Activer le bouton sélectionné
+                            button.classList.add('active');
+                            button.classList.remove('btn-outline-primary');
+                            button.classList.add('btn-primary');
+
+                            // Enregistrer la sélection
+                            document.getElementById('selected_slot').value = slot.datetime;
+                            document.getElementById('selected_user').value = slot.user_id;
+
+                            // Afficher le formulaire
+                            formContainer.style.display = 'block';
+                        }
+
+                        // Soumettre le formulaire
+                        bookingForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            if (!bookingForm.checkValidity()) {
+                                e.stopPropagation();
+                                bookingForm.classList.add('was-validated');
+                                return;
+                            }
+
+                            const formData = new FormData(bookingForm);
+                            const data = Object.fromEntries(formData.entries());
+
+                            fetch('/booking/' + bookingTypeId + '/book', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: data
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.result.success) {
+                                    window.location.href = data.result.confirmation_url;
+                                } else {
+                                    alert('Erreur: ' + data.result.error);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Erreur lors de la réservation');
+                            });
+                        });
+                    });
+                </script>
+            </t>
+        </template>
+
+    </data>
+</odoo>

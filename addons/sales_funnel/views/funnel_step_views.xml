@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_funnel_step_form" model="ir.ui.view">
+            <field name="name">sales.funnel.step.form</field>
+            <field name="model">sales.funnel.step</field>
+            <field name="arch" type="xml">
+                <form string="Étape">
+                    <sheet>
+                        <group>
+                            <field name="funnel_id"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                        </group>
+                        <field name="description" widget="html"/>
+                        <notebook>
+                            <page string="Champs">
+                                <field name="field_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="field_type"/>
+                                        <field name="required"/>
+                                        <field name="crm_field"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Navigation">
+                                <group>
+                                    <field name="show_previous_button"/>
+                                    <field name="previous_button_text"/>
+                                    <field name="next_button_text"/>
+                                </group>
+                            </page>
+                            <page string="Conditions">
+                                <group>
+                                    <field name="conditional"/>
+                                    <field name="condition_field_id" invisible="not conditional"/>
+                                    <field name="condition_operator" invisible="not conditional"/>
+                                    <field name="condition_value" invisible="not conditional"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

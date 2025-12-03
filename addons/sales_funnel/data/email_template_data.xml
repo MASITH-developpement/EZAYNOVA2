@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_funnel_confirmation" model="mail.template">
+            <field name="name">Funnel: Confirmation</field>
+            <field name="model_id" ref="model_sales_funnel_submission"/>
+            <field name="subject">Merci pour votre soumission</field>
+            <field name="email_to">{{ object.partner_email }}</field>
+            <field name="body_html"><![CDATA[
+<p>Bonjour {{ object.partner_name }},</p>
+<p>Merci d'avoir complété notre formulaire. Nous reviendrons vers vous prochainement.</p>
+            ]]></field>
+        </record>
+
+        <record id="email_template_funnel_notification" model="mail.template">
+            <field name="name">Funnel: Notification</field>
+            <field name="model_id" ref="model_sales_funnel_submission"/>
+            <field name="subject">Nouvelle soumission - {{ object.funnel_id.name }}</field>
+            <field name="email_to">{{ object.funnel_id.notification_email }}</field>
+            <field name="body_html"><![CDATA[
+<p>Nouvelle soumission reçue pour le tunnel {{ object.funnel_id.name }}</p>
+<p>De: {{ object.partner_name }} ({{ object.partner_email }})</p>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

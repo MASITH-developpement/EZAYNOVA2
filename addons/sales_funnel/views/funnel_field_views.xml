@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_funnel_field_form" model="ir.ui.view">
+            <field name="name">sales.funnel.field.form</field>
+            <field name="model">sales.funnel.field</field>
+            <field name="arch" type="xml">
+                <form string="Champ">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="step_id"/>
+                                <field name="name"/>
+                                <field name="field_type"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="required"/>
+                                <field name="placeholder"/>
+                                <field name="help_text"/>
+                                <field name="default_value"/>
+                            </group>
+                        </group>
+                        <group string="Options" invisible="field_type not in ['select', 'radio', 'checkbox']">
+                            <field name="option_values" placeholder="Une option par ligne..."/>
+                        </group>
+                        <group string="Validation">
+                            <group>
+                                <field name="validation_type"/>
+                                <field name="validation_regex" invisible="validation_type != 'regex'"/>
+                                <field name="validation_message"/>
+                            </group>
+                        </group>
+                        <group string="Mapping CRM">
+                            <field name="crm_field"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_funnel_field" model="ir.actions.act_window">
+            <field name="name">Champs</field>
+            <field name="res_model">sales.funnel.field</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

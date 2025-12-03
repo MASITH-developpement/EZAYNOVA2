@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue liste -->
+        <record id="view_sales_funnel_tree" model="ir.ui.view">
+            <field name="name">sales.funnel.tree</field>
+            <field name="model">sales.funnel</field>
+            <field name="arch" type="xml">
+                <tree string="Tunnels de Vente">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="funnel_type"/>
+                    <field name="step_count"/>
+                    <field name="submission_count"/>
+                    <field name="conversion_rate" widget="progressbar"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue formulaire -->
+        <record id="view_sales_funnel_form" model="ir.ui.view">
+            <field name="name">sales.funnel.form</field>
+            <field name="model">sales.funnel</field>
+            <field name="arch" type="xml">
+                <form string="Tunnel de Vente">
+                    <header>
+                        <button name="action_preview" type="object" string="Prévisualiser" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_submissions" type="object" class="oe_stat_button" icon="fa-send">
+                                <field name="submission_count" widget="statinfo" string="Soumissions"/>
+                            </button>
+                            <button name="action_view_steps" type="object" class="oe_stat_button" icon="fa-list">
+                                <field name="step_count" widget="statinfo" string="Étapes"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Archivé" bg_color="text-bg-danger" invisible="active"/>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name" placeholder="Nom du tunnel..."/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="funnel_type"/>
+                                <field name="sequence"/>
+                                <field name="website_url" widget="url"/>
+                            </group>
+                            <group>
+                                <field name="view_count"/>
+                                <field name="conversion_rate" widget="progressbar"/>
+                                <field name="show_progress_bar"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Étapes" name="steps">
+                                <field name="step_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="conditional"/>
+                                        <button name="%(action_funnel_field)d" type="action" icon="fa-edit" string="Champs" context="{'default_step_id': id}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Page d'accueil" name="landing">
+                                <group>
+                                    <field name="landing_title"/>
+                                    <field name="landing_subtitle"/>
+                                </group>
+                                <field name="landing_content" widget="html"/>
+                            </page>
+                            <page string="Remerciements" name="thankyou">
+                                <group>
+                                    <field name="thank_you_title"/>
+                                    <field name="redirect_url"/>
+                                </group>
+                                <field name="thank_you_message" widget="html"/>
+                            </page>
+                            <page string="Actions CRM" name="crm">
+                                <group>
+                                    <group>
+                                        <field name="create_contact"/>
+                                        <field name="create_lead"/>
+                                        <field name="assign_to_user_id" invisible="not create_lead"/>
+                                        <field name="team_id" invisible="not create_lead"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Notifications" name="notifications">
+                                <group>
+                                    <group>
+                                        <field name="send_confirmation"/>
+                                        <field name="send_notification"/>
+                                        <field name="notification_email" invisible="not send_notification"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Options" name="options">
+                                <group>
+                                    <field name="allow_multiple_submissions"/>
+                                    <field name="require_authentication"/>
+                                </group>
+                                <field name="description" widget="html"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue kanban -->
+        <record id="view_sales_funnel_kanban" model="ir.ui.view">
+            <field name="name">sales.funnel.kanban</field>
+            <field name="model">sales.funnel</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="funnel_type"/>
+                    <field name="submission_count"/>
+                    <field name="conversion_rate"/>
+                    <field name="website_url"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card">
+                                <div class="o_kanban_record_top">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><field name="funnel_type"/></div>
+                                    <div><field name="submission_count"/> soumissions</div>
+                                    <div>Conversion: <field name="conversion_rate"/>%</div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <a t-att-href="record.website_url.raw_value" target="_blank" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-external-link"/> Voir
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_sales_funnel" model="ir.actions.act_window">
+            <field name="name">Tunnels de Vente</field>
+            <field name="res_model">sales.funnel</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue liste -->
+        <record id="view_booking_appointment_tree" model="ir.ui.view">
+            <field name="name">booking.appointment.tree</field>
+            <field name="model">booking.appointment</field>
+            <field name="arch" type="xml">
+                <tree string="Rendez-vous" decoration-info="state=='draft'" decoration-success="state=='confirmed'" decoration-muted="state=='cancelled'">
+                    <field name="name"/>
+                    <field name="booking_type_id"/>
+                    <field name="partner_name"/>
+                    <field name="partner_email"/>
+                    <field name="start_datetime"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="user_id" widget="many2one_avatar_user"/>
+                    <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='confirmed'" decoration-muted="state=='cancelled'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue formulaire -->
+        <record id="view_booking_appointment_form" model="ir.ui.view">
+            <field name="name">booking.appointment.form</field>
+            <field name="model">booking.appointment</field>
+            <field name="arch" type="xml">
+                <form string="Rendez-vous">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirmer" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_done" type="object" string="Effectué" class="oe_highlight" invisible="state != 'confirmed'"/>
+                        <button name="action_cancel" type="object" string="Annuler" invisible="state in ['cancelled', 'done']"/>
+                        <button name="action_draft" type="object" string="Remettre en brouillon" invisible="state != 'cancelled'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="booking_type_id"/>
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                                <field name="start_datetime"/>
+                                <field name="end_datetime"/>
+                                <field name="duration" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="partner_name"/>
+                                <field name="partner_email" widget="email"/>
+                                <field name="partner_phone" widget="phone"/>
+                                <field name="partner_company"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="message" placeholder="Message du client..."/>
+                            <field name="custom_answers" placeholder="Réponses aux questions personnalisées..." invisible="not custom_answers"/>
+                        </group>
+                        <group>
+                            <group string="Calendrier">
+                                <field name="calendar_event_id" readonly="1"/>
+                            </group>
+                            <group string="Notifications">
+                                <field name="confirmation_sent" readonly="1"/>
+                                <field name="reminder_sent" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Liens publics">
+                                <field name="cancel_url" widget="url" readonly="1"/>
+                                <field name="reschedule_url" widget="url" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue calendrier -->
+        <record id="view_booking_appointment_calendar" model="ir.ui.view">
+            <field name="name">booking.appointment.calendar</field>
+            <field name="model">booking.appointment</field>
+            <field name="arch" type="xml">
+                <calendar string="Rendez-vous" date_start="start_datetime" date_stop="end_datetime" color="user_id" mode="month">
+                    <field name="partner_name"/>
+                    <field name="booking_type_id"/>
+                    <field name="user_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Vue recherche -->
+        <record id="view_booking_appointment_search" model="ir.ui.view">
+            <field name="name">booking.appointment.search</field>
+            <field name="model">booking.appointment</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Rendez-vous">
+                    <field name="name"/>
+                    <field name="partner_name"/>
+                    <field name="partner_email"/>
+                    <field name="booking_type_id"/>
+                    <field name="user_id"/>
+                    <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmé" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Effectué" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Annulé" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <separator/>
+                    <filter string="Aujourd'hui" name="today" domain="[('start_datetime', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('start_datetime', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+                    <filter string="Cette semaine" name="this_week" domain="[('start_datetime', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')), ('start_datetime', '&lt;=', (context_today() + datetime.timedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Grouper par">
+                        <filter string="Type" name="group_type" context="{'group_by': 'booking_type_id'}"/>
+                        <filter string="Utilisateur" name="group_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Statut" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="group_date" context="{'group_by': 'start_datetime'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_booking_appointment" model="ir.actions.act_window">
+            <field name="name">Rendez-vous</field>
+            <field name="res_model">booking.appointment</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="context">{'search_default_confirmed': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Aucun rendez-vous prévu
+                </p>
+                <p>
+                    Les rendez-vous réservés par vos clients apparaîtront ici.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

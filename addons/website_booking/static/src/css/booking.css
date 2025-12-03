@@ -1,0 +1,73 @@
+/* EAZYNOVA - Website Booking CSS */
+
+.booking-slot-button {
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.booking-slot-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.booking-slot-button.active {
+    font-weight: bold;
+}
+
+#slots_list {
+    min-height: 100px;
+}
+
+#slots_list button {
+    margin: 5px;
+}
+
+.booking-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.booking-confirmation-icon {
+    animation: checkmark 0.5s ease-in-out;
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #slots_list button {
+        width: calc(33.333% - 10px);
+        margin: 5px;
+    }
+}
+
+/* Loading spinner */
+.booking-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0,0,0,.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

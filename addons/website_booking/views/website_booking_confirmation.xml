@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Page de confirmation -->
+        <template id="booking_confirmation_page" name="Confirmation de rendez-vous">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-check-circle text-success" style="font-size: 4rem;"/>
+                                </div>
+                                <h2 class="mb-3">Rendez-vous confirmé !</h2>
+                                <p class="lead">Votre rendez-vous a été enregistré avec succès.</p>
+
+                                <div class="alert alert-info text-start mt-4">
+                                    <h5><i class="fa fa-calendar"/> Détails du rendez-vous</h5>
+                                    <hr/>
+                                    <p class="mb-2">
+                                        <strong>Type :</strong>
+                                        <t t-out="appointment.booking_type_id.name"/>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Date et heure :</strong>
+                                        <t t-out="appointment.start_datetime" t-options="{'widget': 'datetime', 'format': 'dd/MM/yyyy HH:mm'}"/>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Durée :</strong>
+                                        <t t-out="appointment.duration"/> heure<t t-if="appointment.duration > 1">s</t>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Avec :</strong>
+                                        <t t-out="appointment.user_id.name"/>
+                                    </p>
+                                    <t t-if="appointment.booking_type_id.location">
+                                        <p class="mb-2">
+                                            <strong>Lieu :</strong>
+                                            <t t-out="appointment.booking_type_id.location"/>
+                                        </p>
+                                    </t>
+                                </div>
+
+                                <div class="alert alert-light mt-4">
+                                    <p class="mb-0">
+                                        <i class="fa fa-envelope"/>
+                                        Un email de confirmation a été envoyé à <strong t-out="appointment.partner_email"/>.
+                                    </p>
+                                </div>
+
+                                <div class="mt-4">
+                                    <t t-if="appointment.booking_type_id.allow_reschedule">
+                                        <a t-att-href="appointment.reschedule_url" class="btn btn-outline-primary me-2">
+                                            <i class="fa fa-calendar"/>
+                                            Reprogrammer
+                                        </a>
+                                    </t>
+                                    <t t-if="appointment.booking_type_id.allow_cancel">
+                                        <a t-att-href="appointment.cancel_url" class="btn btn-outline-danger">
+                                            <i class="fa fa-times"/>
+                                            Annuler
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Page d'annulation -->
+        <template id="booking_cancel_confirm" name="Confirmer l'annulation">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h3 class="mb-4">Annuler ce rendez-vous ?</h3>
+                                <div class="alert alert-warning text-start">
+                                    <p class="mb-2">
+                                        <strong>Type :</strong>
+                                        <t t-out="appointment.booking_type_id.name"/>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Date et heure :</strong>
+                                        <t t-out="appointment.start_datetime" t-options="{'widget': 'datetime'}"/>
+                                    </p>
+                                </div>
+                                <form method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <button type="submit" class="btn btn-danger me-2">
+                                        Confirmer l'annulation
+                                    </button>
+                                    <a href="/booking" class="btn btn-secondary">
+                                        Retour
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Page après annulation -->
+        <template id="booking_cancelled_page" name="Rendez-vous annulé">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-times-circle text-danger" style="font-size: 4rem;"/>
+                                </div>
+                                <h3 class="mb-3">Rendez-vous annulé</h3>
+                                <p class="lead">Votre rendez-vous a été annulé avec succès.</p>
+                                <div class="mt-4">
+                                    <a href="/booking" class="btn btn-primary">
+                                        Réserver un nouveau rendez-vous
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Annulation non autorisée -->
+        <template id="booking_cancel_not_allowed" name="Annulation non autorisée">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-ban text-warning" style="font-size: 4rem;"/>
+                                </div>
+                                <h3 class="mb-3">Annulation non autorisée</h3>
+                                <p class="lead">Ce type de rendez-vous ne peut pas être annulé en ligne.</p>
+                                <p>Veuillez nous contacter directement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Annulation trop tardive -->
+        <template id="booking_cancel_too_late" name="Annulation trop tardive">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-clock-o text-warning" style="font-size: 4rem;"/>
+                                </div>
+                                <h3 class="mb-3">Délai d'annulation dépassé</h3>
+                                <p class="lead">
+                                    Le délai d'annulation est de <t t-out="appointment.booking_type_id.cancel_hours"/> heures avant le rendez-vous.
+                                </p>
+                                <p>Pour annuler ce rendez-vous, veuillez nous contacter directement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Page de reprogrammation -->
+        <template id="booking_reschedule_page" name="Reprogrammer le rendez-vous">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="text-center mb-4">Reprogrammer votre rendez-vous</h2>
+                        <div class="alert alert-info">
+                            <p class="mb-0">
+                                <strong>Rendez-vous actuel :</strong>
+                                <t t-out="appointment.start_datetime" t-options="{'widget': 'datetime'}"/>
+                            </p>
+                        </div>
+                        <!-- Réutiliser le formulaire de réservation -->
+                        <p class="text-muted text-center">
+                            Cette fonctionnalité sera disponible prochainement.
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Reprogrammation non autorisée -->
+        <template id="booking_reschedule_not_allowed" name="Reprogrammation non autorisée">
+            <t t-call="website_booking.booking_layout">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-ban text-warning" style="font-size: 4rem;"/>
+                                </div>
+                                <h3 class="mb-3">Reprogrammation non autorisée</h3>
+                                <p class="lead">Ce type de rendez-vous ne peut pas être reprogrammé en ligne.</p>
+                                <p>Veuillez nous contacter directement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>
