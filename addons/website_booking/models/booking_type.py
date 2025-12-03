@@ -136,7 +136,6 @@ class BookingType(models.Model):
         compute='_compute_website_url'
     )
 
-    @api.depends('id')
     def _compute_website_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:

@@ -171,7 +171,6 @@ class Funnel(models.Model):
             else:
                 record.conversion_rate = 0
 
-    @api.depends('id')
     def _compute_website_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:

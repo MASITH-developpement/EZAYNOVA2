@@ -138,7 +138,7 @@ class BookingAppointment(models.Model):
             else:
                 record.end_datetime = False
 
-    @api.depends('access_token', 'id')
+    @api.depends('access_token')
     def _compute_urls(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:
