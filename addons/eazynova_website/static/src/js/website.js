@@ -1,7 +1,6 @@
 /** @odoo-module **/
 
 import publicWidget from "@web/legacy/js/public/public_widget";
-import { jsonrpc } from "@web/core/network/rpc_service";
 
 // Calculateur de prix
 publicWidget.registry.EazynovaPriceCalculator = publicWidget.Widget.extend({
