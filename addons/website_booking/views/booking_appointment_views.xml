@@ -114,12 +114,10 @@
                     <filter string="Effectué" name="done" domain="[('state', '=', 'done')]"/>
                     <filter string="Annulé" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <separator/>
-                    <group expand="0" string="Grouper par">
-                        <filter string="Type" name="group_type" context="{'group_by': 'booking_type_id'}"/>
-                        <filter string="Utilisateur" name="group_user" context="{'group_by': 'user_id'}"/>
-                        <filter string="Statut" name="group_state" context="{'group_by': 'state'}"/>
-                        <filter string="Date" name="group_date" context="{'group_by': 'start_datetime'}"/>
-                    </group>
+                    <filter string="Type" name="group_type" context="{'group_by': 'booking_type_id'}"/>
+                    <filter string="Utilisateur" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Statut" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'start_datetime'}"/>
                 </search>
             </field>
         </record>
