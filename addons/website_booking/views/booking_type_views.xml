@@ -8,13 +8,6 @@
             <field name="model">booking.type</field>
             <field name="arch" type="xml">
                 <list string="Types de Rendez-vous">
-                    <header>
-                        <button name="%(action_booking_type_creation_wizard)d"
-                                type="action"
-                                string="Créer avec l'IA"
-                                class="btn-primary"
-                                icon="fa-magic"/>
-                    </header>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="duration" widget="float_time"/>
