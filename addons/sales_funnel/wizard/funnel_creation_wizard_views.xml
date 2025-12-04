@@ -315,7 +315,7 @@
 
                     <!-- Bouton Suivant -->
                     <button name="action_next_step"
-                            string="Suivant →"
+                            string="Suivant"
                             type="object"
                             class="btn-primary"
                             invisible="current_step == '6_preview'"/>
