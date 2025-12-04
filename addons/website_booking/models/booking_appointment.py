@@ -119,12 +119,18 @@ class BookingAppointment(models.Model):
     )
 
     @api.model
-    def create(self, vals):
-        if vals.get('name', _('Nouveau')) == _('Nouveau'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('booking.appointment') or _('Nouveau')
-        if not vals.get('access_token'):
-            vals['access_token'] = self._generate_access_token()
-        return super(BookingAppointment, self).create(vals)
+    def create(self, vals_list):
+        # Odoo 19: vals_list est maintenant une liste de dictionnaires
+        if not isinstance(vals_list, list):
+            vals_list = [vals_list]
+
+        for vals in vals_list:
+            if vals.get('name', _('Nouveau')) == _('Nouveau'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('booking.appointment') or _('Nouveau')
+            if not vals.get('access_token'):
+                vals['access_token'] = self._generate_access_token()
+
+        return super(BookingAppointment, self).create(vals_list)
 
     def _generate_access_token(self):
         import secrets
