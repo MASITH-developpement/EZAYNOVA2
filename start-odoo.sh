@@ -70,12 +70,23 @@ EOF
 echo "Configuration Odoo créée!"
 echo "Connexion: odoo@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-# Nettoyer les assets corrompus ET débloquer les modules - VERSION AGRESSIVE
+# Vérifier si la base Odoo est initialisée
 echo ""
 echo "========================================"
-echo "=== NETTOYAGE AGRESSIF ODOO =========="
+echo "=== VÉRIFICATION BASE ODOO ==========="
 echo "========================================"
-PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
+
+# Vérifier si les tables Odoo existent
+DB_INITIALIZED=$(PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='ir_module_module');" 2>/dev/null || echo "f")
+
+if [ "$DB_INITIALIZED" = "t" ]; then
+    echo "✓ Base Odoo initialisée - Nettoyage en cours..."
+
+    # Nettoyer les assets corrompus ET débloquer les modules - VERSION AGRESSIVE
+    echo "========================================"
+    echo "=== NETTOYAGE AGRESSIF ODOO =========="
+    echo "========================================"
+    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
 -- 1. Désactiver tous les cron jobs temporairement
 UPDATE ir_cron SET active = false WHERE active = true;
 
@@ -133,10 +144,15 @@ FROM ir_module_module;
 SELECT COUNT(*) as "Assets restants" FROM ir_attachment WHERE name LIKE '%asset%' OR name LIKE '%.min.%';
 EOSQL
 
-if [ $? -eq 0 ]; then
-    echo "✓ Nettoyage agressif réussi"
+    if [ $? -eq 0 ]; then
+        echo "✓ Nettoyage agressif réussi"
+    else
+        echo "⚠ Nettoyage échoué (vérifier les logs)"
+    fi
 else
-    echo "⚠ Nettoyage échoué (vérifier les logs)"
+    echo "⚠ Base Odoo non initialisée - Premier démarrage détecté"
+    echo "  Le nettoyage sera effectué au prochain redémarrage"
+    echo "  Odoo va maintenant initialiser la base de données..."
 fi
 echo "========================================"
 echo ""
