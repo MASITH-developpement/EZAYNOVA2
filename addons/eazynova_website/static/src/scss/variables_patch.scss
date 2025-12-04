@@ -1,12 +1,59 @@
-/* EAZYNOVA - Patch pour les variables SCSS manquantes dans Odoo 19 */
+/* EAZYNOVA - Patch COMPLET pour les variables SCSS manquantes dans Odoo 19 */
 
-/* Variables du Web Editor manquantes */
+/* ===== VARIABLES WEB EDITOR ESSENTIELLES ===== */
+
+/* Spacing */
 $o-we-item-spacing: 0.5rem !default;
-$o-we-sidebar-width: 300px !default;
-$o-we-bg-darkest: #1c1c1c !default;
-$o-we-color-text-normal: #666 !default;
+$o-we-item-spacing-small: 0.25rem !default;
+$o-we-item-spacing-large: 1rem !default;
 
-/* Autres variables potentiellement manquantes */
-$o-we-toolbar-height: 40px !default;
+/* Sidebar */
+$o-we-sidebar-width: 300px !default;
+$o-we-sidebar-width-narrow: 250px !default;
+
+/* Colors */
+$o-we-bg: #fff !default;
+$o-we-bg-darker: #f8f9fa !default;
+$o-we-bg-darkest: #1c1c1c !default;
+$o-we-color: #212529 !default;
+$o-we-color-text-normal: #666 !default;
+$o-we-color-text-light: #999 !default;
+$o-we-color-primary: #007bff !default;
+$o-we-color-success: #28a745 !default;
+$o-we-color-warning: #ffc107 !default;
+$o-we-color-danger: #dc3545 !default;
+$o-we-color-info: #17a2b8 !default;
+
+/* Borders */
 $o-we-border-width: 1px !default;
 $o-we-border-color: #dee2e6 !default;
+$o-we-border-style: solid !default;
+$o-we-border-radius: 0.25rem !default;
+
+/* Toolbar */
+$o-we-toolbar-height: 40px !default;
+$o-we-toolbar-bg: #f8f9fa !default;
+
+/* Handles */
+$o-we-handle-edge-size: 10px !default;
+$o-we-handle-btn-size: 24px !default;
+
+/* Overlays */
+$o-we-overlay-zindex: 1040 !default;
+$o-we-zindex: 1050 !default;
+
+/* Dropzone */
+$o-we-dropzone-size: 60px !default;
+$o-we-dropzone-border: 2px dashed $o-we-color-primary !default;
+
+/* Font sizes */
+$o-we-font-size-base: 14px !default;
+$o-we-font-size-small: 12px !default;
+
+/* Animations */
+$o-we-transition-duration: 0.3s !default;
+$o-we-transition-easing: ease-in-out !default;
+
+/* ===== DÉSACTIVATION DES ASSETS PROBLÉMATIQUES ===== */
+/* Si les variables ci-dessus ne suffisent pas, les assets du web editor
+   peuvent être désactivés en commentant leur inclusion dans les bundles */

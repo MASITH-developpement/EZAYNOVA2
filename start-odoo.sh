@@ -70,29 +70,73 @@ EOF
 echo "Configuration Odoo créée!"
 echo "Connexion: odoo@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-# Nettoyer les assets corrompus ET débloquer les modules
+# Nettoyer les assets corrompus ET débloquer les modules - VERSION AGRESSIVE
 echo ""
 echo "========================================"
-echo "=== NETTOYAGE ET DÉBLOCAGE ODOO ======"
+echo "=== NETTOYAGE AGRESSIF ODOO =========="
 echo "========================================"
 PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
--- Nettoyer les assets
-DELETE FROM ir_attachment WHERE name LIKE '%.min.js%' OR name LIKE '%.min.css%' OR name LIKE '%assets_%';
-VACUUM ANALYZE ir_attachment;
+-- 1. Désactiver tous les cron jobs temporairement
+UPDATE ir_cron SET active = false WHERE active = true;
 
--- Débloquer tous les modules bloqués
-UPDATE ir_module_module SET state='uninstalled' WHERE state IN ('to install', 'to upgrade', 'to remove');
-UPDATE ir_module_module SET state='installed' WHERE state='to upgrade';
+-- 2. Débloquer TOUS les modules (très agressif)
+UPDATE ir_module_module
+SET state = 'uninstalled'
+WHERE state NOT IN ('installed', 'uninstalled');
+
+-- 3. Supprimer TOUS les assets générés (pas seulement minifiés)
+DELETE FROM ir_attachment
+WHERE res_model = 'ir.ui.view'
+   OR name LIKE '%assets_%'
+   OR name LIKE '%.min.%'
+   OR name LIKE '%/web/content/%'
+   OR name LIKE '%bundle%';
+
+-- 4. Supprimer les vues QWeb compilées
+DELETE FROM ir_ui_view
+WHERE type = 'qweb'
+  AND (name LIKE '%assets%' OR key LIKE '%assets%');
+
+-- 5. Nettoyer le cache de traduction
+TRUNCATE ir_translation;
+
+-- 6. Réactiver uniquement les cron essentiels
+UPDATE ir_cron SET active = true
+WHERE name IN ('Auto-vacuum internal data', 'Update Notification');
+
+-- 7. Vérifier l'état des modules critiques
+DO $$
+DECLARE
+    booking_state TEXT;
+    funnel_state TEXT;
+BEGIN
+    SELECT state INTO booking_state FROM ir_module_module WHERE name = 'website_booking';
+    SELECT state INTO funnel_state FROM ir_module_module WHERE name = 'sales_funnel';
+
+    RAISE NOTICE 'website_booking state: %', COALESCE(booking_state, 'NOT FOUND');
+    RAISE NOTICE 'sales_funnel state: %', COALESCE(funnel_state, 'NOT FOUND');
+END $$;
+
+-- 8. Nettoyer et analyser
+VACUUM ANALYZE ir_attachment;
+VACUUM ANALYZE ir_module_module;
+VACUUM ANALYZE ir_ui_view;
 
 -- Afficher les résultats
-SELECT COUNT(*) as "Assets supprimés" FROM ir_attachment WHERE name LIKE '%.min.%';
-SELECT COUNT(*) as "Modules débloqués" FROM ir_module_module WHERE state='uninstalled';
+SELECT
+    COUNT(*) as "Total modules",
+    SUM(CASE WHEN state = 'installed' THEN 1 ELSE 0 END) as "Installés",
+    SUM(CASE WHEN state = 'uninstalled' THEN 1 ELSE 0 END) as "Non installés",
+    SUM(CASE WHEN state NOT IN ('installed', 'uninstalled') THEN 1 ELSE 0 END) as "Bloqués restants"
+FROM ir_module_module;
+
+SELECT COUNT(*) as "Assets restants" FROM ir_attachment WHERE name LIKE '%asset%' OR name LIKE '%.min.%';
 EOSQL
 
 if [ $? -eq 0 ]; then
-    echo "✓ Nettoyage et déblocage réussis"
+    echo "✓ Nettoyage agressif réussi"
 else
-    echo "⚠ Nettoyage ignoré (normal au premier démarrage)"
+    echo "⚠ Nettoyage échoué (vérifier les logs)"
 fi
 echo "========================================"
 echo ""
