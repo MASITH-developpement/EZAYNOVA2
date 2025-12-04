@@ -108,10 +108,16 @@ class FunnelSubmission(models.Model):
     )
 
     @api.model
-    def create(self, vals):
-        if vals.get('name', _('Nouveau')) == _('Nouveau'):
-            vals['name'] = self.env['ir.sequence'].next_by_code('sales.funnel.submission') or _('Nouveau')
-        return super(FunnelSubmission, self).create(vals)
+    def create(self, vals_list):
+        # Odoo 19: vals_list est maintenant une liste de dictionnaires
+        if not isinstance(vals_list, list):
+            vals_list = [vals_list]
+
+        for vals in vals_list:
+            if vals.get('name', _('Nouveau')) == _('Nouveau'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('sales.funnel.submission') or _('Nouveau')
+
+        return super(FunnelSubmission, self).create(vals_list)
 
     @api.depends('partner_id')
     def _compute_partner_info(self):
