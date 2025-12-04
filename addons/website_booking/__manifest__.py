@@ -67,12 +67,12 @@
         # Wizards
         'wizard/booking_reschedule_wizard_views.xml',
     ],
-    'assets': {
-        'web.assets_frontend': [
-            'website_booking/static/src/css/booking.css',
-            'website_booking/static/src/js/booking_calendar.js',
-        ],
-    },
+    # 'assets': {
+    #     'web.assets_frontend': [
+    #         'website_booking/static/src/css/booking.css',
+    #         'website_booking/static/src/js/booking_calendar.js',
+    #     ],
+    # },
     'images': ['static/description/banner.png'],
     'installable': True,
     'application': True,
