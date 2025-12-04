@@ -11,8 +11,9 @@
                     <header>
                         <button name="%(action_funnel_creation_wizard)d"
                                 type="action"
-                                string="🤖 Créer avec l'IA"
-                                class="btn-primary"/>
+                                string="Créer avec l'IA"
+                                class="btn-primary"
+                                icon="fa-magic"/>
                     </header>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
