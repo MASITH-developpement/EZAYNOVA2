@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire du wizard de création de tunnel -->
+    <record id="view_funnel_creation_wizard_form" model="ir.ui.view">
+        <field name="name">funnel.creation.wizard.form</field>
+        <field name="model">funnel.creation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assistant de Création de Tunnel de Vente">
+                <header>
+                    <field name="current_step" widget="statuses"
+                           statusbar_visible="1_basic,2_landing,3_steps,4_fields,5_thank_you,6_preview"/>
+                </header>
+
+                <sheet>
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 1: INFORMATIONS DE BASE -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '1_basic'">
+                        <group colspan="2">
+                            <h1>✨ Créez votre tunnel de vente avec l'IA</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                Laissez l'intelligence artificielle vous guider dans la création
+                                d'un tunnel de vente optimisé pour la conversion.
+                            </p>
+                        </group>
+
+                        <!-- Template de départ -->
+                        <group string="🎯 Template de départ (optionnel)" colspan="2">
+                            <field name="template_id" placeholder="Choisir un template pré-configuré"/>
+                            <button name="action_apply_template"
+                                    string="Appliquer le template"
+                                    type="object"
+                                    class="btn-primary"
+                                    invisible="not template_id"
+                                    icon="fa-magic"/>
+                        </group>
+
+                        <!-- Informations de base -->
+                        <group string="📝 Informations de base" colspan="2">
+                            <field name="name"
+                                   placeholder="Ex: Téléchargez notre guide gratuit"
+                                   required="1"/>
+                            <field name="funnel_type"/>
+                            <field name="target_goal"
+                                   placeholder="Ex: Collecter 100 emails par mois"/>
+                            <field name="target_audience"
+                                   placeholder="Ex: Entrepreneurs, TPE/PME"/>
+                        </group>
+
+                        <!-- Description avec IA -->
+                        <group string="📄 Description du tunnel" colspan="2">
+                            <button name="action_generate_description"
+                                    string="🤖 Générer avec l'IA"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-magic"
+                                    help="L'IA va créer une description optimisée basée sur vos informations"/>
+
+                            <field name="use_ai_description"
+                                   invisible="not ai_generated_description"
+                                   string="Utiliser la description générée par IA"/>
+
+                            <field name="ai_generated_description"
+                                   invisible="not ai_generated_description"
+                                   readonly="1"
+                                   nolabel="1"/>
+
+                            <field name="description"
+                                   invisible="use_ai_description"
+                                   placeholder="Ou saisissez votre propre description..."
+                                   nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 2: PAGE D'ACCUEIL (LANDING PAGE) -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '2_landing'">
+                        <group colspan="2">
+                            <h1>🎨 Créez votre page d'accueil</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                La page d'accueil est la première impression. Rendez-la mémorable !
+                            </p>
+                        </group>
+
+                        <!-- Configuration landing page -->
+                        <group string="🖼️ En-tête de la page" colspan="2">
+                            <field name="landing_title"
+                                   placeholder="Ex: Téléchargez notre guide gratuit"
+                                   required="1"/>
+                            <field name="landing_subtitle"
+                                   placeholder="Ex: Découvrez les secrets de la croissance"/>
+                            <field name="show_progress_bar"/>
+                        </group>
+
+                        <!-- Contenu avec IA -->
+                        <group string="📝 Contenu de la page" colspan="2">
+                            <button name="action_generate_landing_page"
+                                    string="🤖 Générer avec l'IA"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-magic"
+                                    help="L'IA va créer un contenu de landing page optimisé pour la conversion"/>
+
+                            <field name="use_ai_landing"
+                                   invisible="not ai_generated_landing"
+                                   string="Utiliser le contenu généré par IA"/>
+
+                            <field name="ai_generated_landing"
+                                   invisible="not ai_generated_landing"
+                                   readonly="1"
+                                   nolabel="1"/>
+
+                            <field name="landing_content"
+                                   invisible="use_ai_landing"
+                                   placeholder="Ou créez votre propre contenu HTML..."
+                                   nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 3: ÉTAPES DU TUNNEL -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '3_steps'">
+                        <group colspan="2">
+                            <h1>🎯 Configurez les étapes du tunnel</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                Divisez le parcours utilisateur en étapes logiques et progressives.
+                            </p>
+                        </group>
+
+                        <!-- Nombre d'étapes -->
+                        <group string="📊 Configuration des étapes" colspan="2">
+                            <field name="step_count"
+                                   help="Entre 1 et 5 étapes recommandées"/>
+
+                            <button name="action_suggest_steps"
+                                    string="🤖 Suggérer des étapes avec l'IA"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-magic"
+                                    help="L'IA va suggérer des étapes pertinentes pour votre tunnel"/>
+
+                            <field name="ai_suggested_steps"
+                                   invisible="not ai_suggested_steps"
+                                   readonly="1"
+                                   nolabel="1"/>
+                        </group>
+
+                        <!-- Configuration détaillée des étapes -->
+                        <group string="✏️ Détails des étapes" colspan="2">
+                            <!-- Étape 1 -->
+                            <group colspan="2">
+                                <label for="step_1_name" string="Étape 1"/>
+                                <field name="step_1_name" placeholder="Nom de l'étape 1" nolabel="1"/>
+                                <field name="step_1_description"
+                                       placeholder="Description de l'étape 1"
+                                       nolabel="1"/>
+                            </group>
+
+                            <!-- Étape 2 -->
+                            <group colspan="2" invisible="step_count &lt; 2">
+                                <label for="step_2_name" string="Étape 2"/>
+                                <field name="step_2_name" placeholder="Nom de l'étape 2" nolabel="1"/>
+                                <field name="step_2_description"
+                                       placeholder="Description de l'étape 2"
+                                       nolabel="1"/>
+                            </group>
+
+                            <!-- Étape 3 -->
+                            <group colspan="2" invisible="step_count &lt; 3">
+                                <label for="step_3_name" string="Étape 3"/>
+                                <field name="step_3_name" placeholder="Nom de l'étape 3" nolabel="1"/>
+                                <field name="step_3_description"
+                                       placeholder="Description de l'étape 3"
+                                       nolabel="1"/>
+                            </group>
+
+                            <!-- Étape 4 -->
+                            <group colspan="2" invisible="step_count &lt; 4">
+                                <label for="step_4_name" string="Étape 4"/>
+                                <field name="step_4_name" placeholder="Nom de l'étape 4" nolabel="1"/>
+                                <field name="step_4_description"
+                                       placeholder="Description de l'étape 4"
+                                       nolabel="1"/>
+                            </group>
+
+                            <!-- Étape 5 -->
+                            <group colspan="2" invisible="step_count &lt; 5">
+                                <label for="step_5_name" string="Étape 5"/>
+                                <field name="step_5_name" placeholder="Nom de l'étape 5" nolabel="1"/>
+                                <field name="step_5_description"
+                                       placeholder="Description de l'étape 5"
+                                       nolabel="1"/>
+                            </group>
+                        </group>
+                    </group>
+
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 4: CHAMPS DU FORMULAIRE -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '4_fields'">
+                        <group colspan="2">
+                            <h1>📋 Configurez les champs du formulaire</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                Sélectionnez les informations que vous souhaitez collecter.
+                            </p>
+                        </group>
+
+                        <!-- Champs standards -->
+                        <group string="✅ Champs standards" colspan="2">
+                            <field name="include_name"/>
+                            <field name="include_email"/>
+                            <field name="include_phone"/>
+                            <field name="include_company"/>
+                            <field name="include_message"/>
+                        </group>
+
+                        <!-- Champs personnalisés avec IA -->
+                        <group string="🎨 Champs personnalisés" colspan="2">
+                            <button name="action_suggest_fields"
+                                    string="🤖 Suggérer des champs avec l'IA"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-magic"
+                                    help="L'IA va suggérer des champs pertinents pour votre tunnel"/>
+
+                            <field name="ai_suggested_fields"
+                                   invisible="not ai_suggested_fields"
+                                   readonly="1"
+                                   nolabel="1"/>
+
+                            <field name="custom_fields"
+                                   placeholder="Ajoutez vos propres champs (un par ligne)&#10;Ex:&#10;- Taille de l'entreprise&#10;- Budget disponible&#10;- Date de début souhaitée"
+                                   nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 5: PAGE DE REMERCIEMENT -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '5_thank_you'">
+                        <group colspan="2">
+                            <h1>🎉 Page de remerciement</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                Terminez en beauté avec un message de remerciement engageant.
+                            </p>
+                        </group>
+
+                        <!-- Configuration page de remerciement -->
+                        <group string="💌 Message de remerciement" colspan="2">
+                            <field name="thank_you_title" placeholder="Ex: Merci !"/>
+
+                            <button name="action_generate_thank_you_message"
+                                    string="🤖 Générer avec l'IA"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-magic"
+                                    help="L'IA va créer un message de remerciement personnalisé"/>
+
+                            <field name="use_ai_thank_you"
+                                   invisible="not ai_generated_thank_you"
+                                   string="Utiliser le message généré par IA"/>
+
+                            <field name="ai_generated_thank_you"
+                                   invisible="not ai_generated_thank_you"
+                                   readonly="1"
+                                   nolabel="1"/>
+
+                            <field name="thank_you_message"
+                                   invisible="use_ai_thank_you"
+                                   placeholder="Ou créez votre propre message..."
+                                   nolabel="1"/>
+                        </group>
+
+                        <!-- Redirection et actions -->
+                        <group string="🔗 Après la soumission" colspan="2">
+                            <field name="redirect_url"
+                                   placeholder="https://example.com/merci (optionnel)"/>
+                        </group>
+
+                        <!-- Actions automatiques -->
+                        <group string="⚙️ Actions automatiques" colspan="2">
+                            <field name="create_lead"/>
+                            <field name="create_contact"/>
+                        </group>
+                    </group>
+
+                    <!-- ================================================ -->
+                    <!-- ÉTAPE 6: PRÉVISUALISATION -->
+                    <!-- ================================================ -->
+                    <group invisible="current_step != '6_preview'">
+                        <group colspan="2">
+                            <h1>👁️ Aperçu de votre tunnel</h1>
+                            <p style="color: #6c757d; font-size: 14px;">
+                                Voici à quoi ressemblera votre tunnel de vente. Vous pourrez le personnaliser davantage après création.
+                            </p>
+                        </group>
+
+                        <!-- Aperçu HTML -->
+                        <group colspan="2">
+                            <field name="preview_html" nolabel="1"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <!-- Footer avec navigation -->
+                <footer>
+                    <!-- Bouton Précédent -->
+                    <button name="action_previous_step"
+                            string="← Précédent"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="current_step == '1_basic'"/>
+
+                    <!-- Bouton Suivant -->
+                    <button name="action_next_step"
+                            string="Suivant →"
+                            type="object"
+                            class="btn-primary"
+                            invisible="current_step == '6_preview'"/>
+
+                    <!-- Bouton Créer (dernière étape) -->
+                    <button name="action_create_funnel"
+                            string="✅ Créer le tunnel"
+                            type="object"
+                            class="btn-success"
+                            invisible="current_step != '6_preview'"/>
+
+                    <!-- Bouton Annuler -->
+                    <button string="Annuler"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir le wizard -->
+    <record id="action_funnel_creation_wizard" model="ir.actions.act_window">
+        <field name="name">Créer un Tunnel avec l'IA</field>
+        <field name="res_model">funnel.creation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sales_funnel"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+</odoo>

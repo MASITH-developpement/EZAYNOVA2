@@ -53,6 +53,7 @@
         'mail',
         'crm',
         'contacts',
+        'ai_assistant',
     ],
     'data': [
         # Sécurité
@@ -74,6 +75,9 @@
         'views/website_funnel_templates.xml',
         'views/website_funnel_page.xml',
         'views/website_funnel_thank_you.xml',
+
+        # Wizards
+        'wizard/funnel_creation_wizard_views.xml',
     ],
     # 'assets': {
     #     'web.assets_frontend': [
