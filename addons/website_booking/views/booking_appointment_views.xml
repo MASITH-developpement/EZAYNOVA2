@@ -114,8 +114,7 @@
                     <filter string="Effectué" name="done" domain="[('state', '=', 'done')]"/>
                     <filter string="Annulé" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <separator/>
-                    <filter string="Aujourd'hui" name="today" domain="[('start_datetime', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')), ('start_datetime', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
-                    <filter string="Cette semaine" name="this_week" date="start_datetime" default_period="this_week"/>
+                    <filter string="Date" name="filter_date" date="start_datetime"/>
                     <group expand="0" string="Grouper par">
                         <filter string="Type" name="group_type" context="{'group_by': 'booking_type_id'}"/>
                         <filter string="Utilisateur" name="group_user" context="{'group_by': 'user_id'}"/>
