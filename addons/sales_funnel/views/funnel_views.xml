@@ -8,6 +8,12 @@
             <field name="model">sales.funnel</field>
             <field name="arch" type="xml">
                 <list string="Tunnels de Vente">
+                    <header>
+                        <button name="%(action_funnel_creation_wizard)d"
+                                type="action"
+                                string="🤖 Créer avec l'IA"
+                                class="btn-primary"/>
+                    </header>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="funnel_type"/>
