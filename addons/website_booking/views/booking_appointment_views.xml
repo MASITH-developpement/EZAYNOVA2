@@ -114,8 +114,8 @@
                     <filter string="Effectué" name="done" domain="[('state', '=', 'done')]"/>
                     <filter string="Annulé" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <separator/>
-                    <filter string="Aujourd'hui" name="today" domain="[('start_datetime', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('start_datetime', '&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
-                    <filter string="Cette semaine" name="this_week" domain="[('start_datetime', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')), ('start_datetime', '&lt;=', (context_today() + datetime.timedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Aujourd'hui" name="today" domain="[('start_datetime', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')), ('start_datetime', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="Cette semaine" name="this_week" date="start_datetime" default_period="this_week"/>
                     <group expand="0" string="Grouper par">
                         <filter string="Type" name="group_type" context="{'group_by': 'booking_type_id'}"/>
                         <filter string="Utilisateur" name="group_user" context="{'group_by': 'user_id'}"/>
