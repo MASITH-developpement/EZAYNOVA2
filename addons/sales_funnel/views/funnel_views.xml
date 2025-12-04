@@ -7,7 +7,7 @@
             <field name="name">sales.funnel.tree</field>
             <field name="model">sales.funnel</field>
             <field name="arch" type="xml">
-                <tree string="Tunnels de Vente">
+                <list string="Tunnels de Vente">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="funnel_type"/>
@@ -15,7 +15,7 @@
                     <field name="submission_count"/>
                     <field name="conversion_rate" widget="progressbar"/>
                     <field name="active" widget="boolean_toggle"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -58,12 +58,12 @@
                         <notebook>
                             <page string="Étapes" name="steps">
                                 <field name="step_ids">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="name"/>
                                         <field name="conditional"/>
                                         <button name="%(action_funnel_field)d" type="action" icon="fa-edit" string="Champs" context="{'default_step_id': id}"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Page d'accueil" name="landing">
@@ -155,7 +155,7 @@
         <record id="action_sales_funnel" model="ir.actions.act_window">
             <field name="name">Tunnels de Vente</field>
             <field name="res_model">sales.funnel</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">kanban,list,form</field>
         </record>
 
     </data>

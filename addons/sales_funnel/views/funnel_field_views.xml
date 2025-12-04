@@ -42,7 +42,7 @@
         <record id="action_funnel_field" model="ir.actions.act_window">
             <field name="name">Champs</field>
             <field name="res_model">sales.funnel.field</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
     </data>
 </odoo>
