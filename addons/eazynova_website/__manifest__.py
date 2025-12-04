@@ -72,7 +72,7 @@
     'assets': {
         'web.assets_frontend': [
             'eazynova_website/static/src/css/website.css',
-            'eazynova_website/static/src/js/website.js',
+            # 'eazynova_website/static/src/js/website.js',  # Désactivé temporairement - incompatible Odoo 19
         ],
         'web.assets_backend': [
             'eazynova_website/static/src/css/backend.css',
