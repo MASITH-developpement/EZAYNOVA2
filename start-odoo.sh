@@ -70,89 +70,62 @@ EOF
 echo "Configuration Odoo créée!"
 echo "Connexion: odoo@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-# Vérifier si la base Odoo est initialisée
+# Nettoyer TOUTES les bases de données Odoo existantes
 echo ""
 echo "========================================"
-echo "=== VÉRIFICATION BASE ODOO ==========="
+echo "=== NETTOYAGE MULTI-BASE ODOO ========"
 echo "========================================"
 
-# Vérifier si les tables Odoo existent
-DB_INITIALIZED=$(PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='ir_module_module');" 2>/dev/null || echo "f")
+# Récupérer la liste de toutes les bases (exclure postgres, template0, template1)
+DATABASES=$(PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d postgres -tAc "SELECT datname FROM pg_database WHERE datistemplate = false AND datname NOT IN ('postgres');" 2>/dev/null)
 
-if [ "$DB_INITIALIZED" = "t" ]; then
-    echo "✓ Base Odoo initialisée - Nettoyage en cours..."
+if [ -z "$DATABASES" ]; then
+    echo "⚠ Aucune base de données trouvée - Premier démarrage"
+else
+    echo "Bases de données détectées:"
+    echo "$DATABASES"
+    echo ""
 
-    # Nettoyer les assets corrompus ET débloquer les modules - VERSION AGRESSIVE
-    echo "========================================"
-    echo "=== NETTOYAGE AGRESSIF ODOO =========="
-    echo "========================================"
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
--- 1. Désactiver tous les cron jobs temporairement
+    # Pour chaque base de données
+    for DB in $DATABASES; do
+        echo "--- Traitement de la base: $DB ---"
+
+        # Vérifier si c'est une base Odoo
+        IS_ODOO=$(PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "$DB" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='ir_module_module');" 2>/dev/null || echo "f")
+
+        if [ "$IS_ODOO" = "t" ]; then
+            echo "  ✓ Base Odoo détectée - Nettoyage en cours..."
+
+            # Nettoyage agressif de cette base
+            PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "$DB" << 'EOSQL' 2>/dev/null
+-- Désactiver les cron temporairement
 UPDATE ir_cron SET active = false WHERE active = true;
 
--- 2. Débloquer TOUS les modules (très agressif)
-UPDATE ir_module_module
-SET state = 'uninstalled'
-WHERE state NOT IN ('installed', 'uninstalled');
+-- Débloquer TOUS les modules
+UPDATE ir_module_module SET state = 'uninstalled' WHERE state NOT IN ('installed', 'uninstalled');
 
--- 3. Supprimer TOUS les assets générés (pas seulement minifiés)
-DELETE FROM ir_attachment
-WHERE res_model = 'ir.ui.view'
-   OR name LIKE '%assets_%'
-   OR name LIKE '%.min.%'
-   OR name LIKE '%/web/content/%'
-   OR name LIKE '%bundle%';
+-- Supprimer tous les assets
+DELETE FROM ir_attachment WHERE res_model = 'ir.ui.view' OR name LIKE '%assets_%' OR name LIKE '%.min.%' OR name LIKE '%bundle%';
 
--- 4. Supprimer les vues QWeb compilées
-DELETE FROM ir_ui_view
-WHERE type = 'qweb'
-  AND (name LIKE '%assets%' OR key LIKE '%assets%');
+-- Supprimer les vues QWeb compilées
+DELETE FROM ir_ui_view WHERE type = 'qweb' AND (name LIKE '%assets%' OR key LIKE '%assets%');
 
--- 5. Nettoyer le cache de traduction
-TRUNCATE ir_translation;
-
--- 6. Réactiver uniquement les cron essentiels
-UPDATE ir_cron SET active = true
-WHERE name IN ('Auto-vacuum internal data', 'Update Notification');
-
--- 7. Vérifier l'état des modules critiques
-DO $$
-DECLARE
-    booking_state TEXT;
-    funnel_state TEXT;
-BEGIN
-    SELECT state INTO booking_state FROM ir_module_module WHERE name = 'website_booking';
-    SELECT state INTO funnel_state FROM ir_module_module WHERE name = 'sales_funnel';
-
-    RAISE NOTICE 'website_booking state: %', COALESCE(booking_state, 'NOT FOUND');
-    RAISE NOTICE 'sales_funnel state: %', COALESCE(funnel_state, 'NOT FOUND');
-END $$;
-
--- 8. Nettoyer et analyser
-VACUUM ANALYZE ir_attachment;
-VACUUM ANALYZE ir_module_module;
-VACUUM ANALYZE ir_ui_view;
-
--- Afficher les résultats
-SELECT
-    COUNT(*) as "Total modules",
-    SUM(CASE WHEN state = 'installed' THEN 1 ELSE 0 END) as "Installés",
-    SUM(CASE WHEN state = 'uninstalled' THEN 1 ELSE 0 END) as "Non installés",
-    SUM(CASE WHEN state NOT IN ('installed', 'uninstalled') THEN 1 ELSE 0 END) as "Bloqués restants"
-FROM ir_module_module;
-
-SELECT COUNT(*) as "Assets restants" FROM ir_attachment WHERE name LIKE '%asset%' OR name LIKE '%.min.%';
+-- Réactiver les cron essentiels
+UPDATE ir_cron SET active = true WHERE name IN ('Auto-vacuum internal data', 'Update Notification');
 EOSQL
 
-    if [ $? -eq 0 ]; then
-        echo "✓ Nettoyage agressif réussi"
-    else
-        echo "⚠ Nettoyage échoué (vérifier les logs)"
-    fi
-else
-    echo "⚠ Base Odoo non initialisée - Premier démarrage détecté"
-    echo "  Le nettoyage sera effectué au prochain redémarrage"
-    echo "  Odoo va maintenant initialiser la base de données..."
+            if [ $? -eq 0 ]; then
+                echo "  ✓ Nettoyage réussi pour $DB"
+            else
+                echo "  ⚠ Erreur lors du nettoyage de $DB"
+            fi
+        else
+            echo "  - Base non-Odoo, ignorée"
+        fi
+        echo ""
+    done
+
+    echo "✓ Nettoyage multi-base terminé"
 fi
 echo "========================================"
 echo ""
