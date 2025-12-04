@@ -1,0 +1,12 @@
+/* EAZYNOVA - Patch pour les variables SCSS manquantes dans Odoo 19 */
+
+/* Variables du Web Editor manquantes */
+$o-we-item-spacing: 0.5rem !default;
+$o-we-sidebar-width: 300px !default;
+$o-we-bg-darkest: #1c1c1c !default;
+$o-we-color-text-normal: #666 !default;
+
+/* Autres variables potentiellement manquantes */
+$o-we-toolbar-height: 40px !default;
+$o-we-border-width: 1px !default;
+$o-we-border-color: #dee2e6 !default;

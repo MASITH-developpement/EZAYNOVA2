@@ -70,6 +70,12 @@
         'wizard/subscription_upgrade_wizard_views.xml',
     ],
     'assets': {
+        'web.assets_web': [
+            ('prepend', 'eazynova_website/static/src/scss/variables_patch.scss'),
+        ],
+        'web.assets_web_print': [
+            ('prepend', 'eazynova_website/static/src/scss/variables_patch.scss'),
+        ],
         'web.assets_frontend': [
             'eazynova_website/static/src/css/website.css',
             # 'eazynova_website/static/src/js/website.js',  # Désactivé temporairement - incompatible Odoo 19
