@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_generate_wizard_form" model="ir.ui.view">
+        <field name="name">ai.generate.wizard.form</field>
+        <field name="model">ai.generate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Générer avec l'IA">
+                <group>
+                    <field name="generation_type"/>
+                    <field name="prompt" placeholder="Décrivez ce que vous voulez générer..."/>
+                    <field name="max_tokens" invisible="generation_type != 'text'"/>
+                    <field name="image_style" invisible="generation_type not in ['image', 'icon']"/>
+                </group>
+                <group string="Résultat" invisible="not result_text and not result_media">
+                    <field name="result_text" invisible="generation_type != 'text'" nolabel="1"/>
+                    <field name="result_media" filename="result_filename" invisible="generation_type == 'text'"/>
+                    <field name="result_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Générer" type="object" class="btn-primary"/>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

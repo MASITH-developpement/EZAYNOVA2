@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_config_user,ai.config.user,model_ai_config,base.group_user,1,0,0,0
+access_ai_config_manager,ai.config.manager,model_ai_config,base.group_system,1,1,1,1
+access_ai_media_library_user,ai.media.library.user,model_ai_media_library,base.group_user,1,1,1,0
+access_ai_media_library_manager,ai.media.library.manager,model_ai_media_library,base.group_system,1,1,1,1
+access_ai_media_tag_user,ai.media.tag.user,model_ai_media_tag,base.group_user,1,0,0,0
+access_ai_media_tag_manager,ai.media.tag.manager,model_ai_media_tag,base.group_system,1,1,1,1

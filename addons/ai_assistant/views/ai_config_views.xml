@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_config_form" model="ir.ui.view">
+        <field name="name">ai.config.form</field>
+        <field name="model">ai.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuration Assistant IA">
+                <header>
+                    <button name="action_test_connection" type="object" string="Tester la connexion" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Configuration de l'Assistant IA</h1>
+                    </div>
+                    <group>
+                        <group string="Génération de Texte">
+                            <field name="provider"/>
+                            <field name="text_model"/>
+                            <field name="claude_api_key" password="True" invisible="provider == 'openai'"/>
+                            <field name="openai_api_key" password="True" invisible="provider == 'claude'"/>
+                        </group>
+                        <group string="Génération d'Images">
+                            <field name="image_provider"/>
+                            <field name="image_quality"/>
+                            <field name="image_size"/>
+                            <field name="stable_diffusion_api_key" password="True" invisible="image_provider != 'stable_diffusion'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Génération d'Audio">
+                            <field name="audio_provider"/>
+                            <field name="elevenlabs_api_key" password="True" invisible="audio_provider != 'elevenlabs'"/>
+                        </group>
+                        <group string="Options">
+                            <field name="enable_cache"/>
+                            <field name="cache_duration" invisible="not enable_cache"/>
+                            <field name="max_tokens"/>
+                            <field name="temperature"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Derniers tests" invisible="not last_test_date">
+                        <field name="last_test_date"/>
+                        <field name="last_test_result" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_config_tree" model="ir.ui.view">
+        <field name="name">ai.config.tree</field>
+        <field name="model">ai.config</field>
+        <field name="arch" type="xml">
+            <list string="Configurations IA">
+                <field name="provider"/>
+                <field name="image_provider"/>
+                <field name="audio_provider"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_ai_config" model="ir.actions.act_window">
+        <field name="name">Configuration IA</field>
+        <field name="res_model">ai.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

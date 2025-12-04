@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu principal -->
+    <menuitem id="menu_ai_assistant_root"
+              name="Assistant IA"
+              sequence="100"/>
+
+    <menuitem id="menu_ai_media_library"
+              name="Bibliothèque"
+              parent="menu_ai_assistant_root"
+              action="action_ai_media_library"
+              sequence="10"/>
+
+    <menuitem id="menu_ai_config"
+              name="Configuration"
+              parent="menu_ai_assistant_root"
+              action="action_ai_config"
+              sequence="100"/>
+</odoo>
