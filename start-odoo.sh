@@ -70,21 +70,29 @@ EOF
 echo "Configuration Odoo créée!"
 echo "Connexion: odoo@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-# Nettoyer les assets corrompus
+# Nettoyer les assets corrompus ET débloquer les modules
 echo ""
 echo "========================================"
-echo "=== NETTOYAGE DES ASSETS ODOO ========"
+echo "=== NETTOYAGE ET DÉBLOCAGE ODOO ======"
 echo "========================================"
 PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
+-- Nettoyer les assets
 DELETE FROM ir_attachment WHERE name LIKE '%.min.js%' OR name LIKE '%.min.css%' OR name LIKE '%assets_%';
 VACUUM ANALYZE ir_attachment;
-SELECT COUNT(*) as "Assets restants" FROM ir_attachment WHERE name LIKE '%.min.%';
+
+-- Débloquer tous les modules bloqués
+UPDATE ir_module_module SET state='uninstalled' WHERE state IN ('to install', 'to upgrade', 'to remove');
+UPDATE ir_module_module SET state='installed' WHERE state='to upgrade';
+
+-- Afficher les résultats
+SELECT COUNT(*) as "Assets supprimés" FROM ir_attachment WHERE name LIKE '%.min.%';
+SELECT COUNT(*) as "Modules débloqués" FROM ir_module_module WHERE state='uninstalled';
 EOSQL
 
 if [ $? -eq 0 ]; then
-    echo "✓ Assets nettoyés avec succès"
+    echo "✓ Nettoyage et déblocage réussis"
 else
-    echo "⚠ Nettoyage des assets ignoré (normal au premier démarrage)"
+    echo "⚠ Nettoyage ignoré (normal au premier démarrage)"
 fi
 echo "========================================"
 echo ""
