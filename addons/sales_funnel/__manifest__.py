@@ -75,12 +75,12 @@
         'views/website_funnel_page.xml',
         'views/website_funnel_thank_you.xml',
     ],
-    'assets': {
-        'web.assets_frontend': [
-            'sales_funnel/static/src/css/funnel.css',
-            'sales_funnel/static/src/js/funnel.js',
-        ],
-    },
+    # 'assets': {
+    #     'web.assets_frontend': [
+    #         'sales_funnel/static/src/css/funnel.css',
+    #         'sales_funnel/static/src/js/funnel.js',
+    #     ],
+    # },
     'images': ['static/description/banner.png'],
     'installable': True,
     'application': True,
