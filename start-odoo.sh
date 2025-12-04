@@ -70,6 +70,25 @@ EOF
 echo "Configuration Odoo créée!"
 echo "Connexion: odoo@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
+# Nettoyer les assets corrompus
+echo ""
+echo "========================================"
+echo "=== NETTOYAGE DES ASSETS ODOO ========"
+echo "========================================"
+PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "${DB_NAME}" << 'EOSQL'
+DELETE FROM ir_attachment WHERE name LIKE '%.min.js%' OR name LIKE '%.min.css%' OR name LIKE '%assets_%';
+VACUUM ANALYZE ir_attachment;
+SELECT COUNT(*) as "Assets restants" FROM ir_attachment WHERE name LIKE '%.min.%';
+EOSQL
+
+if [ $? -eq 0 ]; then
+    echo "✓ Assets nettoyés avec succès"
+else
+    echo "⚠ Nettoyage des assets ignoré (normal au premier démarrage)"
+fi
+echo "========================================"
+echo ""
+
 # Lancer Odoo
 echo "Démarrage d'Odoo..."
 exec odoo -c /etc/odoo/odoo.conf
