@@ -62,7 +62,6 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="name"/>
                                         <field name="conditional"/>
-                                        <button name="%(action_funnel_field)d" type="action" icon="fa-edit" string="Champs" context="{'default_step_id': id}"/>
                                     </list>
                                 </field>
                             </page>
