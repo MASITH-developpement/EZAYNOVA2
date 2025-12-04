@@ -147,6 +147,26 @@ Réponds uniquement avec la description, sans introduction.
         return self.generate(prompt, max_tokens=200)
 
     @api.model
+    def generate_funnel_description(self, funnel_name, funnel_type, target_goal=None, target_audience=None):
+        """Générer une description de tunnel de vente"""
+        prompt = f"""
+Crée une description professionnelle pour un tunnel de vente nommé "{funnel_name}".
+
+Type de tunnel: {funnel_type}
+{f"Objectif: {target_goal}" if target_goal else ""}
+{f"Public cible: {target_audience}" if target_audience else ""}
+
+La description doit:
+- Expliquer clairement l'objectif du tunnel
+- Être concise (2-3 phrases)
+- Mettre en avant les bénéfices
+- Être professionnelle et engageante
+
+Réponds uniquement avec la description, sans introduction.
+"""
+        return self.generate(prompt, max_tokens=200)
+
+    @api.model
     def generate_funnel_landing_page(self, funnel_name, funnel_type, target_goal):
         """Générer le contenu d'une page d'accueil de tunnel"""
         prompt = f"""

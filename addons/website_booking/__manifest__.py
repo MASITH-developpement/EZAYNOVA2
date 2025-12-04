@@ -43,6 +43,7 @@
         'mail',
         'calendar',
         'contacts',
+        'ai_assistant',
     ],
     'data': [
         # Sécurité
@@ -66,6 +67,7 @@
 
         # Wizards
         'wizard/booking_reschedule_wizard_views.xml',
+        'wizard/booking_type_creation_wizard_views.xml',
     ],
     # 'assets': {
     #     'web.assets_frontend': [

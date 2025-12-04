@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_booking_type_creation_wizard_form" model="ir.ui.view">
+        <field name="name">booking.type.creation.wizard.form</field>
+        <field name="model">booking.type.creation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Assistant de Création de Rendez-vous">
+                <header>
+                    <field name="current_step" widget="statuses" statusbar_visible="1_basic,2_availability,3_questions,4_landing,5_notifications,6_preview"/>
+                </header>
+                <sheet>
+                    <!-- Étape 1: Informations de base -->
+                    <group invisible="current_step != '1_basic'">
+                        <h1>✨ Créez votre type de rendez-vous avec l'IA</h1>
+                        <group string="Template (optionnel)">
+                            <field name="template_id"/>
+                            <button name="action_apply_template" string="Appliquer le template" type="object" class="btn-secondary" invisible="not template_id"/>
+                        </group>
+                        <group string="Informations de base">
+                            <field name="name" placeholder="Ex: Consultation 30 min"/>
+                            <field name="duration"/>
+                            <field name="target_audience" placeholder="Ex: Professionnels, Particuliers..."/>
+                        </group>
+                        <group string="Description">
+                            <button name="action_generate_description" string="🤖 Générer avec l'IA" type="object" class="btn-primary" icon="fa-magic"/>
+                            <field name="use_ai_description" invisible="not ai_generated_description"/>
+                            <field name="ai_generated_description" invisible="not ai_generated_description" readonly="1"/>
+                            <field name="description" invisible="use_ai_description"/>
+                        </group>
+                    </group>
+
+                    <!-- Étape 2: Disponibilités -->
+                    <group invisible="current_step != '2_availability'">
+                        <h1>📅 Configurez vos disponibilités</h1>
+                        <group string="Jours disponibles">
+                            <field name="allow_monday"/>
+                            <field name="allow_tuesday"/>
+                            <field name="allow_wednesday"/>
+                            <field name="allow_thursday"/>
+                            <field name="allow_friday"/>
+                            <field name="allow_saturday"/>
+                            <field name="allow_sunday"/>
+                        </group>
+                        <group string="Horaires">
+                            <field name="start_time" widget="float_time"/>
+                            <field name="end_time" widget="float_time"/>
+                            <field name="buffer_time"/>
+                        </group>
+                    </group>
+
+                    <!-- Étape 3: Questions -->
+                    <group invisible="current_step != '3_questions'">
+                        <h1>❓ Personnalisez les questions</h1>
+                        <group string="Questions standards">
+                            <field name="ask_phone"/>
+                            <field name="ask_company"/>
+                            <field name="ask_message"/>
+                        </group>
+                        <group string="Questions personnalisées">
+                            <button name="action_generate_questions" string="🤖 Suggérer avec l'IA" type="object" class="btn-primary"/>
+                            <field name="ai_generated_questions" invisible="not ai_generated_questions" readonly="1"/>
+                            <field name="custom_questions" placeholder="Une question par ligne..."/>
+                        </group>
+                    </group>
+
+                    <!-- Étape 4: Page d'accueil -->
+                    <group invisible="current_step != '4_landing'">
+                        <h1>🎨 Page d'accueil personnalisée</h1>
+                        <group>
+                            <field name="landing_title"/>
+                            <button name="action_generate_landing_page" string="🤖 Générer avec l'IA" type="object" class="btn-primary"/>
+                            <field name="ai_generated_landing" invisible="not ai_generated_landing" readonly="1"/>
+                            <field name="landing_content"/>
+                            <field name="generate_icon"/>
+                        </group>
+                    </group>
+
+                    <!-- Étape 5: Notifications -->
+                    <group invisible="current_step != '5_notifications'">
+                        <h1>📧 Configurez les notifications</h1>
+                        <group>
+                            <field name="send_confirmation"/>
+                            <field name="send_reminder"/>
+                            <field name="reminder_hours" invisible="not send_reminder"/>
+                        </group>
+                        <group string="Email de confirmation" invisible="not send_confirmation">
+                            <button name="action_generate_email_template" string="🤖 Générer avec l'IA" type="object" class="btn-primary"/>
+                            <field name="confirmation_email_subject"/>
+                            <field name="ai_generated_email" invisible="not ai_generated_email" readonly="1"/>
+                            <field name="confirmation_email_body"/>
+                        </group>
+                    </group>
+
+                    <!-- Étape 6: Prévisualisation -->
+                    <group invisible="current_step != '6_preview'">
+                        <h1>👁️ Aperçu final</h1>
+                        <field name="preview_html" nolabel="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_previous_step" string="← Précédent" type="object" class="btn-secondary" invisible="current_step == '1_basic'"/>
+                    <button name="action_next_step" string="Suivant →" type="object" class="btn-primary" invisible="current_step == '6_preview'"/>
+                    <button name="action_create_booking_type" string="✅ Créer le rendez-vous" type="object" class="btn-success" invisible="current_step != '6_preview'"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_booking_type_creation_wizard" model="ir.actions.act_window">
+        <field name="name">Créer un Type de Rendez-vous avec l'IA</field>
+        <field name="res_model">booking.type.creation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
