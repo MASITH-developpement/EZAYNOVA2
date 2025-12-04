@@ -2,6 +2,7 @@
 <odoo>
     <data>
         <menuitem id="menu_sales_funnel_root" name="Tunnels de Vente" sequence="52" web_icon="sales_funnel,static/description/icon.png"/>
+        <menuitem id="menu_funnel_wizard" name="Créer avec l'IA" parent="menu_sales_funnel_root" action="sales_funnel.action_funnel_creation_wizard" sequence="5"/>
         <menuitem id="menu_funnel" name="Tunnels" parent="menu_sales_funnel_root" action="action_sales_funnel" sequence="10"/>
         <menuitem id="menu_funnel_submission" name="Soumissions" parent="menu_sales_funnel_root" action="action_funnel_submission" sequence="20"/>
     </data>

@@ -9,6 +9,12 @@
             web_icon="website_booking,static/description/icon.png"/>
 
         <!-- Sous-menus -->
+        <menuitem id="menu_booking_wizard"
+            name="Créer avec l'IA"
+            parent="menu_booking_root"
+            action="website_booking.action_booking_type_creation_wizard"
+            sequence="5"/>
+
         <menuitem id="menu_booking_appointments"
             name="Rendez-vous"
             parent="menu_booking_root"
