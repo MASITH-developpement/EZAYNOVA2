@@ -168,7 +168,7 @@ class BookingType(models.Model):
         self.ensure_one()
         return {
             'name': _('Rendez-vous'),
-            'view_mode': 'tree,form,calendar',
+            'view_mode': 'list,form,calendar',
             'res_model': 'booking.appointment',
             'type': 'ir.actions.act_window',
             'domain': [('booking_type_id', '=', self.id)],

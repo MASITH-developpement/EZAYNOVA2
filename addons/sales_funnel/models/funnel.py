@@ -189,7 +189,7 @@ class Funnel(models.Model):
         self.ensure_one()
         return {
             'name': _('Soumissions'),
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'res_model': 'sales.funnel.submission',
             'type': 'ir.actions.act_window',
             'domain': [('funnel_id', '=', self.id)],
@@ -200,7 +200,7 @@ class Funnel(models.Model):
         self.ensure_one()
         return {
             'name': _('Étapes'),
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'res_model': 'sales.funnel.step',
             'type': 'ir.actions.act_window',
             'domain': [('funnel_id', '=', self.id)],

@@ -16,13 +16,13 @@
                         <notebook>
                             <page string="Champs">
                                 <field name="field_ids">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="name"/>
                                         <field name="field_type"/>
                                         <field name="required"/>
                                         <field name="crm_field"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                             <page string="Navigation">
