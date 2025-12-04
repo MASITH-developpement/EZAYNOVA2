@@ -1,0 +1,48 @@
+/* Assistant IA - Styles */
+
+.ai_assistant_widget {
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.ai_suggestion {
+    margin: 10px 0;
+    padding: 10px;
+    background: white;
+    border-left: 3px solid #007bff;
+    border-radius: 4px;
+}
+
+.ai_loading {
+    display: inline-block;
+    animation: ai_pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ai_pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.ai_generated_content {
+    margin: 15px 0;
+    padding: 15px;
+    background: #e7f3ff;
+    border-radius: 6px;
+}
+
+.ai_button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ai_button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
