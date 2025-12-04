@@ -96,19 +96,13 @@ else
         if [ "$IS_ODOO" = "t" ]; then
             echo "  ✓ Base Odoo détectée - Nettoyage en cours..."
 
-            # Nettoyage agressif de cette base
+            # Nettoyage SÉCURISÉ - déblocage uniquement, pas de suppression d'assets critiques
             PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "$DB" << 'EOSQL' 2>/dev/null
 -- Désactiver les cron temporairement
 UPDATE ir_cron SET active = false WHERE active = true;
 
 -- Débloquer TOUS les modules
 UPDATE ir_module_module SET state = 'uninstalled' WHERE state NOT IN ('installed', 'uninstalled');
-
--- Supprimer tous les assets
-DELETE FROM ir_attachment WHERE res_model = 'ir.ui.view' OR name LIKE '%assets_%' OR name LIKE '%.min.%' OR name LIKE '%bundle%';
-
--- Supprimer les vues QWeb compilées
-DELETE FROM ir_ui_view WHERE type = 'qweb' AND (name LIKE '%assets%' OR key LIKE '%assets%');
 
 -- Réactiver les cron essentiels
 UPDATE ir_cron SET active = true WHERE name IN ('Auto-vacuum internal data', 'Update Notification');
@@ -130,6 +124,6 @@ fi
 echo "========================================"
 echo ""
 
-# Lancer Odoo
-echo "Démarrage d'Odoo..."
-exec odoo -c /etc/odoo/odoo.conf
+# Lancer Odoo avec mise à jour forcée des modules de base
+echo "Démarrage d'Odoo avec régénération des assets..."
+exec odoo -c /etc/odoo/odoo.conf --update=base,web
