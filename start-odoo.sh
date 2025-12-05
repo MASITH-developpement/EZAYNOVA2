@@ -124,6 +124,42 @@ fi
 echo "========================================"
 echo ""
 
+# ======================================
+# FIX: Réinitialiser le domaine website
+# ======================================
+echo "========================================"
+echo "=== FIX WEBSITE REDIRECT ============="
+echo "========================================"
+
+if [ -n "$DATABASES" ]; then
+    for DB in $DATABASES; do
+        # Vérifier si le module website est installé
+        HAS_WEBSITE=$(PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "$DB" -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='website');" 2>/dev/null || echo "f")
+
+        if [ "$HAS_WEBSITE" = "t" ]; then
+            echo "Correction du domaine website pour la base: $DB"
+
+            PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "odoo" -d "$DB" << 'EOSQL' 2>/dev/null
+-- Réinitialiser tous les domaines website (vide = accepte tous les domaines)
+UPDATE website SET domain = '' WHERE active = true;
+
+-- S'assurer qu'il y a un site par défaut
+UPDATE website SET is_default_website = false;
+UPDATE website SET is_default_website = true WHERE id = (SELECT MIN(id) FROM website WHERE active = true);
+EOSQL
+
+            if [ $? -eq 0 ]; then
+                echo "  ✓ Domaine website corrigé pour $DB"
+            else
+                echo "  ⚠ Erreur lors de la correction du domaine pour $DB"
+            fi
+        fi
+    done
+fi
+
+echo "========================================"
+echo ""
+
 # Lancer Odoo avec mise à jour forcée des modules de base
 echo "Démarrage d'Odoo avec régénération des assets..."
 exec odoo -c /etc/odoo/odoo.conf --update=base,web
