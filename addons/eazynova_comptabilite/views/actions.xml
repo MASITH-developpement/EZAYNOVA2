@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions pour les menus -->
+    
+    <record id="action_account_journal" model="ir.actions.act_window">
+        <field name="name">Journaux</field>
+        <field name="res_model">account.journal</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_account_tax" model="ir.actions.act_window">
+        <field name="name">Taxes</field>
+        <field name="res_model">account.tax</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_payment_inbound" model="ir.actions.act_window">
+        <field name="name">Paiements reçus</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type', '=', 'inbound')]</field>
+        <field name="context">{'default_payment_type': 'inbound'}</field>
+    </record>
+
+    <record id="action_payment_outbound" model="ir.actions.act_window">
+        <field name="name">Paiements émis</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('payment_type', '=', 'outbound')]</field>
+        <field name="context">{'default_payment_type': 'outbound'}</field>
+    </record>
+
+    <record id="action_bank_account" model="ir.actions.act_window">
+        <field name="name">Comptes bancaires</field>
+        <field name="res_model">eazynova.bank.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_bank_statement" model="ir.actions.act_window">
+        <field name="name">Relevés bancaires</field>
+        <field name="res_model">account.bank.statement</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_partner_customer" model="ir.actions.act_window">
+        <field name="name">Clients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="context">{'default_customer_rank': 1}</field>
+    </record>
+
+    <record id="action_partner_supplier" model="ir.actions.act_window">
+        <field name="name">Fournisseurs</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('supplier_rank', '>', 0)]</field>
+        <field name="context">{'default_supplier_rank': 1}</field>
+    </record>
+
+    <record id="action_expense_note" model="ir.actions.act_window">
+        <field name="name">Notes de frais</field>
+        <field name="res_model">account.expense.note</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_analytic_account" model="ir.actions.act_window">
+        <field name="name">Comptes analytiques</field>
+        <field name="res_model">account.analytic.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_accounting_connector" model="ir.actions.act_window">
+        <field name="name">Connecteurs comptables</field>
+        <field name="res_model">accounting.connector</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

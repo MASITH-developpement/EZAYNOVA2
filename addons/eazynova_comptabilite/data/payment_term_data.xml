@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Conditions de paiement -->
+
+    <record id="payment_term_immediate" model="account.payment.term">
+        <field name="name">Comptant</field>
+        <field name="note">Paiement immédiat</field>
+    </record>
+
+    <record id="payment_term_immediate_line" model="account.payment.term.line">
+        <field name="payment_term_id" ref="payment_term_immediate"/>
+        <field name="value">balance</field>
+        <field name="option">day_after_invoice_date</field>
+        <field name="nb_days">0</field>
+    </record>
+
+    <record id="payment_term_30" model="account.payment.term">
+        <field name="name">30 jours</field>
+        <field name="note">Paiement à 30 jours</field>
+    </record>
+
+    <record id="payment_term_30_line" model="account.payment.term.line">
+        <field name="payment_term_id" ref="payment_term_30"/>
+        <field name="value">balance</field>
+        <field name="option">day_after_invoice_date</field>
+        <field name="nb_days">30</field>
+    </record>
+
+</odoo>
