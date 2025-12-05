@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu principal -->
+    <menuitem id="menu_accounting_root" 
+              name="Comptabilité" 
+              sequence="10"
+              web_icon="eazynova_comptabilite,static/description/icon.png"/>
+
+    <!-- Tableau de bord -->
+    <menuitem id="menu_accounting_dashboard" 
+              name="Tableau de bord" 
+              parent="menu_accounting_root" 
+              sequence="1"/>
+
+    <!-- Factures -->
+    <menuitem id="menu_accounting_invoices" 
+              name="Facturation" 
+              parent="menu_accounting_root" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_invoices_customer" 
+              name="Factures clients" 
+              parent="menu_accounting_invoices" 
+              action="action_invoice_customer" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_invoices_supplier" 
+              name="Factures fournisseurs" 
+              parent="menu_accounting_invoices" 
+              action="action_invoice_supplier" 
+              sequence="20"/>
+
+    <!-- Paiements -->
+    <menuitem id="menu_accounting_payments" 
+              name="Paiements" 
+              parent="menu_accounting_root" 
+              sequence="20"/>
+    
+    <menuitem id="menu_accounting_payments_in" 
+              name="Paiements reçus" 
+              parent="menu_accounting_payments" 
+              action="action_payment_inbound" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_payments_out" 
+              name="Paiements émis" 
+              parent="menu_accounting_payments" 
+              action="action_payment_outbound" 
+              sequence="20"/>
+
+    <!-- Banque -->
+    <menuitem id="menu_accounting_bank" 
+              name="Banque" 
+              parent="menu_accounting_root" 
+              sequence="30"/>
+    
+    <menuitem id="menu_accounting_bank_accounts" 
+              name="Comptes bancaires" 
+              parent="menu_accounting_bank" 
+              action="action_bank_account" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_bank_statements" 
+              name="Relevés bancaires" 
+              parent="menu_accounting_bank" 
+              action="action_bank_statement" 
+              sequence="20"/>
+
+    <!-- Écritures -->
+    <menuitem id="menu_accounting_moves" 
+              name="Écritures" 
+              parent="menu_accounting_root" 
+              sequence="40"/>
+    
+    <menuitem id="menu_accounting_moves_all" 
+              name="Toutes les écritures" 
+              parent="menu_accounting_moves" 
+              action="action_account_move" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_journals" 
+              name="Journaux" 
+              parent="menu_accounting_moves" 
+              action="action_account_journal" 
+              sequence="20"/>
+
+    <!-- Partenaires -->
+    <menuitem id="menu_accounting_partners" 
+              name="Tiers" 
+              parent="menu_accounting_root" 
+              sequence="50"/>
+    
+    <menuitem id="menu_accounting_customers" 
+              name="Clients" 
+              parent="menu_accounting_partners" 
+              action="action_partner_customer" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_suppliers" 
+              name="Fournisseurs" 
+              parent="menu_accounting_partners" 
+              action="action_partner_supplier" 
+              sequence="20"/>
+
+    <!-- Notes de frais -->
+    <menuitem id="menu_accounting_expenses" 
+              name="Notes de frais" 
+              parent="menu_accounting_root" 
+              action="action_expense_note" 
+              sequence="60"/>
+
+    <!-- Analytique -->
+    <menuitem id="menu_accounting_analytic" 
+              name="Analytique" 
+              parent="menu_accounting_root" 
+              sequence="70"
+              groups="eazynova_comptabilite.group_accounting_manager"/>
+    
+    <menuitem id="menu_accounting_analytic_accounts" 
+              name="Comptes analytiques" 
+              parent="menu_accounting_analytic" 
+              action="action_analytic_account" 
+              sequence="10"/>
+
+    <!-- Rapports -->
+    <menuitem id="menu_accounting_reports" 
+              name="Rapports" 
+              parent="menu_accounting_root" 
+              sequence="80"/>
+    
+    <menuitem id="menu_accounting_reports_balance" 
+              name="Balance" 
+              parent="menu_accounting_reports" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_reports_ledger" 
+              name="Grand livre" 
+              parent="menu_accounting_reports" 
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_accounting_config" 
+              name="Configuration" 
+              parent="menu_accounting_root" 
+              sequence="90"
+              groups="eazynova_comptabilite.group_accounting_accountant"/>
+    
+    <menuitem id="menu_accounting_config_chart" 
+              name="Plan comptable" 
+              parent="menu_accounting_config" 
+              action="action_account_chart" 
+              sequence="10"/>
+    
+    <menuitem id="menu_accounting_config_taxes" 
+              name="Taxes" 
+              parent="menu_accounting_config" 
+              action="action_account_tax" 
+              sequence="20"/>
+    
+    <menuitem id="menu_accounting_config_connectors" 
+              name="Connecteurs" 
+              parent="menu_accounting_config" 
+              action="action_accounting_connector" 
+              sequence="30"/>
+
+</odoo>

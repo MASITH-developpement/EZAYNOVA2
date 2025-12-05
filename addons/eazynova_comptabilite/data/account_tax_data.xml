@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- TVA françaises -->
+
+    <!-- TVA 20% -->
+    <record id="tax_tva_20" model="account.tax">
+        <field name="name">TVA 20%</field>
+        <field name="description">20%</field>
+        <field name="amount">20.0</field>
+        <field name="amount_type">percent</field>
+        <field name="type_tax_use">sale</field>
+        <field name="price_include" eval="False"/>
+    </record>
+
+    <record id="tax_tva_20_achat" model="account.tax">
+        <field name="name">TVA 20% (Achat)</field>
+        <field name="description">20%</field>
+        <field name="amount">20.0</field>
+        <field name="amount_type">percent</field>
+        <field name="type_tax_use">purchase</field>
+        <field name="price_include" eval="False"/>
+    </record>
+
+    <!-- TVA 10% -->
+    <record id="tax_tva_10" model="account.tax">
+        <field name="name">TVA 10%</field>
+        <field name="description">10%</field>
+        <field name="amount">10.0</field>
+        <field name="amount_type">percent</field>
+        <field name="type_tax_use">sale</field>
+        <field name="price_include" eval="False"/>
+    </record>
+
+    <record id="tax_tva_10_achat" model="account.tax">
+        <field name="name">TVA 10% (Achat)</field>
+        <field name="description">10%</field>
+        <field name="amount">10.0</field>
+        <field name="amount_type">percent</field>
+        <field name="type_tax_use">purchase</field>
+        <field name="price_include" eval="False"/>
+    </record>
+
+    <!-- TVA 5.5% -->
+    <record id="tax_tva_55" model="account.tax">
+        <field name="name">TVA 5.5%</field>
+        <field name="description">5.5%</field>
+        <field name="amount">5.5</field>
+        <field name="amount_type">percent</field>
+        <field name="type_tax_use">sale</field>
+        <field name="price_include" eval="False"/>
+    </record>
+
+</odoo>

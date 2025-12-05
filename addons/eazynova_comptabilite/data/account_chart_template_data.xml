@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Plan comptable français de base -->
+    
+    <!-- Modèle de plan comptable français -->
+    <record id="chart_template_fr" model="account.chart.template">
+        <field name="name">Plan Comptable Général Français</field>
+        <field name="code">FR_PCG</field>
+        <field name="country_id" ref="base.fr"/>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+
+    <!-- Comptes de base du PCG -->
+    <!-- Classe 1 - Capitaux -->
+    <record id="chart_template_101" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">101000</field>
+        <field name="name">Capital</field>
+        <field name="account_type">equity</field>
+    </record>
+
+    <record id="chart_template_110" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">110000</field>
+        <field name="name">Report à nouveau</field>
+        <field name="account_type">equity_unaffected</field>
+    </record>
+
+    <record id="chart_template_120" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">120000</field>
+        <field name="name">Résultat de l'exercice</field>
+        <field name="account_type">equity</field>
+    </record>
+
+    <record id="chart_template_164" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">164000</field>
+        <field name="name">Emprunts</field>
+        <field name="account_type">liability_non_current</field>
+    </record>
+
+    <!-- Classe 2 - Immobilisations -->
+    <record id="chart_template_211" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">211000</field>
+        <field name="name">Terrains</field>
+        <field name="account_type">asset_fixed</field>
+    </record>
+
+    <record id="chart_template_213" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">213000</field>
+        <field name="name">Constructions</field>
+        <field name="account_type">asset_fixed</field>
+    </record>
+
+    <record id="chart_template_218" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">218000</field>
+        <field name="name">Matériel de bureau</field>
+        <field name="account_type">asset_fixed</field>
+    </record>
+
+    <!-- Classe 4 - Tiers -->
+    <record id="chart_template_401" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">401000</field>
+        <field name="name">Fournisseurs</field>
+        <field name="account_type">liability_payable</field>
+        <field name="reconcile" eval="True"/>
+    </record>
+
+    <record id="chart_template_411" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">411000</field>
+        <field name="name">Clients</field>
+        <field name="account_type">asset_receivable</field>
+        <field name="reconcile" eval="True"/>
+    </record>
+
+    <record id="chart_template_421" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">421000</field>
+        <field name="name">Personnel - Rémunérations dues</field>
+        <field name="account_type">liability_current</field>
+    </record>
+
+    <record id="chart_template_4456" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">445600</field>
+        <field name="name">TVA déductible</field>
+        <field name="account_type">asset_current</field>
+    </record>
+
+    <record id="chart_template_4457" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">445700</field>
+        <field name="name">TVA collectée</field>
+        <field name="account_type">liability_current</field>
+    </record>
+
+    <!-- Classe 5 - Banque et caisse -->
+    <record id="chart_template_512" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">512000</field>
+        <field name="name">Banque</field>
+        <field name="account_type">asset_cash</field>
+    </record>
+
+    <record id="chart_template_530" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">530000</field>
+        <field name="name">Caisse</field>
+        <field name="account_type">asset_cash</field>
+    </record>
+
+    <!-- Classe 6 - Charges -->
+    <record id="chart_template_601" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">601000</field>
+        <field name="name">Achats stockés - Matières premières</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_606" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">606000</field>
+        <field name="name">Achats non stockés</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_613" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">613000</field>
+        <field name="name">Locations</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_616" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">616000</field>
+        <field name="name">Primes d'assurance</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_622" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">622000</field>
+        <field name="name">Honoraires</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_625" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">625000</field>
+        <field name="name">Déplacements</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_626" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">626000</field>
+        <field name="name">Frais postaux et télécommunications</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_641" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">641000</field>
+        <field name="name">Salaires</field>
+        <field name="account_type">expense</field>
+    </record>
+
+    <record id="chart_template_681" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">681000</field>
+        <field name="name">Dotations aux amortissements</field>
+        <field name="account_type">expense_depreciation</field>
+    </record>
+
+    <!-- Classe 7 - Produits -->
+    <record id="chart_template_701" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">701000</field>
+        <field name="name">Ventes de produits finis</field>
+        <field name="account_type">income</field>
+    </record>
+
+    <record id="chart_template_706" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">706000</field>
+        <field name="name">Prestations de services</field>
+        <field name="account_type">income</field>
+    </record>
+
+    <record id="chart_template_707" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">707000</field>
+        <field name="name">Ventes de marchandises</field>
+        <field name="account_type">income</field>
+    </record>
+
+    <record id="chart_template_758" model="account.chart.template.line">
+        <field name="template_id" ref="chart_template_fr"/>
+        <field name="code">758000</field>
+        <field name="name">Produits divers de gestion courante</field>
+        <field name="account_type">income_other</field>
+    </record>
+
+</odoo>
