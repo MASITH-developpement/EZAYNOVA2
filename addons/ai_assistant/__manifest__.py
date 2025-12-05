@@ -66,7 +66,7 @@
     'assets': {
         'web.assets_backend': [
             'ai_assistant/static/src/css/ai_assistant.css',
-            'ai_assistant/static/src/js/ai_assistant_widget.js',
+            # 'ai_assistant/static/src/js/ai_assistant_widget.js',  # Désactivé temporairement - incompatible Odoo 19
         ],
     },
     'images': ['static/description/icon.png'],
